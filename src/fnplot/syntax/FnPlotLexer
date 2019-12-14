@@ -1,0 +1,140 @@
+package fnplot.syntax;
+
+/* Specification for ArithExp tokens */
+
+// user customisations
+import java_cup.runtime.*;
+
+// Jlex directives
+%%
+    
+%cup
+%public
+
+%class FnPlotLexer
+
+%type java_cup.runtime.Symbol
+
+%eofval{
+	return new Symbol(sym.EOF);
+%eofval}
+
+%eofclose	false
+
+%char
+%line
+
+%{
+    public int getChar() {
+	return yychar + 1;
+    }
+
+    public int getColumn() {
+    	return yycolumn + 1;
+    }
+
+    public int getLine() {
+	return yyline + 1;
+    }
+
+    public String getText() {
+	return yytext();
+    }
+%}
+
+%debug
+
+nl = [\n\r]
+cc = ([\b\f]|{nl})
+
+ws = {cc}|[\t ]
+
+alpha = [a-zA-Z_]
+
+num = [0-9]
+
+real = -?{num}+(\.{num}+)
+
+neg = -?{num}
+
+alphanum = {alpha}|{num}
+
+bin = #b[01]+
+
+%%
+
+<YYINITIAL>	{nl}	{
+                        //skip newline, but reset char counter
+			yycolumn = 0;
+			}
+<YYINITIAL>	{ws}	{
+                        //skip whitespace
+			}
+<YYINITIAL>	"+"	{return new Symbol(sym.PLUS);}
+<YYINITIAL>	"-"	{return new Symbol(sym.MINUS);}
+<YYINITIAL>	"*"	{return new Symbol(sym.MUL);}
+<YYINITIAL>	"/"	{return new Symbol(sym.DIV);}
+<YYINITIAL>	"%"	{return new Symbol(sym.MOD);}
+<YYINITIAL>	"="	{return new Symbol(sym.ASSIGN);}
+
+<YYINITIAL>	"("	{return new Symbol(sym.LPAREN);}
+<YYINITIAL>	")"	{return new Symbol(sym.RPAREN);}
+
+<YYINITIAL>	"{"	{return new Symbol(sym.LBRACE);}
+<YYINITIAL>	"}"	{return new Symbol(sym.RBRACE);}
+
+<YYINITIAL>	","	{return new Symbol(sym.COMMA);}
+
+<YYINITIAL>	"let"	{return new Symbol(sym.LET);}
+<YYINITIAL>	"in"	{return new Symbol(sym.IN);}
+
+<YYINITIAL>	";" 	{return new Symbol(sym.SEMI);}
+
+// project code below
+
+<YYINITIAL>	":" 	{return new Symbol(sym.COLON);}
+<YYINITIAL>	"[" 	{return new Symbol(sym.RSQBRACKET);}
+<YYINITIAL>	"]" 	{return new Symbol(sym.LSQBRACKET);}
+
+// project code below
+
+<YYINITIAL> "^" {return new Symbol(sym.EXPO);}
+
+<YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER); }
+
+<YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext() ); }
+
+<YYINITIAL>   ( {num}+|{neg}+ ) {
+	       // INTEGER
+	       return new Symbol(sym.INTEGER, 
+				 new Integer(yytext()));
+	       }
+
+
+<YYINITIAL>    [0-9]+\.[0-9]+ {
+	       // DOUBLE
+	       return new Symbol(sym.DOUBLE, 
+				 new Double(yytext()));
+	       }
+
+<YYINITIAL>    [0-9]+\. {
+	       // DOUBLE
+	       return new Symbol(sym.DOUBLE, 
+				 new Double(yytext()));
+	       }
+
+<YYINITIAL>    {alpha}{alphanum}* {
+	       // VARIABLE
+	       return new Symbol(sym.VARIABLE, yytext());
+	       }
+
+//project code above
+
+
+
+
+
+
+
+
+

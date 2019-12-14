@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - FnPlotFrame",
+            "request": "launch",
+            "mainClass": "fnplot.gui.FnPlotFrame"
+        }
+    ]
+}
