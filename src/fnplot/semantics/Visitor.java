@@ -5,6 +5,7 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
+import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
 import fnplot.syntax.ExpFunCall;
@@ -148,4 +149,6 @@ public interface Visitor<S, T> {
      * @throws FnPlotException If an error arises while visiting the subtree.
      */
     public T visitExpVar(ExpVar exp, S arg) throws FnPlotException;
+
+	public T visitExpPair(PairFunction pairFunction, S state) throws FnPlotException;
 }
