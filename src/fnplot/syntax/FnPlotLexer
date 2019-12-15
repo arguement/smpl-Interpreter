@@ -100,6 +100,8 @@ bin = #b[01]+
 
 <YYINITIAL> "^" {return new Symbol(sym.EXPO);}
 
+<YYINITIAL> [\"][a-zA-Z0-9\\\s]+[\"] { return new Symbol(sym.STR,yytext()); }
+
 <YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER); }
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext() ); }

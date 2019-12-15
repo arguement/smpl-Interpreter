@@ -29,6 +29,7 @@ public class sym {
   public static final int error = 1;
   public static final int BIN_INTEGER = 20;
   public static final int LET = 13;
+  public static final int STR = 25;
   public static final int ASSIGN = 12;
   public static final int INTEGER = 22;
   public static final int MUL = 9;
@@ -58,7 +59,8 @@ public class sym {
   "HEX_INTEGER",
   "INTEGER",
   "DOUBLE",
-  "VARIABLE"
+  "VARIABLE",
+  "STR"
   };
 }
 

@@ -66,6 +66,7 @@ terminal EXPO,BIN_INTEGER,HEX_INTEGER;
 terminal Integer INTEGER;
 terminal Double DOUBLE;
 terminal String VARIABLE;
+terminal String STR; // for strings encased in "" e.g "smpl"
 
 /* Non terminals */
 non terminal ArithProgram program;
