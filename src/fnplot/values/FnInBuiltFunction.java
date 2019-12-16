@@ -57,7 +57,7 @@ public class FnInBuiltFunction extends FnPlotValue<FnInBuiltFunction> {
         // }
         // String body = funExp.getBody().toString();
 
-        return String.format("[%s]",this.funExp.toString());
+        return String.format("%s",this.funExp.toString());
     }
     
 }

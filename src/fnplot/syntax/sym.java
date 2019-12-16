@@ -14,14 +14,15 @@ public class sym {
   public static final int RPAREN = 3;
   public static final int SEMI = 18;
   public static final int IN = 14;
-  public static final int BOOL_TRUE = 27;
-  public static final int BOOL_FALSE = 28;
-  public static final int VARIABLE = 25;
+  public static final int BOOL_TRUE = 28;
+  public static final int BOOL_FALSE = 29;
+  public static final int VARIABLE = 26;
   public static final int LPAREN = 2;
   public static final int RSQBRACKET = 4;
   public static final int COLON = 6;
   public static final int LBRACE = 15;
   public static final int LSQBRACKET = 5;
+  public static final int CAR = 23;
   public static final int HEX_INTEGER = 21;
   public static final int EXPO = 19;
   public static final int COMMA = 17;
@@ -31,12 +32,12 @@ public class sym {
   public static final int error = 1;
   public static final int BIN_INTEGER = 20;
   public static final int LET = 13;
-  public static final int STR = 26;
+  public static final int STR = 27;
   public static final int ASSIGN = 12;
-  public static final int INTEGER = 23;
+  public static final int INTEGER = 24;
   public static final int MUL = 9;
   public static final int PAIR = 22;
-  public static final int DOUBLE = 24;
+  public static final int DOUBLE = 25;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -61,6 +62,7 @@ public class sym {
   "BIN_INTEGER",
   "HEX_INTEGER",
   "PAIR",
+  "CAR",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",

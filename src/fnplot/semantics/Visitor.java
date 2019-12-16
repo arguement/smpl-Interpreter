@@ -5,6 +5,7 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
+import fnplot.syntax.inbuiltfunctions.CarFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
@@ -151,4 +152,6 @@ public interface Visitor<S, T> {
     public T visitExpVar(ExpVar exp, S arg) throws FnPlotException;
 
 	public T visitExpPair(PairFunction pairFunction, S state) throws FnPlotException;
+
+	public T visitCarFunction(CarFunction carFunction, S state) throws FnPlotException;
 }

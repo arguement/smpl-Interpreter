@@ -99,6 +99,7 @@ bin = #b[01]+
 // project code below
 
 <YYINITIAL> "pair" {return new Symbol(sym.PAIR);}
+<YYINITIAL> "car" {return new Symbol(sym.CAR);}
 
 <YYINITIAL> "^" {return new Symbol(sym.EXPO);}
 
