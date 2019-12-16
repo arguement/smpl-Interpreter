@@ -25,6 +25,7 @@ import fnplot.sys.FnPlotException;
 import fnplot.values.FnPlotReal;
 import fnplot.values.FnPlotValue;
 import fnplot.values.FnPlotFunction;
+import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
@@ -445,6 +446,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitExpPair(PairFunction pairFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        return null;
+        return new FnInBuiltFunction(pairFunction, env);
     }
 }
