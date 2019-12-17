@@ -113,6 +113,18 @@ bin = #b[01]+
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext() ); }
 
+// Britt Bratt :P
+<YYINITIAL> "def" {return new Symbol (sym.DEF)}
+<YYINITIAL> "if" {return new Symbol (sym.IF)}
+<YYINITIAL> "then" {return new Symbol (sym.THEN)}
+<YYINITIAL> "else" {return new Symbol (sym.ELSE)}
+<YYINITIAL> "@" {return new Symbol (sym.IF)}
+<YYINITIAL> "and" {return new Symbol (sym.AND)}
+<YYINITIAL> "or" {return new Symbol (sym.OR)}
+<YYINITIAL> "not" {return new Symbol (sym.NOT)}
+<YYINITIAL> "read {return new Symbol (sym.READ)}
+<YYINITIAL> "readint" {return new Symbol (sym.READINT)}
+
 <YYINITIAL>   ( {num}+|{neg}+ ) {
 	       // INTEGER
 	       return new Symbol(sym.INTEGER, 
