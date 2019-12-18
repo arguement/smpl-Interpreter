@@ -69,6 +69,7 @@ public class sym {
   "STR",
   "BOOL_TRUE",
   "BOOL_FALSE"
+  "CONCAT"
   };
 }
 

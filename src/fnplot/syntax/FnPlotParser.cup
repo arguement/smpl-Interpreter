@@ -57,7 +57,7 @@ terminal DEF;
 terminal IF, THEN, ELSE;
 terminal AND, OR, NOT;
 terminal READ, READINT;
-non terminal IRExpConcat concat 
+non terminal ExpConcat concat 
 non terminal StmtSequence helper
 
 //special symbols i added
@@ -126,16 +126,16 @@ stmt ::= definition:d {: RESULT = d; :} |
 definition ::= DEF VARIABLE:v expression:e {: RESULT = new StmtDefinition(v, e); :};
 helper ::= expression:exp {exp {: RESULT = new StmtSequence(new StmtExpr(exp)); :} | 
 		   LBRACE stmtList:s RBRACE {: RESULT = s; :};
-ifExp ::= IF expression:e THEN helper:s ELSE helper:s2 {: RESULT = new IRExpIF(e, s, s2); :} |
-		  IF expression:e THEN helper:s {: RESULT = new IRExpIF(e, s); :};
-concat := VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new IRExpConcat(v1, v2); :};
+ifExp ::= IF expression:e THEN helper:s ELSE helper:s2 {: RESULT = new ExpIF(e, s, s2); :} |
+		  IF expression:e THEN helper:s {: RESULT = new ExpIF(e, s); :};
+concat := VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
 readExp ::= READ LPAREN RPAREN {: RESULT = new IRExpRead(); :};
-readIntExp: ::= READINT LPAREN RPAREN {: RESULT = new IRExpReadInt(); :}
-logOp ::= comp:c1 AND comp:c2 {: RESULT = newIRExpLogAnd(a,b); :} |
-		  comp:c1 OR comp:c2 {: RESULT = newIRExpLogOR(a,b); :} |
-		  NOT comp:c1 {: RESULT = newIRExpLogNOT(a,b); :};
-comp ::= arithExp:exp1 COMPARE:sign arithExp:exp2 {: RESULT = new IRExpComparison(sign, exp1, exp2); :} |
-         arithExp:exp1 EQUAL arithExp:exp2 {: RESULT = new IRExpComparison("=", exp1, exp2); :};	
+readIntExp: ::= READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :}
+logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
+		  comp:c1 OR comp:c2 {: RESULT = newExpLogOR(a,b); :} |
+		  NOT comp:c1 {: RESULT = new ExpLogNOT(a,b); :};
+comp ::= arithExp:exp1 COMPARE:sign arithExp:exp2 {: RESULT = new ExpComparison(sign, exp1, exp2); :} |
+         arithExp:exp1 EQUAL arithExp:exp2 {: RESULT = new ExpComparison("=", exp1, exp2); :};	
 
 
 car ::= CAR LPAREN pair:p RPAREN {:
