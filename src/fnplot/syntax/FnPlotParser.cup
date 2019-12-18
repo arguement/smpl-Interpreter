@@ -57,7 +57,7 @@ terminal DEF;
 terminal IF, THEN, ELSE;
 terminal AND, OR, NOT;
 terminal READ, READINT;
-non terminal ExpConcat concat; 
+non terminal ExpConcat CONCAT; 
 non terminal StmtSequence helper;
 
 //special symbols i added
