@@ -193,6 +193,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         return val1.expo(val2);
     }
 
+
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
         System.out.println("inside evaluator visitfncall");
         // System.out.println(callExp.toString());
@@ -460,5 +461,18 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Exp exp = p.getArguments().get(0);
         
         return exp.visit(this, state);
+    }
+
+    //Britt
+    @Override
+    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2;
+        
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        
+        return val1.toString().concat(val2.toString());
     }
 }
