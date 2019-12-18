@@ -59,7 +59,7 @@ terminal AND, OR, NOT;
 terminal READ, READINT;
 non terminal ExpConcat CONCAT; 
 non terminal StmtSequence helper;
-non terminal comp;
+/*non terminal comp;*/
 
 //special symbols i added
 terminal RSQBRACKET,LSQBRACKET,COLON;
@@ -138,12 +138,12 @@ readExp ::= READ LPAREN RPAREN {: RESULT = new IRExpRead(); :};
 
 readIntExp ::= READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :};
 
-logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
+/*logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
 		  comp:c1 OR comp:c2 {: RESULT = newExpLogOR(a,b); :} |
 		  NOT comp:c1 {: RESULT = new ExpLogNOT(a,b); :};
 
 comp ::= arithExp:exp1 COMPARE:sign arithExp:exp2 {: RESULT = new ExpComparison(sign, exp1, exp2); :} |
-         arithExp:exp1 EQUAL arithExp:exp2 {: RESULT = new ExpComparison("=", exp1, exp2); :};	
+         arithExp:exp1 EQUAL arithExp:exp2 {: RESULT = new ExpComparison("=", exp1, exp2); :};	*/
 /************************************************************************************************************/
 
 car ::= CAR LPAREN pair:p RPAREN {:
@@ -173,10 +173,10 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		readExp:e {: RESULT = e; :} |
 		readIntExp:e {: RESULT = e; :};
 
-/*Britt*/
+/*Britt
 condition ::= comp:c {RESULT = c; :} | 
 			  logOp:l {RESULT = l; :};
-
+*/
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
            :} ;
