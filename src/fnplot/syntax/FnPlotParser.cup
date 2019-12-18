@@ -58,6 +58,7 @@ terminal IF, THEN, ELSE;
 terminal AND, OR, NOT;
 terminal READ, READINT;
 non terminal ExpConcat CONCAT; 
+non terminal concat;
 non terminal StmtSequence helper;
 /*non terminal comp;*/
 
@@ -126,7 +127,7 @@ stmt ::= definition:d {: RESULT = d; :} |
 /*Britt Bratt*/
 definition ::= DEF VARIABLE:v expression:e {: RESULT = new StmtDefinition(v, e); :};
 
-helper ::= expression:exp  {: RESULT = new StmtSequence(new StmtExpr(exp)); :} | 
+helper ::= expression:e  {: RESULT = new StmtSequence(new StmtExpr(e)); :} | 
 		   LBRACE stmtList:s RBRACE {: RESULT = s; :};
 
 ifExp ::= IF expression:e THEN helper:s ELSE helper:s2 {: RESULT = new ExpIF(e, s, s2); :} |
