@@ -53,7 +53,7 @@ scan with {:
 terminal LPAREN, RPAREN;
 
 //Britt Bratt 
-terminal CONCAT
+terminal CONCAT;
 non terminal ExpConcat concatenation; 
 
 
@@ -145,7 +145,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		pair:p {: RESULT = p; :} | 
 		car:c {: RESULT = c; :} |
 		//Britt
-		concat:c {: RESULT = c; :} |
+		concat:c {: RESULT = c; :}; 
 		
 
 letExp ::= LET bindings:bs IN expression:body {:
