@@ -125,21 +125,21 @@ stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
 
 /*Britt Bratt*/
-definition ::= DEF VARIABLE:v expression:e {: RESULT = new StmtDefinition(v, e); :};
+/*definition ::= DEF VARIABLE:v expression:e {: RESULT = new StmtDefinition(v, e); :};
 
 helper ::= expression:e  {: RESULT = new StmtSequence(new StmtExpr(e)); :} | 
 		   LBRACE stmtList:s RBRACE {: RESULT = s; :};
 
 ifExp ::= IF expression:e THEN helper:s ELSE helper:s2 {: RESULT = new ExpIF(e, s, s2); :} |
-		  IF expression:e THEN helper:s {: RESULT = new ExpIF(e, s); :};
+		  IF expression:e THEN helper:s {: RESULT = new ExpIF(e, s); :};*/
 
 concat ::= VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
 
-readExp ::= READ LPAREN RPAREN {: RESULT = new IRExpRead(); :};
+/*readExp ::= READ LPAREN RPAREN {: RESULT = new IRExpRead(); :};
 
 readIntExp ::= READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :};
 
-/*logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
+logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
 		  comp:c1 OR comp:c2 {: RESULT = newExpLogOR(a,b); :} |
 		  NOT comp:c1 {: RESULT = new ExpLogNOT(a,b); :};
 
@@ -170,9 +170,9 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		car:c {: RESULT = c; :} |
 		//Britt
 		concat:c {: RESULT = c; :} |
-		ifExp:i {: RESULT = i; :} |
+		/*ifExp:i {: RESULT = i; :} |
 		readExp:e {: RESULT = e; :} |
-		readIntExp:e {: RESULT = e; :};
+		readIntExp:e {: RESULT = e; :}*/;
 
 /*Britt
 condition ::= comp:c {RESULT = c; :} | 
