@@ -113,7 +113,7 @@ bin = #b[01]+
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext() ); }
 
-// Britt Bratt
+// Britt
 <YYINITIAL> "@" {return new Symbol (sym.CONCAT);}
 
 

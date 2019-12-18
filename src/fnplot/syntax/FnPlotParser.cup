@@ -119,7 +119,7 @@ stmtList ::= stmtList:lst stmt:s {:
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
 
-/*Britt Bratt*/
+//Britt
 concatenation ::= VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
 
 
@@ -145,7 +145,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		pair:p {: RESULT = p; :} | 
 		car:c {: RESULT = c; :} |
 		//Britt
-		concat:c {: RESULT = c; :}; 
+		concatenation:c {: RESULT = c; :}; 
 		
 
 letExp ::= LET bindings:bs IN expression:body {:
