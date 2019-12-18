@@ -57,8 +57,8 @@ terminal DEF;
 terminal IF, THEN, ELSE;
 terminal AND, OR, NOT;
 terminal READ, READINT;
-non terminal ExpConcat concat 
-non terminal StmtSequence helper
+non terminal ExpConcat concat; 
+non terminal StmtSequence helper;
 
 //special symbols i added
 terminal RSQBRACKET,LSQBRACKET,COLON;
@@ -122,15 +122,15 @@ stmtList ::= stmtList:lst stmt:s {:
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
 
-//Britt Bratt
+/*Britt Bratt*/
 definition ::= DEF VARIABLE:v expression:e {: RESULT = new StmtDefinition(v, e); :};
-helper ::= expression:exp {exp {: RESULT = new StmtSequence(new StmtExpr(exp)); :} | 
+helper ::= expression:exp  {: RESULT = new StmtSequence(new StmtExpr(exp)); :} | 
 		   LBRACE stmtList:s RBRACE {: RESULT = s; :};
 ifExp ::= IF expression:e THEN helper:s ELSE helper:s2 {: RESULT = new ExpIF(e, s, s2); :} |
 		  IF expression:e THEN helper:s {: RESULT = new ExpIF(e, s); :};
-concat := VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
+concat ::= VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
 readExp ::= READ LPAREN RPAREN {: RESULT = new IRExpRead(); :};
-readIntExp: ::= READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :}
+readIntExp ::= READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :};
 logOp ::= comp:c1 AND comp:c2 {: RESULT = newExpLogAnd(a,b); :} |
 		  comp:c1 OR comp:c2 {: RESULT = newExpLogOR(a,b); :} |
 		  NOT comp:c1 {: RESULT = new ExpLogNOT(a,b); :};
@@ -165,7 +165,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		readExp:e {: RESULT = e; :} |
 		readIntExp:e {: RESULT = e; :};
 
-//Britt
+/*Britt*/
 condition ::= comp:c {RESULT = c; :} | 
 			  logOp:l {RESULT = l; :};
 
