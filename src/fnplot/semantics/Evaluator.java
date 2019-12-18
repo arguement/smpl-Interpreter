@@ -466,13 +466,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     //Britt
     @Override
     public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2;
-        
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        
-        return val1.toString().concat(val2.toString());
+        return val1 + val2;
     }
 }
