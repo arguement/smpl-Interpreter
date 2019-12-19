@@ -135,8 +135,8 @@ list2 ::= RSQBRACKET expListE:lst LSQBRACKET{:
 				RESULT = new ListFunction(lst);
 :};
 
-list ::= LIST LPAREN expListE:lst RPAREN {:
-			RESULT = new ListFunction(lst);
+list ::= LIST LPAREN list2:lst RPAREN {:
+			RESULT = lst;
 :};
 
 expListE ::= expList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
@@ -171,7 +171,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists: lst{: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :};
+		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
