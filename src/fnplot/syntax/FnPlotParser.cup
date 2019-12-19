@@ -102,6 +102,7 @@ non terminal PairFunction pair;
 non terminal CarFunction car;
 non terminal IsPairFunction isPair;
 non terminal ListFunction list;
+non terminal Exp string;
 
 // non terminal StmtFun funExp;
 
@@ -155,7 +156,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :}| pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
+		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|list: lst{: RESULT = lst; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
@@ -199,6 +200,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpMod(f, t); :} |
 		power:p {: RESULT= p; :};
 
+string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
 number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :};
 

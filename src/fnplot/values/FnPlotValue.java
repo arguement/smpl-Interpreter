@@ -38,6 +38,9 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public static FnPlotBool make(Boolean v) {
         return new FnPlotBool(v);
     }
+    public static FnPlotString make(String v) {
+        return new FnPlotString(v);
+    }
     
     /**
      *
@@ -131,6 +134,10 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
 
     public boolean booleanValue() throws TypeFnPlotException {
         throw new TypeFnPlotException(FnPlotType.BOOLEAN, getType());
+    }
+
+    public String stringValue() throws TypeFnPlotException {
+        throw new TypeFnPlotException(FnPlotType.STRING, getType());
     }
 
     /**
