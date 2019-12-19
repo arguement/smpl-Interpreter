@@ -56,7 +56,7 @@ public class FnPlotInt extends FnPlotValue<FnPlotInt> {
     public FnPlotInt mul(FnPlotValue<?> arg) throws FnPlotException {
         return make(value * arg.intValue());
     }
-
+    
     /**
      * Divide the given value by this value.
      * @param arg The divisor

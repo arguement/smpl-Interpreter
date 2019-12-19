@@ -34,7 +34,9 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public static FnPlotInt make(Integer v) {
         return new FnPlotInt(v);
     }
-    
+    public static FnPlotBoolean make(Boolean v){
+        return new FnPlotBoolean(v);
+   }
     /**
      *
      * @return The type of this value.
@@ -106,7 +108,8 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public FnPlotValue<?> mod(FnPlotValue<?> arg) throws FnPlotException {
             throw new TypeFnPlotException("Operation mod called with non-numeric type");
     }
-
+    public FnPlotValue<?> eequals(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something"); }
     /**
      *
      * @return The integer value wrapped in this FnPlot value
@@ -114,8 +117,11 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
      */
     public int intValue() throws TypeFnPlotException {
         throw new TypeFnPlotException(FnPlotType.INTEGER, getType());
-    }
-
+    } 
+    //dean
+   public Boolean booleanValue() throws TypeFnPlotException{
+       throw new TypeFnPlotException(FnPlotType.BOOLEAN, getType());
+   }
     /**
      *
      * @return The real value wrapped in this FnPlot value

@@ -58,11 +58,20 @@ terminal RSQBRACKET,LSQBRACKET,COLON;
 // arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD, ASSIGN;
 terminal LET, IN, LBRACE, RBRACE, COMMA;
-terminal SEMI;
+terminal SEMI; 
+
+//Relational Operators 
+terminal GREATER;
+terminal LESSER;
+terminal GREATEREQUAL;
+terminal LESSEREQUAL;
+terminal NOTEQUAL; 
+terminal EEQUAL;
 
 // arithmetic operators i created
 terminal EXPO,BIN_INTEGER,HEX_INTEGER;
 terminal PAIR;
+terminal CAR;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -84,7 +93,7 @@ non terminal ArrayList<Binding> bindingsAux;
 non terminal Binding binding;
 
 non terminal Exp expression;
-non terminal Exp arithExp;
+non terminal Exp arithExp; 
 non terminal Exp term;
 non terminal Exp factor;
 non terminal FnPlotValue<?> number;
@@ -94,6 +103,8 @@ non terminal empty;
 
 non terminal Exp power;
 non terminal PairFunction pair;
+non terminal CarFunction car;
+non terminal Exp comp; //dean 
 
 // non terminal StmtFun funExp;
 
@@ -113,6 +124,17 @@ stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
 
 
+car ::= CAR LPAREN pair:p RPAREN {:
+		System.out.println("inside car");
+		RESULT = new CarFunction(p);
+:} |  CAR LPAREN VARIABLE:p RPAREN {:
+		System.out.println("inside car");
+		ExpVar var = new ExpVar(p);
+		RESULT = new CarFunction(var);
+:}; 
+
+
+
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 		ArrayList<Exp> store = new ArrayList<>();
 		store.add(e1);
@@ -122,7 +144,8 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :}| pair:p {: RESULT = p; :};
+		arithExp:a {: RESULT = a; :}| pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} |comp:n {: RESULT= n; :}
+	    ;
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -157,19 +180,25 @@ arithExp ::= arithExp:e PLUS term:t {:
 power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
 						factor:f {: RESULT=f; :};
 
+comp ::= power:e1 EEQUAL expression:e2 {: 
+              System.out.println("in here");
+              RESULT=new ExpComp(e1,e2); :}| 
+         power:e1 GREATER expression:e2 {:
+		      RESULT= new ExpGreater(e1,e2); :} ;
+
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
 	 power:f DIV term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :};
+		power:p {: RESULT= p; :}  ;
 
 
 number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :};
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} ;
 
 empty ::= ;

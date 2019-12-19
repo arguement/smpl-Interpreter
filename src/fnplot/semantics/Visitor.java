@@ -5,9 +5,13 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
-import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.PairFunction; 
+import fnplot.syntax.ExpComp; //added by dean 
+import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
+import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
@@ -87,7 +91,11 @@ public interface Visitor<S, T> {
 
     public T visitStmtClear(StatementClear exp, S arg) throws FnPlotException;
     //above added by me
-
+    
+    //dean
+    public T visitExpComp(ExpComp exp,S arg) throws FnPlotException; 
+    public T visitExpGreater(ExpGreater exp,S arg) throws FnPlotException;
+    //dean
     public T visitExpAdd(ExpAdd exp, S arg) throws FnPlotException ;
     
     /**
@@ -151,4 +159,6 @@ public interface Visitor<S, T> {
     public T visitExpVar(ExpVar exp, S arg) throws FnPlotException;
 
 	public T visitExpPair(PairFunction pairFunction, S state) throws FnPlotException;
+
+	public T visitCarFunction(CarFunction carFunction, S state) throws FnPlotException;
 }
