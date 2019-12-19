@@ -15,9 +15,10 @@ public class sym {
   public static final int LIST = 25;
   public static final int SEMI = 18;
   public static final int IN = 14;
-  public static final int BOOL_TRUE = 30;
-  public static final int BOOL_FALSE = 31;
-  public static final int VARIABLE = 28;
+  public static final int BOOL_TRUE = 31;
+  public static final int BOOL_FALSE = 32;
+  public static final int VARIABLE = 29;
+  public static final int NIL = 26;
   public static final int LPAREN = 2;
   public static final int RSQBRACKET = 4;
   public static final int COLON = 6;
@@ -33,13 +34,13 @@ public class sym {
   public static final int error = 1;
   public static final int BIN_INTEGER = 20;
   public static final int LET = 13;
-  public static final int STR = 29;
+  public static final int STR = 30;
   public static final int ASSIGN = 12;
-  public static final int INTEGER = 26;
+  public static final int INTEGER = 27;
   public static final int MUL = 9;
   public static final int IS_PAIR = 24;
   public static final int PAIR = 22;
-  public static final int DOUBLE = 27;
+  public static final int DOUBLE = 28;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -67,6 +68,7 @@ public class sym {
   "CAR",
   "IS_PAIR",
   "LIST",
+  "NIL",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",

@@ -455,7 +455,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
-        // TODO Auto-generated method stub
+        
         FnInBuiltFunction pair = ((FnInBuiltFunction) carFunction.getPair().visit(this, state));
 
         PairFunction p = ((PairFunction) pair.getFunExp());
@@ -466,9 +466,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     @Override
-    public FnPlotValue<?> visitIsPairFunction(IsPairFunction isPairFunction, Environment<FnPlotValue<?>> state)
+    public FnPlotValue<?> visitIsPairFunction(IsPairFunction isPairFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-        // TODO Auto-generated method stub
+        
         Exp isPair = isPairFunction.getPair();
         boolean checkPair = isPair instanceof PairFunction;
 
@@ -478,9 +478,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     @Override
-    public FnPlotValue<?> visitListFunction(ListFunction listFunction, Environment<FnPlotValue<?>> state)
+    public FnPlotValue<?> visitListFunction(ListFunction listFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        return null;
+        return new FnInBuiltFunction(listFunction, env);
     }
 }

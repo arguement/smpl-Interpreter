@@ -126,9 +126,11 @@ list ::= LIST LPAREN expListE:lst RPAREN {:
 
 expListE ::= expList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
 
-expList ::=  expression:v COMMA expList:pl {: pl.add(v); 
+expList ::=  expression:v COMMA expList:pl {: 
+											
+											pl.add(0,v); 
 											RESULT = pl; :} | NIL:n {: 
-									RESULT = new ArrayList<>;
+									RESULT = new ArrayList<>();
 									:};
 
 isPair ::= IS_PAIR LPAREN expression:p RPAREN {:

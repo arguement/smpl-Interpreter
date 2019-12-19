@@ -41,7 +41,7 @@ public class ListFunction extends InBuilt {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return null;
+        return String.format("list( %s )", this.argList);
     }
 
 }
