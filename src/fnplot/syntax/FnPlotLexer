@@ -98,6 +98,7 @@ bin = #b[01]+
 
 // project code below
 
+<YYINITIAL> "equal?" {return new Symbol(sym.IS_EQUAL);}
 <YYINITIAL> "eqv?" {return new Symbol(sym.IS_EQV);}
 
 <YYINITIAL> "list" {return new Symbol(sym.LIST);}

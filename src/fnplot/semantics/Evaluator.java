@@ -7,6 +7,7 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
 import fnplot.syntax.inbuiltfunctions.InBuilt;
+import fnplot.syntax.inbuiltfunctions.IsEqual;
 import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
@@ -489,15 +490,13 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitIsEqvFunction(IsEqv isEqv, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        HashMap<String, FnPlotValue<?>> envMap = env.dictionary;
+        
         boolean isEqvBool = false;
-        Exp expL = isEqv.getExpL();
-        Exp expR = isEqv.getExpL();
+        
         FnPlotValue<?> expLVal = isEqv.getExpL().visit(this, env);
         FnPlotValue<?> expRVal = isEqv.getExpR().visit(this, env);
-        
-        
-        if (expRVal instanceof FnInBuiltFunction && expLVal instanceof FnInBuiltFunction){
+
+        if (expRVal instanceof FnInBuiltFunction && expLVal instanceof FnInBuiltFunction) {
             FnInBuiltFunction expLFn = ((FnInBuiltFunction) expLVal);
             FnInBuiltFunction expRFn = ((FnInBuiltFunction) expRVal);
 
@@ -506,14 +505,31 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
             int refL = expLFn.getFunExp().getRef();
             int refR = expRFn.getFunExp().getRef();
-            if (stringEvalR.equals(stringEvalL) && refL == refR){
+            if (stringEvalR.equals(stringEvalL) && refL == refR) {
                 isEqvBool = true;
             }
         }
-      
 
         result = FnPlotValue.make(isEqvBool);
-        
+
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsEqualFunction(IsEqual isEqual, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        FnPlotValue<?> expLVal = isEqual.getExpL().visit(this, env);
+        FnPlotValue<?> expRVal = isEqual.getExpR().visit(this, env);
+        boolean isEqvBool = false;
+
+        if (expLVal.toString().equals(expRVal.toString())) {
+
+            isEqvBool = true;
+        }
+
+        result = FnPlotValue.make(isEqvBool);
+
         return result;
     }
 }
