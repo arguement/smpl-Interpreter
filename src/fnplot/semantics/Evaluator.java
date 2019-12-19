@@ -31,6 +31,8 @@ import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
 import java.awt.geom.Point2D;
+import fnplot.syntax.ExpConcat;
+
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
     /*
@@ -468,6 +470,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        return val1 + val2;
+        return val1.concat(val2);
     }
 }
