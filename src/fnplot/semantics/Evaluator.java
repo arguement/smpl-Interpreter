@@ -6,6 +6,7 @@ import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
@@ -446,19 +447,32 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpPair(PairFunction pairFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-        
+
         return new FnInBuiltFunction(pairFunction, env);
     }
 
     @Override
-    public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state) throws FnPlotException{
+    public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
         // TODO Auto-generated method stub
-        FnInBuiltFunction pair = ((FnInBuiltFunction)carFunction.getPair().visit(this, state));
+        FnInBuiltFunction pair = ((FnInBuiltFunction) carFunction.getPair().visit(this, state));
 
-        PairFunction p = ((PairFunction)pair.getFunExp());
+        PairFunction p = ((PairFunction) pair.getFunExp());
 
         Exp exp = p.getArguments().get(0);
-        
+
         return exp.visit(this, state);
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsPairFunction(IsPairFunction isPairFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp isPair = isPairFunction.getPair();
+        boolean checkPair =  isPair instanceof PairFunction;
+
+        result = FnPlotValue.make(checkPair);
+        
+        return result;
     }
 }

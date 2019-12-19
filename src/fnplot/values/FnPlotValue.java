@@ -34,6 +34,10 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public static FnPlotInt make(Integer v) {
         return new FnPlotInt(v);
     }
+
+    public static FnPlotBool make(Boolean v) {
+        return new FnPlotBool(v);
+    }
     
     /**
      *
@@ -123,6 +127,10 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
      */
     public double doubleValue() throws TypeFnPlotException {
         throw new TypeFnPlotException(FnPlotType.REAL, getType());
+    }
+
+    public boolean booleanValue() throws TypeFnPlotException {
+        throw new TypeFnPlotException(FnPlotType.BOOLEAN, getType());
     }
 
     /**
