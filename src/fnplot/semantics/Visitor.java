@@ -156,5 +156,5 @@ public interface Visitor<S, T> {
 	public T visitCarFunction(CarFunction carFunction, S state) throws FnPlotException;
 
     //Britt Adds
-    public T visitExpConcat(ExpConcat concat, S arg) throws FnPlotException;
+    public T visitExpConcat(ExpConcat exp, S env) throws FnPlotException;
 }
