@@ -69,6 +69,7 @@ terminal LIST;
 terminal NIL;
 terminal IS_EQV;
 terminal IS_EQUAL;
+terminal SUBSTR;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -109,6 +110,7 @@ non terminal ListFunction allLists;
 non terminal Exp string;
 non terminal IsEqv isEqv;
 non terminal IsEqual isEqual;
+non terminal SubstrFunction substr;
 
 // non terminal StmtFun funExp;
 
@@ -126,6 +128,10 @@ stmtList ::= stmtList:lst stmt:s {:
 
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
+
+substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:end RPAREN {:
+	RESULT = new SubstrFunction(str,start,end);
+:};
 
 isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
 							RESULT = new IsEqual(e1,e2);
@@ -177,7 +183,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :};
+		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);

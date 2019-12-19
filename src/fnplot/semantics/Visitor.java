@@ -11,6 +11,7 @@ import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
 import fnplot.syntax.ExpFunCall;
@@ -166,5 +167,7 @@ public interface Visitor<S, T> {
 	public T visitIsEqvFunction(IsEqv isEqv, S state) throws FnPlotException;
 
 	public T visitIsEqualFunction(IsEqual isEqual, S state) throws FnPlotException;
+
+	public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
 
 }

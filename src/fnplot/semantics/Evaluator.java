@@ -12,6 +12,7 @@ import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
@@ -490,9 +491,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitIsEqvFunction(IsEqv isEqv, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        
+
         boolean isEqvBool = false;
-        
+
         FnPlotValue<?> expLVal = isEqv.getExpL().visit(this, env);
         FnPlotValue<?> expRVal = isEqv.getExpR().visit(this, env);
 
@@ -530,6 +531,38 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         result = FnPlotValue.make(isEqvBool);
 
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitSubstrFunction(SubstrFunction substrFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp str = substrFunction.getStr();
+        Exp start = substrFunction.getStart();
+        Exp end = substrFunction.getEnd();
+
+        FnPlotValue<?> strVal = str.visit(this, env);
+        FnPlotValue<?> startVal = start.visit(this, env);
+        FnPlotValue<?> endVal = end.visit(this, env);
+
+        String strString = strVal.stringValue();
+        int startInt = startVal.intValue();
+        int endInt = endVal.intValue();
+
+        System.out.println(strString);
+        System.out.println(startInt);
+        System.out.println(endInt);
+
+        String val = "";
+        int strLen = strString.length();
+        if (endInt > startInt){
+            if (startInt < strLen ){
+                val = strString.substring(startInt, endInt );
+            }
+
+        }
+        result = FnPlotValue.make(val);
         return result;
     }
 }

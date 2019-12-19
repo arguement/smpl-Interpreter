@@ -8,41 +8,42 @@ package fnplot.syntax;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int IS_EQV = 27;
-  public static final int MOD = 11;
-  public static final int PLUS = 7;
-  public static final int RBRACE = 16;
-  public static final int RPAREN = 3;
-  public static final int LIST = 25;
-  public static final int SEMI = 18;
-  public static final int IN = 14;
-  public static final int BOOL_TRUE = 33;
-  public static final int BOOL_FALSE = 34;
-  public static final int VARIABLE = 31;
-  public static final int NIL = 26;
+  public static final int STR = 33;
+  public static final int CAR = 23;
+  public static final int DOUBLE = 31;
+  public static final int INTEGER = 30;
   public static final int LPAREN = 2;
-  public static final int RSQBRACKET = 4;
+  public static final int SEMI = 18;
+  public static final int EXPO = 19;
+  public static final int MINUS = 8;
+  public static final int BOOL_TRUE = 34;
+  public static final int RPAREN = 3;
+  public static final int NIL = 26;
+  public static final int IN = 14;
+  public static final int COMMA = 17;
+  public static final int DIV = 10;
+  public static final int PLUS = 7;
+  public static final int ASSIGN = 12;
+  public static final int IS_EQUAL = 28;
+  public static final int EOF = 0;
+  public static final int error = 1;
+  public static final int MUL = 9;
+  public static final int MOD = 11;
+  public static final int LSQBRACKET = 5;
+  public static final int PAIR = 22;
+  public static final int IS_EQV = 27;
+  public static final int IS_PAIR = 24;
+  public static final int BOOL_FALSE = 35;
   public static final int COLON = 6;
   public static final int LBRACE = 15;
-  public static final int LSQBRACKET = 5;
-  public static final int CAR = 23;
-  public static final int HEX_INTEGER = 21;
-  public static final int EXPO = 19;
-  public static final int COMMA = 17;
-  public static final int EOF = 0;
-  public static final int DIV = 10;
-  public static final int MINUS = 8;
-  public static final int error = 1;
-  public static final int BIN_INTEGER = 20;
+  public static final int VARIABLE = 32;
+  public static final int LIST = 25;
+  public static final int SUBSTR = 29;
   public static final int LET = 13;
-  public static final int STR = 32;
-  public static final int ASSIGN = 12;
-  public static final int INTEGER = 29;
-  public static final int IS_EQUAL = 28;
-  public static final int MUL = 9;
-  public static final int IS_PAIR = 24;
-  public static final int PAIR = 22;
-  public static final int DOUBLE = 30;
+  public static final int BIN_INTEGER = 20;
+  public static final int RBRACE = 16;
+  public static final int RSQBRACKET = 4;
+  public static final int HEX_INTEGER = 21;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -73,6 +74,7 @@ public class sym {
   "NIL",
   "IS_EQV",
   "IS_EQUAL",
+  "SUBSTR",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",
