@@ -98,6 +98,7 @@ bin = #b[01]+
 
 // project code below
 
+<YYINITIAL> "list" {return new Symbol(sym.LIST);}
 <YYINITIAL> "pair?" {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair" {return new Symbol(sym.PAIR);}
 <YYINITIAL> "car" {return new Symbol(sym.CAR);}
@@ -107,6 +108,8 @@ bin = #b[01]+
 <YYINITIAL> #t {return new Symbol(sym.BOOL_TRUE);}
 
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
+
+<YYINITIAL> #e {return new Symbol(sym.NIL);}
 
 <YYINITIAL> [\"][a-zA-Z0-9\\\s]+[\"] { return new Symbol(sym.STR,yytext()); }
 

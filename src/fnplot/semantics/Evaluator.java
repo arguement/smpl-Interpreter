@@ -7,6 +7,7 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
+import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
@@ -469,10 +470,17 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             throws FnPlotException {
         // TODO Auto-generated method stub
         Exp isPair = isPairFunction.getPair();
-        boolean checkPair =  isPair instanceof PairFunction;
+        boolean checkPair = isPair instanceof PairFunction;
 
         result = FnPlotValue.make(checkPair);
-        
+
         return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitListFunction(ListFunction listFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
