@@ -11,10 +11,10 @@ import fnplot.sys.FnPlotException;
 
 public class ExpConcat extends Exp {
 
-    Exp exp1;
-    Exp exp2;
+    String exp1;
+    String exp2;
 
-    public ExpConcat(Exp e1, Exp e2) {
+    public ExpConcat(String e1, String e2) {
         exp1 = e1;
         exp2 = e2;
     }
@@ -34,6 +34,6 @@ public class ExpConcat extends Exp {
 
     @Override
     public String toString() {
-        return exp1.toString() + " @ " + exp2.toString();
+        return exp1 + " @ " + exp2;
     }
 }
