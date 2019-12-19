@@ -19,11 +19,11 @@ public class ExpConcat extends Exp {
         exp2 = e2;
     }
 
-    public Exp getExpL() {
+    public String getExpL() {
         return exp1;
     }
 
-    public Exp getExpR() {
+    public String getExpR() {
         return exp2;
     }
 
