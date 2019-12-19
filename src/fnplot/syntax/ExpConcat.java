@@ -11,10 +11,10 @@ import fnplot.sys.FnPlotException;
 
 public class ExpConcat extends Exp {
 
-    String exp1;
-    String exp2;
+    Exp exp1;
+    Exp exp2;
 
-    public ExpConcat(String e1, String e2) {
+    public ExpConcat(Exp e1, Exp e2) {
         exp1 = e1;
         exp2 = e2;
     }

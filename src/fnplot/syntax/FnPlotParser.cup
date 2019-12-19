@@ -52,10 +52,12 @@ scan with {:
 // special symbols
 terminal LPAREN, RPAREN;
 
-//Britt Bratt 
+//Britt 
 terminal CONCAT;
+terminal IF, THEN, ELSE;
 non terminal Exp concatenation; 
-
+non terminal StmtDefinition funDef; 
+non terminal Exp condition;
 
 //special symbols i added
 terminal RSQBRACKET,LSQBRACKET,COLON;
@@ -117,11 +119,23 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :} ;
+	 expression:e SEMI {: RESULT = e; :};
 
 //Britt
 concatenation ::= VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
 
+/*funDef ::= DEF VARIABLE:v expression:e SEMI {: RESULT = new StmtDefinition(v, e); :};
+
+ifExp ::= IF condition:c THEN action:a1 ELSE action:a2 {: RESULT = new ExpIf(c, a1, a2); :} |
+          If condition:c THEN action:a1 {: RESULT = ExpIf(c, a1); :};
+
+action ::= expression:e {: RESULT = new StmtSequence(e); :} |
+           stmtList:s  {: RESULT = s; :};
+ 
+condition ::= logOp:l {: RESULT = l; :} |
+			  bitOp:b {: RESULT = b; :} |
+			  relOp:r {: RESULT = r; :};
+*/
 
 car ::= CAR LPAREN pair:p RPAREN {:
 		System.out.println("inside car");
@@ -145,7 +159,9 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		pair:p {: RESULT = p; :} | 
 		car:c {: RESULT = c; :} |
 		//Britt
-		concatenation:c {: RESULT = c; :}; 
+		concatenation:concat {: RESULT = concat; :}| 
+		condition:cond {: RESULT = cond; :} | 
+		ifExp:i {: RESULT = r; :};
 		
 
 letExp ::= LET bindings:bs IN expression:body {:
@@ -170,7 +186,7 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 
 definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:};
+		:} 
 
 arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
