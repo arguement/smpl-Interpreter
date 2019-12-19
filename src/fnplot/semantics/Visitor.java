@@ -21,6 +21,7 @@ import fnplot.syntax.StatementClear;
 import fnplot.syntax.PlotStatement;
 import fnplot.syntax.ArithProgram;
 import fnplot.sys.FnPlotException;
+import fnplot.syntax.ExpConcat;
 
 /**
  * The generic Visitor interface for the Arithmetic parser
@@ -156,5 +157,5 @@ public interface Visitor<S, T> {
 	public T visitCarFunction(CarFunction carFunction, S state) throws FnPlotException;
 
     //Britt Adds
-    public T visitExpConcat(ExpConcat exp, S env) throws FnPlotException;
+    public T visitExpConcat(ExpConcat exp, S arg) throws FnPlotException;
 }
