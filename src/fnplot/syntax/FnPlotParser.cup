@@ -54,7 +54,7 @@ terminal LPAREN, RPAREN;
 
 //Britt Bratt 
 terminal CONCAT;
-non terminal ExpConcat concatenation; 
+non terminal Exp concatenation; 
 
 
 //special symbols i added
