@@ -12,6 +12,16 @@ import fnplot.syntax.Exp;
  */
 public abstract class InBuilt extends Exp{
 
+    private static int counter;
+    private int ref;
+
+    public InBuilt(){
+        this.ref = ++counter;
+    }
+
+    public int getRef() {
+        return ref;
+    }
     // public abstract String toString();
         
 }

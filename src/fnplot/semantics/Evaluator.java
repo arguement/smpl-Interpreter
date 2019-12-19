@@ -6,6 +6,8 @@ import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.InBuilt;
+import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
@@ -455,7 +457,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
-        
+
         FnInBuiltFunction pair = ((FnInBuiltFunction) carFunction.getPair().visit(this, state));
 
         PairFunction p = ((PairFunction) pair.getFunExp());
@@ -468,7 +470,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitIsPairFunction(IsPairFunction isPairFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-        
+
         Exp isPair = isPairFunction.getPair();
         boolean checkPair = isPair instanceof PairFunction;
 
@@ -482,5 +484,36 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             throws FnPlotException {
         // TODO Auto-generated method stub
         return new FnInBuiltFunction(listFunction, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsEqvFunction(IsEqv isEqv, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        HashMap<String, FnPlotValue<?>> envMap = env.dictionary;
+        boolean isEqvBool = false;
+        Exp expL = isEqv.getExpL();
+        Exp expR = isEqv.getExpL();
+        FnPlotValue<?> expLVal = isEqv.getExpL().visit(this, env);
+        FnPlotValue<?> expRVal = isEqv.getExpR().visit(this, env);
+        
+        
+        if (expRVal instanceof FnInBuiltFunction && expLVal instanceof FnInBuiltFunction){
+            FnInBuiltFunction expLFn = ((FnInBuiltFunction) expLVal);
+            FnInBuiltFunction expRFn = ((FnInBuiltFunction) expRVal);
+
+            String stringEvalL = expLFn.getFunExp().toString();
+            String stringEvalR = expRFn.getFunExp().toString();
+
+            int refL = expLFn.getFunExp().getRef();
+            int refR = expRFn.getFunExp().getRef();
+            if (stringEvalR.equals(stringEvalL) && refL == refR){
+                isEqvBool = true;
+            }
+        }
+      
+
+        result = FnPlotValue.make(isEqvBool);
+        
+        return result;
     }
 }

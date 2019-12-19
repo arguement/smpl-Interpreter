@@ -6,6 +6,7 @@ import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
@@ -160,4 +161,7 @@ public interface Visitor<S, T> {
 	public T visitIsPairFunction(IsPairFunction isPairFunction, S state) throws FnPlotException;
 
 	public T visitListFunction(ListFunction listFunction, S state) throws FnPlotException;
+
+	public T visitIsEqvFunction(IsEqv isEqv, S state) throws FnPlotException;
+
 }

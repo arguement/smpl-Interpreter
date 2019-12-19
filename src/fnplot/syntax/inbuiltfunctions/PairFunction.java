@@ -12,19 +12,20 @@ import fnplot.values.FnPlotValue;
  */
 public class PairFunction extends InBuilt {
 
-   
-
     private ArrayList<Exp> argList;
     private String name;
+    
 
-    public PairFunction(){
+    public PairFunction() {
         super();
     }
 
-    public PairFunction(String name,ArrayList<Exp> args) {
-        System.out.println("inside constructor of Pair Function");
+    
+    public PairFunction(String name, ArrayList<Exp> args) {
+        // System.out.println("inside constructor of Pair Function");
         this.argList = args;
         this.name = name;
+        
     }
 
     public ArrayList<Exp> getArguments() {
@@ -68,7 +69,7 @@ public class PairFunction extends InBuilt {
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
         // TODO Auto-generated method stub
-        System.out.println("inside visit of PairFunction");
+        // System.out.println("inside visit of PairFunction");
 
         ArrayList<Exp> evalArgs = expressionReduce(v, this.argList, state);
         setArgList(evalArgs);
