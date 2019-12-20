@@ -116,13 +116,6 @@ bin = #b[01]+
 // Britt
 <YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
 
-<YYINITIAL> " def " {return new Symbol (sym.DEF);}
-
-<YYINITIAL> " if " {return new Symbol (sym.DEF);}
-
-<YYINITIAL> " this " {return new Symbol (sym.DEF);}
-
-<YYINITIAL> " else " {return new Symbol (sym.DEF);}
 
 
 <YYINITIAL>   ( {num}+|{neg}+ ) {

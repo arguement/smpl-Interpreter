@@ -54,11 +54,12 @@ terminal LPAREN, RPAREN;
 
 //Britt 
 terminal CONCAT;
-terminal IF, THEN, ELSE;
 non terminal Exp concatenation; 
+
+/*terminal IF, THEN, ELSE;
 non terminal StmtDefinition funDef; 
 non terminal Exp condition;
-
+*/
 //special symbols i added
 terminal RSQBRACKET,LSQBRACKET,COLON;
 
@@ -159,9 +160,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		pair:p {: RESULT = p; :} | 
 		car:c {: RESULT = c; :} |
 		//Britt
-		concatenation:concat {: RESULT = concat; :}| 
-		condition:cond {: RESULT = cond; :} | 
-		ifExp:i {: RESULT = r; :};
+		concatenation:concat {: RESULT = concat; :};
 		
 
 letExp ::= LET bindings:bs IN expression:body {:
@@ -186,7 +185,7 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 
 definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:} 
+		:} ;
 
 arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
