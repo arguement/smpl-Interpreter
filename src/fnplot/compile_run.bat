@@ -1,4 +1,3 @@
-
 title Compiles and runs java files
 
 rem this is an explanation

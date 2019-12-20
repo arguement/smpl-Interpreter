@@ -58,7 +58,15 @@ terminal RSQBRACKET,LSQBRACKET,COLON;
 // arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD, ASSIGN;
 terminal LET, IN, LBRACE, RBRACE, COMMA;
-terminal SEMI;
+terminal SEMI; 
+
+//Relational Operators 
+terminal GREATER;
+terminal LESSER;
+terminal GREATEREQUAL;
+terminal LESSEREQUAL;
+terminal NOTEQUAL; 
+terminal EEQUAL;
 
 // arithmetic operators i created
 terminal EXPO;
@@ -95,7 +103,7 @@ non terminal ArrayList<Binding> bindingsAux;
 non terminal Binding binding;
 
 non terminal Exp expression;
-non terminal Exp arithExp;
+non terminal Exp arithExp; 
 non terminal Exp term;
 non terminal Exp factor;
 non terminal FnPlotValue<?> number;
@@ -116,6 +124,7 @@ non terminal IsEqv isEqv;
 non terminal IsEqual isEqual;
 non terminal SubstrFunction substr;
 non terminal Boolean complits;
+non terminal Exp comp; //dean 
 
 // non terminal StmtFun funExp;
 
@@ -178,6 +187,8 @@ car ::= CAR LPAREN pair:p RPAREN {:
 		RESULT = new CarFunction(var);
 :}; 
 
+
+
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 		ArrayList<Exp> store = new ArrayList<>();
 		store.add(e1);
@@ -188,7 +199,8 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :};
+		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
+		|comp:n {: RESULT= n; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -223,13 +235,34 @@ arithExp ::= arithExp:e PLUS term:t {:
 power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
 						factor:f {: RESULT=f; :};
 
+comp ::= power:e1 EEQUAL expression:e2 {: 
+              System.out.println("in here");
+              RESULT=new ExpComp(e1,e2); :}| 
+         
+		 power:e1 GREATER expression:e2 {:
+		      RESULT= new ExpGreater(e1,e2); :}| 
+		 
+		 power:e1 LESSER expression:e2 {: 
+		      RESULT= new ExpLesser(e1,e2); :} |
+		 
+		 power:e1 GREATEREQUAL expression:e2 {:
+		  RESULT= new ExpGreaterEqual(e1,e2); :}| 
+		 
+		 power:e1 LESSEREQUAL expression:e2 {: 
+		  RESULT= new ExpLesserEqual(e1,e2);:}|
+		 
+		 power:e1 NOTEQUAL expression:e2 {:
+		  RESULT= new ExpNotEqual(e1,e2);
+		  :}
+		;
+
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
 	 power:f DIV term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :};
+		power:p {: RESULT= p; :}  ;
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
@@ -245,6 +278,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} ;
 
 empty ::= ;

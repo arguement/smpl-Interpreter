@@ -109,7 +109,15 @@ bin = #b[01]+
 
 <YYINITIAL> "^" {return new Symbol(sym.EXPO);}
 
-<YYINITIAL> #t {return new Symbol(sym.BOOL_TRUE);}
+<YYINITIAL> #t {return new Symbol(sym.BOOL_TRUE);} 
+
+<YYINITIAL> ">" {return new Symbol(sym.GREATER); } 
+<YYINITIAL> "<" {return new Symbol(sym.LESSER); }
+<YYINITIAL> ">=" {return new Symbol(sym.GREATEREQUAL);} 
+<YYINITIAL> "<=" {return new Symbol(sym.LESSEREQUAL);} 
+<YYINITIAL> "!=" {return new Symbol(sym.NOTEQUAL);} 
+<YYINITIAL> "==" {return new Symbol(sym.EEQUAL);}
+
 
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
 

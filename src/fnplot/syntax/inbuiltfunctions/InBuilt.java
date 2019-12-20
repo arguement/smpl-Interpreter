@@ -8,7 +8,7 @@ import fnplot.syntax.Exp;
 
 
 /**Parent of all inbuilt types
- * @@author Jordan
+ * @author Jordan
  */
 public abstract class InBuilt extends Exp{
 
