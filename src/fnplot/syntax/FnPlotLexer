@@ -98,12 +98,6 @@ bin = #b[01]+
 
 // project code below
 
-<YYINITIAL> "substr" {return new Symbol(sym.SUBSTR);}
-<YYINITIAL> "equal?" {return new Symbol(sym.IS_EQUAL);}
-<YYINITIAL> "eqv?" {return new Symbol(sym.IS_EQV);}
-
-<YYINITIAL> "list" {return new Symbol(sym.LIST);}
-<YYINITIAL> "pair?" {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair" {return new Symbol(sym.PAIR);}
 <YYINITIAL> "car" {return new Symbol(sym.CAR);}
 
@@ -121,13 +115,11 @@ bin = #b[01]+
 
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
 
-<YYINITIAL> #e {return new Symbol(sym.NIL);}
-
 <YYINITIAL> [\"][a-zA-Z0-9\\\s]+[\"] { return new Symbol(sym.STR,yytext()); }
 
-<YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) ); }
+<YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER); }
 
-<YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }
+<YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext() ); }
 
 <YYINITIAL>   ( {num}+|{neg}+ ) {
 	       // INTEGER
