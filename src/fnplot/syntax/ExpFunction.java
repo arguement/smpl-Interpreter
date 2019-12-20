@@ -39,6 +39,7 @@ public class ExpFunction extends Exp {
 
     ArrayList<String> parameters;
     Exp body;
+    private String overflow;
 
     public ExpFunction() {
         super();
@@ -47,11 +48,35 @@ public class ExpFunction extends Exp {
     public ExpFunction(ArrayList<ExpPara> parameters, Exp body) {
         System.out.println("inside");
 
+        // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        // ArrayList<String> temp2 = new ArrayList<>(temp);
+        
+        this.parameters = this.toVarList(parameters);
+        this.body = body;
+    }
+
+    public ExpFunction(ArrayList<ExpPara> parameters, Exp body,ExpPara overflow) {
+        System.out.println("inside another");
+
+        // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        // ArrayList<String> temp2 = new ArrayList<>(temp);
+        
+        this.parameters = this.toVarList(parameters);
+        this.body = body;
+        this.overflow = overflow.getVar();
+    }
+    private ArrayList<String> toVarList(ArrayList<ExpPara> parameters){
+
         List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
         ArrayList<String> temp2 = new ArrayList<>(temp);
+
+        return temp2;
         
-        this.parameters = temp2;
-        this.body = body;
+
+    }
+
+    public String getRestParameters() {
+        return overflow;
     }
 
     public ArrayList<String> getParameters() {

@@ -84,6 +84,7 @@ bin = #b[01]+
 <YYINITIAL>	"}"	{return new Symbol(sym.RBRACE);}
 
 <YYINITIAL>	","	{return new Symbol(sym.COMMA);}
+<YYINITIAL>	"."	{return new Symbol(sym.DOT);}
 
 <YYINITIAL>	"let"	{return new Symbol(sym.LET);}
 <YYINITIAL>	"in"	{return new Symbol(sym.IN);}

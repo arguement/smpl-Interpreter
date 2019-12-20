@@ -43,6 +43,7 @@ import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.awt.geom.Point2D;
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
@@ -186,15 +187,24 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     // added by me
     public FnPlotValue<?> visitFnDefn(ExpFunction defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
         System.out.println("inside evaluator visitfn");
+
         Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
-        // env.put(( (Exp)defn)., c);
+
+        if (defn.getRestParameters() != null) {
+
+            // ArrayList<String> withRest = defn.getParameters().addAll(defn.getRestParameters());
+            c.setRest(defn.getRestParameters());
+            
+        } 
+
+
+        // Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
+        
 
         FnPlotFunction funct = new FnPlotFunction(defn, env);
         env.put(funct.toString(), c);
 
-        // env.put(defn.ge,funct.funValue());
-
-        // System.out.printf("inside functiondfn its %s %n",this.result);
+       
         return funct;
     }
 
@@ -228,9 +238,21 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.);
         // System.out.println(values);
         Closure closure = (Closure) env.get(env.get(name).toString());
+        // ListFunction list = new ListFunction(closure.getRestParameters())
 
         // System.out.printf("close getparams: %s %n",closure.getParameters());
         // System.out.printf("values: %s %n",values);
+
+        // int lenParam = closure.getParameters().size();
+        if (closure.getRestParameters() != null) {
+            int lenParam = closure.getParameters().size();
+            int lenArgs = values.size();
+            List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+            List<Exp> tempAfter = values.subList(lenParam,lenArgs).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+
+            ArrayList<Exp> first = new ArrayList<>(tempFirst);
+            ArrayList<Exp> after = new ArrayList<>(tempAfter);
+        }
 
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), values,
                 closure.getEnvironment());
@@ -245,6 +267,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.get(name).);
         // this.plotter.
         // System.out.println(this.plotter);
+        
 
         return closure.getBody().visit(this, newEnv);
     }

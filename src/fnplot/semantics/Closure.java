@@ -8,6 +8,7 @@ import fnplot.values.FnPlotValue;
 
 public class Closure extends FnPlotValue<Closure>  {
     private ArrayList<String> parameters;
+    private String rest = null;
     private Exp body;
     private Environment<FnPlotValue<?>> env;
 
@@ -25,6 +26,12 @@ public class Closure extends FnPlotValue<Closure>  {
     }
     public Exp getBody(){
         return body;
+    }
+    public void setRest(String rest){
+        this.rest = rest;
+    }
+    public String getRestParameters() {
+        return this.rest;
     }
     @Override
     public FnPlotType getType() {
