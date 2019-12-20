@@ -90,6 +90,7 @@ terminal Boolean BOOL_TRUE;
 terminal Boolean BOOL_FALSE;
 terminal String BIN_INTEGER;
 terminal String HEX_INTEGER;
+terminal String MODIFIER;
 
 /* Non terminals */
 non terminal ArithProgram program;
@@ -142,6 +143,9 @@ stmtList ::= stmtList:lst stmt:s {:
 
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
+
+
+
 
 substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:end RPAREN {:
 	RESULT = new SubstrFunction(str,start,end);
