@@ -444,8 +444,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         //FnPlotValue<FnNone> result=true; 
         return val1.eequals(val2);
     } 
@@ -455,8 +455,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.notequal(val2);
     } 
     @Override
@@ -465,8 +465,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.lesserequal(val2);
     } 
     @Override
@@ -475,8 +475,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.lesser(val2);
     } 
     @Override
@@ -485,8 +485,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.greaterequal(val2);
     }
     @Override
@@ -495,8 +495,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2; 
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.greater(val2);
     }
     @Override
