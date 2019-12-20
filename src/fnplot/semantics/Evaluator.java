@@ -6,6 +6,7 @@ import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.CdrFunction;
 import fnplot.syntax.inbuiltfunctions.InBuilt;
 import fnplot.syntax.inbuiltfunctions.IsEqual;
 import fnplot.syntax.inbuiltfunctions.IsEqv;
@@ -524,6 +525,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         return new FnInBuiltFunction(pairFunction, env);
     }
 
+   
+    
     @Override
     public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
@@ -533,6 +536,19 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         PairFunction p = ((PairFunction) pair.getFunExp());
 
         Exp exp = p.getArguments().get(0);
+
+        return exp.visit(this, state);
+    }
+
+    @Override
+    public FnPlotValue<?> visitCdrFunction(CdrFunction cdrFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+
+        FnInBuiltFunction pair = ((FnInBuiltFunction) cdrFunction.getPair().visit(this, state));
+
+        PairFunction p = ((PairFunction) pair.getFunExp());
+
+        Exp exp = p.getArguments().get(1);
 
         return exp.visit(this, state);
     }
