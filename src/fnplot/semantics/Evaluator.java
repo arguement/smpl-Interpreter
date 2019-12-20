@@ -186,15 +186,16 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     // added by me
     public FnPlotValue<?> visitFnDefn(ExpFunction defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
         System.out.println("inside evaluator visitfn");
-        Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
+        /* Closure c = new Closure(defn.getParameters(), defn.getBody(), env); */
         // env.put(( (Exp)defn)., c);
-        FnPlotFunction funct = new FnPlotFunction(defn, env);
-        env.put(funct.toString(), c);
+
+        /* FnPlotFunction funct = new FnPlotFunction(defn, env);
+        env.put(funct.toString(), c); */
 
         // env.put(defn.ge,funct.funValue());
 
         // System.out.printf("inside functiondfn its %s %n",this.result);
-        return funct;
+        return null;
     }
 
     // added by me

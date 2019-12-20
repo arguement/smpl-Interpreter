@@ -9,16 +9,17 @@ package fnplot.syntax;
 public class sym {
   /* terminals */
   public static final int EEQUAL = 24;
-  public static final int STR = 37;
+  public static final int STR = 38;
   public static final int CAR = 27;
-  public static final int DOUBLE = 35;
-  public static final int INTEGER = 34;
+  public static final int DOUBLE = 36;
+  public static final int INTEGER = 35;
   public static final int NOTEQUAL = 23;
   public static final int LPAREN = 2;
   public static final int GREATER = 19;
   public static final int SEMI = 18;
   public static final int EXPO = 25;
-  public static final int BOOL_TRUE = 38;
+  public static final int MODIFIER = 43;
+  public static final int BOOL_TRUE = 39;
   public static final int MINUS = 8;
   public static final int RPAREN = 3;
   public static final int NIL = 30;
@@ -39,17 +40,18 @@ public class sym {
   public static final int IS_EQV = 31;
   public static final int IS_PAIR = 28;
   public static final int GREATEREQUAL = 21;
-  public static final int BOOL_FALSE = 39;
+  public static final int BOOL_FALSE = 40;
   public static final int COLON = 6;
   public static final int LBRACE = 15;
-  public static final int VARIABLE = 36;
+  public static final int VARIABLE = 37;
   public static final int LIST = 29;
   public static final int SUBSTR = 33;
   public static final int LET = 13;
-  public static final int BIN_INTEGER = 40;
+  public static final int BIN_INTEGER = 41;
   public static final int RBRACE = 16;
   public static final int RSQBRACKET = 4;
-  public static final int HEX_INTEGER = 41;
+  public static final int HEX_INTEGER = 42;
+  public static final int PROC = 34;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -85,6 +87,7 @@ public class sym {
   "IS_EQV",
   "IS_EQUAL",
   "SUBSTR",
+  "PROC",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",
@@ -92,7 +95,8 @@ public class sym {
   "BOOL_TRUE",
   "BOOL_FALSE",
   "BIN_INTEGER",
-  "HEX_INTEGER"
+  "HEX_INTEGER",
+  "MODIFIER"
   };
 }
 

@@ -28,13 +28,15 @@ package fnplot.syntax;
 import fnplot.semantics.Visitor;
 import fnplot.sys.FnPlotException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author newts
  */
-public class ExpFunction  extends Exp {
-    
+public class ExpFunction extends Exp {
+
     ArrayList<String> parameters;
     Exp body;
 
@@ -42,9 +44,13 @@ public class ExpFunction  extends Exp {
         super();
     }
 
-    public ExpFunction(ArrayList<String> parameters, Exp body) {
+    public ExpFunction(ArrayList<ExpPara> parameters, Exp body) {
         System.out.println("inside");
-        this.parameters = parameters;
+
+        List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        ArrayList<String> temp2 = new ArrayList<>(temp);
+        
+        this.parameters = temp2;
         this.body = body;
     }
 
@@ -64,14 +70,8 @@ public class ExpFunction  extends Exp {
 
     @Override
     public String toString() {
-        String paramStr = "";
-        if (parameters.size() > 0) {
-            paramStr = parameters.get(0);
-        }
-        for (int i = 1; i < parameters.size(); i++) {
-            paramStr = paramStr + ", " + parameters.get(i);
-        }
-        return String.format("(fun (%s) -> %s)", paramStr, body);
+        
+        return "expfunction";
     }
 
 }
