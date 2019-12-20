@@ -131,6 +131,9 @@ non terminal ExpPara paramter; //dean
 non terminal ArrayList<ExpPara> paramListE;
 non terminal ArrayList<ExpPara> paramList;
 non terminal ExpFunction procDef;
+non terminal ExpFunCall funCall;
+non terminal ArrayList<Exp> funCallExpListE;
+non terminal ArrayList<Exp> funCallExpList;
 
 // non terminal StmtFun funExp;
 
@@ -148,6 +151,17 @@ stmtList ::= stmtList:lst stmt:s {:
 
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :}  ;
+
+funCall ::= VARIABLE:v LPAREN funCallExpListE:el RPAREN {: RESULT= new ExpFunCall(v,el); :} ;
+
+funCallExpListE ::= funCallExpList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
+
+funCallExpList ::= funCallExpList:pl COMMA expression:v {: pl.add(v); 
+											RESULT = pl; :} | expression:v {: ArrayList<Exp> ls = new ArrayList<>(); 
+									ls.add(v) ;
+									RESULT = ls;
+									:};
+
 
 procDef ::= PROC LPAREN RSQBRACKET paramListE:pl LSQBRACKET RPAREN expression:body {: 
 
@@ -305,6 +319,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} ;
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} ;
 
 empty ::= ;
