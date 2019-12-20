@@ -115,6 +115,7 @@ non terminal Exp string;
 non terminal IsEqv isEqv;
 non terminal IsEqual isEqual;
 non terminal SubstrFunction substr;
+non terminal Boolean complits;
 
 // non terminal StmtFun funExp;
 
@@ -232,13 +233,15 @@ term ::= power:f MUL term:t {:
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
+complits ::= BOOL_FALSE:f {: RESULT= new Boolean("false"); :} | BOOL_TRUE:t {: RESULT= new Boolean("true"); :} ;
+
 number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :} | BIN_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 2);
 RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);
 RESULT = FnPlotValue.make(val);
- :};
+ :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :};
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |

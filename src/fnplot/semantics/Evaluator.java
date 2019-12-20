@@ -550,9 +550,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         int startInt = startVal.intValue();
         int endInt = endVal.intValue();
 
-        System.out.println(strString);
-        System.out.println(startInt);
-        System.out.println(endInt);
+        // System.out.println(strString);
+        // System.out.println(startInt);
+        // System.out.println(endInt);
 
         String val = "";
         int strLen = strString.length();
