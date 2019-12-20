@@ -85,7 +85,46 @@ public class FnPlotReal extends FnPlotValue<FnPlotReal> {
             return make(value % arg.doubleValue());
         }
     }
-    
+    @Override
+     public FnPlotBoolean eequals (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+           
+         return  make(value == arg.doubleValue());
+     } 
+    @Override
+     public FnPlotBoolean greater (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value > arg.doubleValue();
+         return  make(val);
+     }
+     
+     @Override
+     public FnPlotBoolean notequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value != arg.doubleValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean lesserequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value <= arg.doubleValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean lesser (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value < arg.doubleValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean greaterequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value >= arg.doubleValue();
+         return  make(val);
+     }
     @Override
     public int intValue() {
         return (int) value;

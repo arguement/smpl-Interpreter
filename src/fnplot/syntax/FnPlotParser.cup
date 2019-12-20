@@ -183,8 +183,23 @@ power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
 comp ::= power:e1 EEQUAL expression:e2 {: 
               System.out.println("in here");
               RESULT=new ExpComp(e1,e2); :}| 
-         power:e1 GREATER expression:e2 {:
-		      RESULT= new ExpGreater(e1,e2); :} ;
+         
+		 power:e1 GREATER expression:e2 {:
+		      RESULT= new ExpGreater(e1,e2); :}| 
+		 
+		 power:e1 LESSER expression:e2 {: 
+		      RESULT= new ExpLesser(e1,e2); :} |
+		 
+		 power:e1 GREATEREQUAL expression:e2 {:
+		  RESULT= new ExpGreaterEqual(e1,e2); :}| 
+		 
+		 power:e1 LESSEREQUAL expression:e2 {: 
+		  RESULT= new ExpLesserEqual(e1,e2);:}|
+		 
+		 power:e1 NOTEQUAL expression:e2 {:
+		  RESULT= new ExpNotEqual(e1,e2);
+		  :}
+		;
 
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |

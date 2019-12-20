@@ -16,7 +16,11 @@ import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.ExpSub; 
-import fnplot.syntax.ExpComp; /// Gaza
+import fnplot.syntax.ExpComp; /// Gaza 
+import fnplot.syntax.ExpLesser;
+import fnplot.syntax.ExpGreaterEqual;
+import fnplot.syntax.ExpLesserEqual;
+import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.Binding; 
 import fnplot.syntax.ArithProgram;
@@ -27,6 +31,7 @@ import fnplot.syntax.PlotStatement;
 import fnplot.sys.FnPlotException;
 import fnplot.values.FnPlotReal;
 import fnplot.values.FnPlotValue;
+import fnplot.values.FnPlotBoolean;
 import fnplot.values.FnPlotFunction;
 import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
@@ -435,9 +440,49 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
         System.out.println(val1);
         System.out.println(val2);
-        //FnPlotValue<FnNone> result=true;
+        //FnPlotValue<FnNone> result=true; 
         return val1.eequals(val2);
     } 
+    @Override
+    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
+        return val1.notequal(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
+        return val1.lesserequal(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpLesser(ExpLesser exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
+        return val1.lesser(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
+        return val1.greaterequal(val2);
+    }
     @Override
     public FnPlotValue<?> visitExpGreater(ExpGreater exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
         
@@ -446,9 +491,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
         System.out.println(val1);
         System.out.println(val2);
-        return null;
+        return val1.greater(val2);
     }
-
     @Override
     public FnPlotValue<?> visitExpMod(ExpMod exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         FnPlotValue<?> val1, val2;

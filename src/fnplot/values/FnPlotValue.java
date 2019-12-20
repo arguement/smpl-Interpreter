@@ -107,9 +107,31 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
      */
     public FnPlotValue<?> mod(FnPlotValue<?> arg) throws FnPlotException {
             throw new TypeFnPlotException("Operation mod called with non-numeric type");
-    }
+    } 
+    //dean was here
     public FnPlotValue<?> eequals(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something"); }
+        throw new TypeFnPlotException("something"); 
+    } 
+
+    public FnPlotValue<?> greater(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something2"); 
+    } 
+
+    public FnPlotValue<?> notequal(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something3"); 
+    } 
+
+    public FnPlotValue<?> lesserequal(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something4"); 
+    }  
+
+    public FnPlotValue<?> lesser(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something5"); 
+    } 
+
+    public FnPlotValue<?> greaterequal(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("something6"); 
+    }
     /**
      *
      * @return The integer value wrapped in this FnPlot value
@@ -119,7 +141,7 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
         throw new TypeFnPlotException(FnPlotType.INTEGER, getType());
     } 
     //dean
-   public Boolean booleanValue() throws TypeFnPlotException{
+   public boolean booleanValue() throws TypeFnPlotException{
        throw new TypeFnPlotException(FnPlotType.BOOLEAN, getType());
    }
     /**

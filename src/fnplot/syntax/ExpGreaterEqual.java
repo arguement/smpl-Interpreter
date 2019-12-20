@@ -3,11 +3,11 @@ package fnplot.syntax;
 import fnplot.semantics.Visitor;
 import fnplot.sys.FnPlotException;
 
-public class ExpGreater extends Exp {
+public class ExpGreaterEqual extends Exp {
 
     Exp exp1, exp2;
 
-    public ExpGreater(Exp e1, Exp e2) {
+    public ExpGreaterEqual(Exp e1, Exp e2) {
         exp1 = e1;
         exp2 = e2;
     }
@@ -22,11 +22,11 @@ public class ExpGreater extends Exp {
 
     @Override
     public <S, T> T visit(Visitor<S, T> v, S arg) throws FnPlotException {
-        return v.visitExpGreater(this, arg);
+        return v.visitExpGreaterEqual(this, arg);
     }
 
     @Override
     public String toString() {
-        return exp1.toString() + " > " + exp2.toString();
+        return exp1.toString() + ">=" + exp2.toString();
     }
 }

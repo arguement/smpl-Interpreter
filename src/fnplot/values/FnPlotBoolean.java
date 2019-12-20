@@ -9,42 +9,42 @@ import fnplot.sys.FnPlotException;
 import static fnplot.values.FnPlotValue.make;
 
 /**
- *
- * @author dean
-
+ *Boolean type 
+ * @author Jordan
+ * 
  */
 public class FnPlotBoolean extends FnPlotValue<FnPlotBoolean> {
-    
+
     boolean value;
-    int val1;
-    
-     public FnPlotBoolean(Boolean val1){
-         this.val1=val1;
+
+    public FnPlotBoolean() {
+        this(false);
+    }
+
+    public FnPlotBoolean(boolean v) {
+        value = v;
+    }
+    @Override
+     public FnPlotBoolean eequals (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value == arg.booleanValue();
+         return  make(val);
      }
     
      @Override
-     public FnPlotBoolean eequals (FnPlotValue<?> arg) throws FnPlotException { 
-          boolean value= val1==arg.doubleValue();
-         return make(value);
-     }
-    @Override
-    public FnPlotType getType() {
-        return FnPlotType.BOOLEAN;
+    public boolean booleanValue() throws TypeFnPlotException {
+        // TODO Auto-generated method stub
+        return this.value;
     }
     
-    
-    @Override
-    public int intValue() {
-        return val1;
-    }
-
-    @Override
-    public double doubleValue() {
-        return val1;
-    }
-
     @Override
     public String toString() {
-        return String.valueOf(val1);
+        return String.valueOf(value);
     }
-}
+
+    @Override
+    public FnPlotType getType() {
+        // TODO Auto-generated method stub
+        return FnPlotType.BOOLEAN;
+    }
+} 
