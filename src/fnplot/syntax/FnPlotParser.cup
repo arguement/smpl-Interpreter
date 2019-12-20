@@ -61,7 +61,9 @@ terminal LET, IN, LBRACE, RBRACE, COMMA;
 terminal SEMI;
 
 // arithmetic operators i created
-terminal EXPO,BIN_INTEGER,HEX_INTEGER;
+terminal EXPO;
+// terminal BIN_INTEGER;
+// terminal HEX_INTEGER;
 terminal PAIR;
 terminal CAR;
 terminal IS_PAIR;
@@ -78,6 +80,8 @@ terminal String VARIABLE;
 terminal String STR; // for strings encased in "" e.g "smpl"
 terminal Boolean BOOL_TRUE;
 terminal Boolean BOOL_FALSE;
+terminal String BIN_INTEGER;
+terminal String HEX_INTEGER;
 
 /* Non terminals */
 non terminal ArithProgram program;
@@ -228,7 +232,13 @@ term ::= power:f MUL term:t {:
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
-number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :};
+number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :} | BIN_INTEGER:ilit {: 
+Integer val = Integer.parseInt(ilit, 2);
+RESULT = FnPlotValue.make(val);
+ :} | HEX_INTEGER:ilit {: 
+Integer val = Integer.parseInt(ilit, 16);
+RESULT = FnPlotValue.make(val);
+ :};
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |

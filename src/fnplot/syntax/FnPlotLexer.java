@@ -896,15 +896,15 @@ public class FnPlotLexer implements java_cup.runtime.Scanner {
           case 61: break;
           case 26: 
             System.out.println("line: "+(yyline+1)+" "+"char: "+yychar+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [120] { return new Symbol(sym.BIN_INTEGER); }");
-            { return new Symbol(sym.BIN_INTEGER);
+            System.out.println("action [120] { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) ); }");
+            { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) );
             } 
             // fall through
           case 62: break;
           case 27: 
             System.out.println("line: "+(yyline+1)+" "+"char: "+yychar+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [122] { return new Symbol( sym.HEX_INTEGER,yytext() ); }");
-            { return new Symbol( sym.HEX_INTEGER,yytext() );
+            System.out.println("action [122] { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }");
+            { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) );
             } 
             // fall through
           case 63: break;
