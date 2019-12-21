@@ -244,14 +244,36 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.printf("values: %s %n",values);
 
         // int lenParam = closure.getParameters().size();
+
+        // chek if more than the definied parameters are there
         if (closure.getRestParameters() != null) {
             int lenParam = closure.getParameters().size();
             int lenArgs = values.size();
-            List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
-            List<Exp> tempAfter = values.subList(lenParam,lenArgs).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
 
-            ArrayList<Exp> first = new ArrayList<>(tempFirst);
-            ArrayList<Exp> after = new ArrayList<>(tempAfter);
+            if (lenArgs > lenParam){
+                
+                List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+                List<Exp> tempAfter = values.subList(lenParam,lenArgs).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+
+                ArrayList<Exp> first = new ArrayList<>(tempFirst);
+                ArrayList<Exp> after = new ArrayList<>(tempAfter);
+
+                ListFunction list = new ListFunction(after);
+                // list.visit(this, env);
+                ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
+                for (Exp e : first) {
+                    tempValues.add(e.visit(this, env));
+
+                }
+                Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), tempValues,
+                    closure.getEnvironment());
+                
+                newEnv.put(closure.getRestParameters(), list.visit(this, env));
+
+                return closure.getBody().visit(this, newEnv);
+
+        }
+            
         }
 
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), values,
