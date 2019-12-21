@@ -5,6 +5,7 @@ import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
+import fnplot.syntax.inbuiltfunctions.CallFunction;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
 import fnplot.syntax.inbuiltfunctions.IsEqual;
 import fnplot.syntax.inbuiltfunctions.IsEqv;
@@ -191,5 +192,7 @@ public interface Visitor<S, T> {
 	public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
 
 	public T visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, S state) throws FnPlotException;
+
+	public T visitCallFunction(CallFunction callFunction, S state) throws FnPlotException;
 
 }

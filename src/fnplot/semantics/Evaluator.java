@@ -5,6 +5,7 @@ import fnplot.syntax.StmtFun;
 import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
+import fnplot.syntax.inbuiltfunctions.CallFunction;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
 import fnplot.syntax.inbuiltfunctions.InBuilt;
 import fnplot.syntax.inbuiltfunctions.IsEqual;
@@ -44,6 +45,7 @@ import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.awt.geom.Point2D;
 
@@ -221,7 +223,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        
+
         System.out.println("inside evaluator visitfncall");
         // System.out.println(callExp.toString());
         String name = callExp.getName();
@@ -242,13 +244,11 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.);
         // System.out.println(values);
         Closure closure = (Closure) env.get(env.get(name).toString());
-        
 
-         //checking for ID then it is proc <id> <body>
-        if (closure.getId() != null){
+        // checking for ID then it is proc <id> <body>
+        if (closure.getId() != null) {
             System.out.println("in closure id");
-            List<Exp> evalExp = values.stream().map(v -> new ExpLit(v))
-                        .collect(Collectors.toList());
+            List<Exp> evalExp = values.stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
 
             ArrayList<Exp> evalExpArrayList = new ArrayList<>(evalExp);
             ListFunction list = new ListFunction(evalExpArrayList);
@@ -257,9 +257,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             System.out.println(closure.getId());
 
             ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
-                
-            Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(),
-                tempValues, closure.getEnvironment());
+
+            Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), tempValues,
+                    closure.getEnvironment());
 
             newEnv.put(closure.getId(), list.visit(this, env));
 
@@ -267,10 +267,11 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             System.out.println(newEnv.dictionary);
 
             return closure.getBody().visit(this, newEnv);
-            
+
         }
 
-        // checks that the rest paramters are there therefore it would be proc(p1, . . . , pn . prest) <body> 
+        // checks that the rest paramters are there therefore it would be proc(p1, . . .
+        // , pn . prest) <body>
         if (closure.getRestParameters() != null) {
             int lenParam = closure.getParameters().size();
             int lenArgs = values.size();
@@ -718,18 +719,42 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-                // System.out.println("inside evaluator visitfn");
+        // System.out.println("inside evaluator visitfn");
 
-                // Closure c = new Closure(expNoLimitProc.getParameters(), expNoLimitProc.getBody(), env);
+        // Closure c = new Closure(expNoLimitProc.getParameters(),
+        // expNoLimitProc.getBody(), env);
+
+        // // Closure c = new Closure(expNoLimitProc.getParameters(),
+        // expNoLimitProc.getBody(), env);
+
+        // FnPlotFunction funct = new FnPlotFunction(expNoLimitProc, env);
+        // env.put(funct.toString(), c);
+
+        // return funct;
+        return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitCallFunction(CallFunction callFunction, Environment<FnPlotValue<?>> env)
+    throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp funcExp = callFunction.getfunct();
+        Exp listExp = callFunction.getList();
+
+        FnPlotFunction fn = (FnPlotFunction)funcExp.visit(this, env);
+        ExpFunction expFn =  fn.getFunExp();
+
+        ListFunction listFun = (ListFunction)listExp;
+
+        ArrayList<FnPlotValue<?>> values = new ArrayList<>();
+        for (Exp e : listFun.getArguments()) {
+            values.add(e.visit(this, env));
+
+        }
+        Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(expFn.getParameters(), values,
+                    fn.getClosingEnv());
+
         
-                
-        
-                // // Closure c = new Closure(expNoLimitProc.getParameters(), expNoLimitProc.getBody(), env);
-        
-                // FnPlotFunction funct = new FnPlotFunction(expNoLimitProc, env);
-                // env.put(funct.toString(), c);
-        
-                // return funct;
-                 return null;
+        return expFn.getBody().visit(this, newEnv);
     }
 }

@@ -82,6 +82,7 @@ terminal IS_EQUAL;
 terminal SUBSTR;
 terminal PROC;
 terminal DOT;
+terminal CALL;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -139,6 +140,7 @@ non terminal ExpFunction noLimitProc;
 non terminal ExpFunCall funCall;
 non terminal ArrayList<Exp> funCallExpListE;
 non terminal ArrayList<Exp> funCallExpList;
+non terminal CallFunction call;
 
 // non terminal StmtFun funExp;
 
@@ -156,6 +158,10 @@ stmtList ::= stmtList:lst stmt:s {:
 
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :}  ;
+
+call ::= CALL LPAREN expression:func COMMA expression:lst RPAREN {:
+	RESULT = new CallFunction(func,lst);
+:};
 
 funCall ::= VARIABLE:v LPAREN funCallExpListE:el RPAREN {: RESULT= new ExpFunCall(v,el); :} ;
 
@@ -252,7 +258,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
+		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
 		|comp:n {: RESULT= n; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
