@@ -27,7 +27,8 @@ import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
-import fnplot.syntax.ExpGreater;
+import fnplot.syntax.ExpGreater; 
+import fnplot.syntax.ExpHeap;
 import fnplot.syntax.Binding; 
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
@@ -505,8 +506,24 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.mod(val2);
-    }
+    } 
 
+    @Override
+    public FnPlotValue<?> visitExpHeap(ExpHeap exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getExp(); 
+        System.out.println(val1);
+        //ArrayList<String> gaza = ((ListFunction)val). 
+        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
+        //System.out.println("null");
+        //System.out.println(test); 
+        ArrayList<String> newArg = new ArrayList<>();
+        liste.forEach((e) -> {
+            newArg.add(e.toString());
+        }); 
+        System.out.println("null");
+        System.out.println(newArg);
+        return null;
+    } 
     @Override
     public FnPlotValue<?> visitExpLit(ExpLit exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         return exp.getVal();

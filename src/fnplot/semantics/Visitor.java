@@ -19,7 +19,8 @@ import fnplot.syntax.ExpFunction;
 import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
-import fnplot.syntax.ExpNotEqual;
+import fnplot.syntax.ExpNotEqual; 
+import fnplot.syntax.ExpHeap;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
@@ -111,7 +112,9 @@ public interface Visitor<S, T> {
 
     public T visitExpLesserEqual(ExpLesserEqual exp,S arg) throws FnPlotException; 
 
-    public T visitExpNotEqual(ExpNotEqual exp,S arg) throws FnPlotException;
+    public T visitExpNotEqual(ExpNotEqual exp,S arg) throws FnPlotException; 
+
+    public T visitExpHeap(ExpHeap exp,S arg) throws FnPlotException;
     //dean
     public T visitExpAdd(ExpAdd exp, S arg) throws FnPlotException ;
     
