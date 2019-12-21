@@ -132,8 +132,10 @@ non terminal ExpPara paramter; //dean
 non terminal ArrayList<ExpPara> paramListE;
 non terminal ArrayList<ExpPara> paramList;
 non terminal ExpFunction procDef;
-non terminal ExpFunction procDefWithOverflow ;
-non terminal ExpFunction procedures ;
+non terminal ExpFunction procDefWithOverflow;
+// non terminal ExpFunction procedures;
+non terminal Exp procedures;
+non terminal ExpFunction noLimitProc;
 non terminal ExpFunCall funCall;
 non terminal ArrayList<Exp> funCallExpListE;
 non terminal ArrayList<Exp> funCallExpList;
@@ -165,7 +167,9 @@ funCallExpList ::= funCallExpList:pl COMMA expression:v {: pl.add(v);
 									RESULT = ls;
 									:};
 
-procedures ::= procDef:pd {: RESULT = pd; :} | procDefWithOverflow:pdOverFlow {: RESULT = pdOverFlow; :};
+procedures ::= procDef:pd {: RESULT = pd; :} | procDefWithOverflow:pdOverFlow {: RESULT = pdOverFlow; :} | noLimitProc:nlp {: RESULT=nlp; :};
+
+noLimitProc ::= PROC VARIABLE:v expression:body {: RESULT= new ExpFunction(v,body); :};
 
 procDefWithOverflow ::= PROC LPAREN paramListE:p DOT paramter:overflow RPAREN expression:body {:
 	RESULT=new ExpFunction(p,body,overflow); 				

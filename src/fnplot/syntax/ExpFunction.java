@@ -28,6 +28,7 @@ package fnplot.syntax;
 import fnplot.semantics.Visitor;
 import fnplot.sys.FnPlotException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,7 @@ public class ExpFunction extends Exp {
     ArrayList<String> parameters;
     Exp body;
     private String overflow;
+    private String id = null;
 
     public ExpFunction() {
         super();
@@ -65,6 +67,13 @@ public class ExpFunction extends Exp {
         this.body = body;
         this.overflow = overflow.getVar();
     }
+    public ExpFunction(String id,Exp body) {
+
+        this.body = body;
+        this.id = id;
+        this.parameters = new ArrayList<>(/* Arrays.asList(id) */);
+    }
+   
     private ArrayList<String> toVarList(ArrayList<ExpPara> parameters){
 
         List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
@@ -73,6 +82,9 @@ public class ExpFunction extends Exp {
         return temp2;
         
 
+    }
+    public String getId(){
+        return this.id;
     }
 
     public String getRestParameters() {

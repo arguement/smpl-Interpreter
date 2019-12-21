@@ -17,18 +17,19 @@ import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpMul;
+import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
-import fnplot.syntax.ExpSub; 
+import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpComp; /// Gaza 
 import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpGreater;
-import fnplot.syntax.Binding; 
+import fnplot.syntax.Binding;
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
 import fnplot.syntax.ExpFunction;
@@ -192,19 +193,21 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         if (defn.getRestParameters() != null) {
 
-            // ArrayList<String> withRest = defn.getParameters().addAll(defn.getRestParameters());
+            // ArrayList<String> withRest =
+            // defn.getParameters().addAll(defn.getRestParameters());
             c.setRest(defn.getRestParameters());
-            
-        } 
 
+        }
+
+        if (defn.getId() != null) {
+            c.setId(defn.getId());
+        }
 
         // Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
-        
 
         FnPlotFunction funct = new FnPlotFunction(defn, env);
         env.put(funct.toString(), c);
 
-       
         return funct;
     }
 
@@ -218,6 +221,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        
         System.out.println("inside evaluator visitfncall");
         // System.out.println(callExp.toString());
         String name = callExp.getName();
@@ -238,22 +242,45 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.);
         // System.out.println(values);
         Closure closure = (Closure) env.get(env.get(name).toString());
-        // ListFunction list = new ListFunction(closure.getRestParameters())
+        
 
-        // System.out.printf("close getparams: %s %n",closure.getParameters());
-        // System.out.printf("values: %s %n",values);
+         //checking for ID then it is proc <id> <body>
+        if (closure.getId() != null){
+            System.out.println("in closure id");
+            List<Exp> evalExp = values.stream().map(v -> new ExpLit(v))
+                        .collect(Collectors.toList());
 
-        // int lenParam = closure.getParameters().size();
+            ArrayList<Exp> evalExpArrayList = new ArrayList<>(evalExp);
+            ListFunction list = new ListFunction(evalExpArrayList);
 
-        // chek if more than the definied parameters are there
+            System.out.println(list);
+            System.out.println(closure.getId());
+
+            ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
+                
+            Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(),
+                tempValues, closure.getEnvironment());
+
+            newEnv.put(closure.getId(), list.visit(this, env));
+
+            System.out.println("new env below");
+            System.out.println(newEnv.dictionary);
+
+            return closure.getBody().visit(this, newEnv);
+            
+        }
+
+        // checks that the rest paramters are there therefore it would be proc(p1, . . . , pn . prest) <body> 
         if (closure.getRestParameters() != null) {
             int lenParam = closure.getParameters().size();
             int lenArgs = values.size();
 
-            if (lenArgs > lenParam){
-                
-                List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
-                List<Exp> tempAfter = values.subList(lenParam,lenArgs).stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+            if (lenArgs > lenParam) {
+
+                List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v))
+                        .collect(Collectors.toList());
+                List<Exp> tempAfter = values.subList(lenParam, lenArgs).stream().map(v -> new ExpLit(v))
+                        .collect(Collectors.toList());
 
                 ArrayList<Exp> first = new ArrayList<>(tempFirst);
                 ArrayList<Exp> after = new ArrayList<>(tempAfter);
@@ -265,15 +292,15 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
                     tempValues.add(e.visit(this, env));
 
                 }
-                Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), tempValues,
-                    closure.getEnvironment());
-                
+                Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(),
+                        tempValues, closure.getEnvironment());
+
                 newEnv.put(closure.getRestParameters(), list.visit(this, env));
 
                 return closure.getBody().visit(this, newEnv);
 
-        }
-            
+            }
+
         }
 
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), values,
@@ -289,7 +316,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.get(name).);
         // this.plotter.
         // System.out.println(this.plotter);
-        
 
         return closure.getBody().visit(this, newEnv);
     }
@@ -482,69 +508,78 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.div(val2);
-    } 
-    //dean
+    }
+
+    // dean
     @Override
-    public FnPlotValue<?> visitExpComp(ExpComp exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpComp(ExpComp exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
-        //FnPlotValue<FnNone> result=true; 
+        // FnPlotValue<FnNone> result=true;
         return val1.eequals(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
         return val1.notequal(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
         return val1.lesserequal(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpLesser(ExpLesser exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpLesser(ExpLesser exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
         return val1.lesser(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
         return val1.greaterequal(val2);
     }
+
     @Override
-    public FnPlotValue<?> visitExpGreater(ExpGreater exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpGreater(ExpGreater exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         // System.out.println(val1);
         // System.out.println(val2);
         return val1.greater(val2);
     }
+
     @Override
     public FnPlotValue<?> visitExpMod(ExpMod exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         FnPlotValue<?> val1, val2;
@@ -670,13 +705,31 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         String val = "";
         int strLen = strString.length();
-        if (endInt > startInt){
-            if (startInt < strLen ){
-                val = strString.substring(startInt, endInt );
+        if (endInt > startInt) {
+            if (startInt < strLen) {
+                val = strString.substring(startInt, endInt);
             }
 
         }
         result = FnPlotValue.make(val);
         return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+                // System.out.println("inside evaluator visitfn");
+
+                // Closure c = new Closure(expNoLimitProc.getParameters(), expNoLimitProc.getBody(), env);
+        
+                
+        
+                // // Closure c = new Closure(expNoLimitProc.getParameters(), expNoLimitProc.getBody(), env);
+        
+                // FnPlotFunction funct = new FnPlotFunction(expNoLimitProc, env);
+                // env.put(funct.toString(), c);
+        
+                // return funct;
+                 return null;
     }
 }

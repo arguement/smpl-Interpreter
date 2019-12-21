@@ -23,6 +23,7 @@ import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
+import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
@@ -188,5 +189,7 @@ public interface Visitor<S, T> {
 	public T visitIsEqualFunction(IsEqual isEqual, S state) throws FnPlotException;
 
 	public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
+
+	public T visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, S state) throws FnPlotException;
 
 }
