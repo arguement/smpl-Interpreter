@@ -21,6 +21,7 @@ import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpVar;
+import fnplot.syntax.ExpVecSpec;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.ExpSub;
@@ -226,7 +227,14 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         System.out.println("inside evaluator visitfncall");
         // System.out.println(callExp.toString());
-        String name = callExp.getName();
+        // String name = callExp.getName();
+
+        // testing
+        FnPlotFunction obj =  (FnPlotFunction)callExp.getName().visit(this, env);
+        // String name = obj.getFunExp().toString();
+        String name = obj.toString();
+        System.out.println("the name is "+name);
+        
 
         // System.out.println(name);
         ArrayList<Exp> args = callExp.getArguments();
@@ -243,7 +251,13 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.parent);
         // System.out.println(env.);
         // System.out.println(values);
-        Closure closure = (Closure) env.get(env.get(name).toString());
+        System.out.println(env.dictionary);
+        System.out.println(obj.getClosingEnv().dictionary);
+
+        // Closure closure = (Closure) env.get(name);
+        Closure closure = (Closure) obj.getClosingEnv().get(name);
+
+        System.out.println("below");
 
         // checking for ID then it is proc <id> <body>
         if (closure.getId() != null) {
@@ -331,7 +345,11 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(defn.getE().);
         Exp expression = defn.getE();
         if (expression instanceof ExpFunCall) {
-            String name = ((ExpFunCall) expression).getName();
+            // String name = ((ExpFunCall) expression).getName();
+
+            String name = ((FnPlotFunction)((ExpFunCall) expression).getName().visit(this, env)).getFunExp().getId();
+        //     FnPlotFunction obj =  (FnPlotFunction)callExp.getName().visit(this, env);
+        // String name = obj.getFunExp().getId();
 
             // the closure is the binds of parameters with the environment
             Closure closure = (Closure) env.get(env.get(name).toString());
@@ -736,15 +754,15 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     @Override
     public FnPlotValue<?> visitCallFunction(CallFunction callFunction, Environment<FnPlotValue<?>> env)
-    throws FnPlotException {
+            throws FnPlotException {
         // TODO Auto-generated method stub
         Exp funcExp = callFunction.getfunct();
         Exp listExp = callFunction.getList();
 
-        FnPlotFunction fn = (FnPlotFunction)funcExp.visit(this, env);
-        ExpFunction expFn =  fn.getFunExp();
+        FnPlotFunction fn = (FnPlotFunction) funcExp.visit(this, env);
+        ExpFunction expFn = fn.getFunExp();
 
-        ListFunction listFun = (ListFunction)listExp;
+        ListFunction listFun = (ListFunction) listExp;
 
         ArrayList<FnPlotValue<?>> values = new ArrayList<>();
         for (Exp e : listFun.getArguments()) {
@@ -752,9 +770,23 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         }
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(expFn.getParameters(), values,
-                    fn.getClosingEnv());
+                fn.getClosingEnv());
 
-        
         return expFn.getBody().visit(this, newEnv);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpVecSpec(ExpVecSpec expVecSpec, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp size = expVecSpec.geSize();
+        Exp fn = expVecSpec.getFunct();
+
+        FnPlotFunction fun = (FnPlotFunction) fn.visit(this, env);
+        ExpFunction expFn = fun.getFunExp();
+
+        FnPlotValue<?> val = size.visit(this, env);
+
+        return null;
     }
 }

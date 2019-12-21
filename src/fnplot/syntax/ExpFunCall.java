@@ -35,20 +35,20 @@ import java.util.ArrayList;
  */
 public class ExpFunCall  extends Exp {
     
-    String name;
+    Exp name;
     ArrayList<Exp> argList;
 
     public ExpFunCall() {
         super();
     }
 
-    public ExpFunCall(String mn,ArrayList<Exp> args ) {
+    public ExpFunCall(Exp mn,ArrayList<Exp> args ) {
         System.out.println("inside fun call");
         this.name = mn;
         this.argList = args;
     }
 
-    public String getName(){
+    public Exp getName(){
         return this.name;
     }
 

@@ -157,13 +157,13 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}  ;
+	 expression:e SEMI {: RESULT = e; :} ;
 
 call ::= CALL LPAREN expression:func COMMA expression:lst RPAREN {:
 	RESULT = new CallFunction(func,lst);
 :};
 
-funCall ::= VARIABLE:v LPAREN funCallExpListE:el RPAREN {: RESULT= new ExpFunCall(v,el); :} ;
+funCall ::= factor:v LPAREN funCallExpListE:el RPAREN {: RESULT= new ExpFunCall(v,el); :} ;
 
 funCallExpListE ::= funCallExpList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
 
@@ -259,7 +259,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
-		|comp:n {: RESULT= n; :};
+		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :} ;
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -291,7 +291,7 @@ arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpSub(e, t); :} |
 		term:t {: RESULT = t; :} ;
 
-power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
+power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :};
 
 comp ::= power:e1 EEQUAL expression:e2 {: 
@@ -321,7 +321,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :}  ;
+		power:p {: RESULT= p; :}   ;
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
@@ -337,6 +337,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} ;
+	   LPAREN expression:e RPAREN {: RESULT = e; :}  ;
 
 empty ::= ;

@@ -28,6 +28,7 @@ import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
+import fnplot.syntax.ExpVecSpec;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
@@ -194,5 +195,7 @@ public interface Visitor<S, T> {
 	public T visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, S state) throws FnPlotException;
 
 	public T visitCallFunction(CallFunction callFunction, S state) throws FnPlotException;
+
+	public T visitExpVecSpec(ExpVecSpec expVecSpec, S arg) throws FnPlotException;
 
 }
