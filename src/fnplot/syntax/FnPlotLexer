@@ -99,6 +99,7 @@ bin = #b[01]+
 
 // project code below
 
+<YYINITIAL> "case" {return new Symbol(sym.CASE);}
 <YYINITIAL> "else" {return new Symbol(sym.ELSE);}
 <YYINITIAL> "then" {return new Symbol(sym.THEN);}
 <YYINITIAL> "if" {return new Symbol(sym.IF);}

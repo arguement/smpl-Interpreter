@@ -39,6 +39,7 @@ import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.PlotStatement;
 import fnplot.syntax.ArithProgram;
+import fnplot.syntax.CaseStatement;
 import fnplot.sys.FnPlotException;
 
 /**
@@ -212,5 +213,7 @@ public interface Visitor<S, T> {
 	public T visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction, S state) throws FnPlotException;
 
 	public T visitStmtIf(IfStatement ifStatement, S arg) throws FnPlotException;
+
+	public T visitStmtCase(CaseStatement caseStatement, S state) throws FnPlotException;
 
 }

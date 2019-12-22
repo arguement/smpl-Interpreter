@@ -37,6 +37,8 @@ import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.Binding;
+import fnplot.syntax.CaseStatement;
+import fnplot.syntax.Clause;
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
 import fnplot.syntax.ExpFunction;
@@ -882,7 +884,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Exp thenConsq = ifStatement.getThenConsq();
         Exp elseConsq = ifStatement.getElseConsq();
 
-        FnPlotValue<?> predVisited = pred.visit(this,env);
+        FnPlotValue<?> predVisited = pred.visit(this, env);
         FnPlotValue<?> thenConsqVisted = thenConsq.visit(this, env);
         FnPlotValue<?> elseConsqVisited = elseConsq.visit(this, env);
 
@@ -891,10 +893,33 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         if (predVisited.booleanValue()) {
 
             ans = thenConsqVisted;
-            
+
         } else {
 
             ans = elseConsqVisited;
+
+        }
+        return ans;
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtCase(CaseStatement caseStatement, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        ArrayList<Clause> caseList =  caseStatement.getClause();
+        FnPlotValue<?> ans = new FnNone();
+        for (Clause clause : caseList) {
+            Exp ant= clause.getAnTqExp();
+            Exp consq= clause.getConsqExp();
+
+            FnPlotValue<?> evalAnt = ant.visit(this, env);
+            FnPlotValue<?> evalConsq = consq.visit(this, env);
+
+            if (evalAnt.booleanValue()) {
+
+                ans = evalConsq;
+    
+            }
             
         }
         return ans;

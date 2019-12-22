@@ -88,6 +88,7 @@ terminal SIZE;
 terminal IF;
 terminal THEN;
 terminal ELSE;
+terminal CASE;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -154,6 +155,10 @@ non terminal ArrayList<Exp> vParamList;
 non terminal VectorIndex vecIndex;
 non terminal SizeVectorFunction vecSize;
 non terminal IfStatement stmtIf;
+non terminal Clause clause;
+non terminal CaseStatement case;
+non terminal ArrayList<Clause> cParamListE;
+non terminal ArrayList<Clause> cParamList;
 
 // non terminal StmtFun funExp;
 
@@ -170,13 +175,25 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} | vecIndex:vc SEMI{: RESULT =vc; :} ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | vecIndex:vc SEMI{: RESULT =vc; :} ;
 
 
+cParamListE ::=  cParamList:pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
+cParamList ::=  cParamList:pl COMMA clause:v  {: pl.add(v); 
+												RESULT = pl; :} | clause:v {: 
+												ArrayList<Clause> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+
+case ::= CASE LBRACE RSQBRACKET cParamListE:cp LSQBRACKET RBRACE {: RESULT = new CaseStatement( cp );  :};
+
+
+clause ::= expression:pred COLON expression:consq {: RESULT = new Clause(pred,consq); :};
 
 stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:consq2 LSQBRACKET {:
-	System.out.println("if stat");
+	
 	RESULT = new IfStatement(pred,consq,consq2);
 :};
 

@@ -9,18 +9,19 @@ package fnplot.syntax;
 public class sym {
   /* terminals */
   public static final int EEQUAL = 24;
-  public static final int STR = 45;
+  public static final int STR = 46;
+  public static final int CASE = 42;
   public static final int CAR = 27;
-  public static final int DOUBLE = 43;
-  public static final int INTEGER = 42;
+  public static final int DOUBLE = 44;
+  public static final int INTEGER = 43;
   public static final int NOTEQUAL = 23;
   public static final int CDR = 28;
   public static final int LPAREN = 2;
   public static final int GREATER = 19;
   public static final int SEMI = 18;
   public static final int EXPO = 25;
-  public static final int MODIFIER = 50;
-  public static final int BOOL_TRUE = 46;
+  public static final int MODIFIER = 51;
+  public static final int BOOL_TRUE = 47;
   public static final int MINUS = 8;
   public static final int RPAREN = 3;
   public static final int NIL = 31;
@@ -45,19 +46,19 @@ public class sym {
   public static final int IS_EQV = 32;
   public static final int IS_PAIR = 29;
   public static final int GREATEREQUAL = 21;
-  public static final int BOOL_FALSE = 47;
+  public static final int BOOL_FALSE = 48;
   public static final int COLON = 6;
   public static final int ELSE = 41;
   public static final int LBRACE = 15;
-  public static final int VARIABLE = 44;
+  public static final int VARIABLE = 45;
   public static final int LIST = 30;
   public static final int SUBSTR = 34;
   public static final int LET = 13;
-  public static final int BIN_INTEGER = 48;
+  public static final int BIN_INTEGER = 49;
   public static final int THEN = 40;
   public static final int RBRACE = 16;
   public static final int RSQBRACKET = 4;
-  public static final int HEX_INTEGER = 49;
+  public static final int HEX_INTEGER = 50;
   public static final int PROC = 35;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -102,6 +103,7 @@ public class sym {
   "IF",
   "THEN",
   "ELSE",
+  "CASE",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",
