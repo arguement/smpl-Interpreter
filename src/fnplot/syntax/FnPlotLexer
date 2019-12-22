@@ -61,6 +61,8 @@ alphanum = {alpha}|{num}
 
 bin = #b[01]+
 
+string = "?:[^"]}*|'?:[^']*
+
 %%
 
 <YYINITIAL>	{nl}	{
@@ -128,7 +130,6 @@ bin = #b[01]+
 <YYINITIAL> "!=" {return new Symbol(sym.NOTEQUAL);} 
 <YYINITIAL> "==" {return new Symbol(sym.EEQUAL);}
 
-
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
 
 <YYINITIAL> #e {return new Symbol(sym.NIL);}
@@ -138,6 +139,15 @@ bin = #b[01]+
 <YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) ); }
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }
+
+<YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
+
+
+<YYINITIAL>    {string} {
+	       // STRING
+	       return new Symbol(sym.STRING, yytext());
+	       }
+
 
 <YYINITIAL>   ( {num}+|{neg}+ ) {
 	       // INTEGER

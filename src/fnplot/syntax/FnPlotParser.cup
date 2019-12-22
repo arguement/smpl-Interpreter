@@ -52,8 +52,17 @@ scan with {:
 // special symbols
 terminal LPAREN, RPAREN;
 
+//britt
+terminal CONCAT;
+terminal string STRING;
+non terminal Exp concat; 
+
+/*terminal IF, THEN, ELSE;
+non terminal StmtDefinition funDef; 
+non terminal Exp condition;
+*/
 //special symbols i added
-terminal RSQBRACKET,LSQBRACKET,COLON;
+terminal RSQBRACKET,LSQBRACKET, COLON;
 
 // arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD, ASSIGN;
@@ -262,6 +271,9 @@ substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:
 	RESULT = new SubstrFunction(str,start,end);
 :};
 
+//britt
+concat ::= allLists:l1 CONCAT allLists:l2 {: RESULT = new ExpConcat(l1, l2); :};
+
 isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
 							RESULT = new IsEqual(e1,e2);
  :};
@@ -322,7 +334,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
-		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :}   ;
+		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :}  ;
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);

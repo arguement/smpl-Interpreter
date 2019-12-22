@@ -41,6 +41,7 @@ import fnplot.syntax.PlotStatement;
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.CaseStatement;
 import fnplot.sys.FnPlotException;
+import fnplot.syntax.ExpConcat;
 
 /**
  * The generic Visitor interface for the Arithmetic parser
@@ -190,7 +191,10 @@ public interface Visitor<S, T> {
     
     public T visitCdrFunction(CdrFunction cdrFunction, S state) throws FnPlotException;
 
-	public T visitIsPairFunction(IsPairFunction isPairFunction, S state) throws FnPlotException;
+    //britt
+    public T visitExpConcat(ExpConcat exp, S state) throws FnPlotException;
+	
+    public T visitIsPairFunction(IsPairFunction isPairFunction, S state) throws FnPlotException;
 
 	public T visitListFunction(ListFunction listFunction, S state) throws FnPlotException;
 

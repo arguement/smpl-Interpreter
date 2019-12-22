@@ -57,6 +57,9 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.awt.geom.Point2D;
+import fnplot.syntax.ExpConcat;
+import fnplot.syntax.ExpConcat;
+
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
     /*
@@ -230,6 +233,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.expo(val2);
     }
+
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
 
@@ -642,6 +646,28 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Exp exp = p.getArguments().get(0);
 
         return exp.visit(this, state);
+    }
+
+    //Britt
+    @Override
+    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> state) throws FnPlotException { 
+        FnPlotValue<?> lst1 = exp.getExpL().visit(this, state);
+        FnPlotValue<?> lst2 = exp.getExpR().visit(this, state);
+
+        FnInBuiltFunction ListFunction1 = ((FnInBuiltFunction) lst1);
+        FnInBuiltFunction ListFunction2 = ((FnInBuiltFunction) lst2);
+
+        ListFunction list1 = ((ListFunction) ListFunction1.getFunExp());
+        ListFunction list2 = ((ListFunction) ListFunction2.getFunExp());
+
+        ArrayList<Exp>  list3 = new ArrayList<Exp>();
+        
+        list3.addAll(list1.getArguments());
+        list3.addAll(list2.getArguments());
+
+        ListFunction result = new ListFunction(list3);
+
+        return new FnInBuiltFunction(result, state);
     }
 
     @Override
