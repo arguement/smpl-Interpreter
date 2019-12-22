@@ -38,7 +38,7 @@ public class VectorFunction extends InBuilt {
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        return String.format("vector( %s )", this.argList);
+        return String.format("vector( [: %s :] )", this.argList);
     }
 
 }

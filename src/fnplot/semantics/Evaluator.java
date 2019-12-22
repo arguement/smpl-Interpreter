@@ -789,7 +789,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val = size.visit(this, env);
 
         ArrayList<Integer> a = new ArrayList<>(
-                IntStream.rangeClosed(0, val.intValue()).boxed().collect(Collectors.toList()));
+                IntStream.rangeClosed(0, val.intValue()-1).boxed().collect(Collectors.toList()));
 
         /*
          * ArrayList<FnPlotValue<?>> values = new ArrayList<>(); ArrayList<Exp>
@@ -818,9 +818,24 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     @Override
-    public FnPlotValue<?> visitVectorFunction(VectorFunction vectorFunction, Environment<FnPlotValue<?>> state)
+    public FnPlotValue<?> visitVectorFunction(VectorFunction vectorFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        return null;
+        // System.out.println(  ((ExpVecSpec)vectorFunction.getArguments().get(1)).visit(this, env)  );
+        ArrayList<Exp> exp = vectorFunction.getArguments();
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : exp) {
+            if (exp2 instanceof ExpVecSpec){
+               FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec)exp2).visit(this, env));
+               ArrayList<Exp> an = ((ListFunction)spec.getFunExp()).getArguments();
+               store.addAll(an);
+
+            }else{
+                Exp temp = new ExpLit(exp2.visit(this, env));
+                store.add(temp);
+            }
+        }
+        VectorFunction ans = new VectorFunction(store);
+        return new FnInBuiltFunction(ans, env);
     }
 }
