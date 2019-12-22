@@ -26,6 +26,7 @@ import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpVecSpec;
+import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.ExpSub;
@@ -628,8 +629,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         return new FnInBuiltFunction(pairFunction, env);
     }
 
-   
-    
     @Override
     public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
@@ -869,8 +868,35 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction,
             Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        VectorFunction v =  (VectorFunction)((FnInBuiltFunction)sizeVectorFunction.getVector().visit(this, env)).getFunExp();
+        VectorFunction v = (VectorFunction) ((FnInBuiltFunction) sizeVectorFunction.getVector().visit(this, env))
+                .getFunExp();
         int len = v.getArguments().size();
         return FnPlotValue.make(len);
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtIf(IfStatement ifStatement, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        // System.out.println("eval if");
+        Exp pred = ifStatement.getPred();
+        Exp thenConsq = ifStatement.getThenConsq();
+        Exp elseConsq = ifStatement.getElseConsq();
+
+        FnPlotValue<?> predVisited = pred.visit(this,env);
+        FnPlotValue<?> thenConsqVisted = thenConsq.visit(this, env);
+        FnPlotValue<?> elseConsqVisited = elseConsq.visit(this, env);
+
+        FnPlotValue<?> ans;
+
+        if (predVisited.booleanValue()) {
+
+            ans = thenConsqVisted;
+            
+        } else {
+
+            ans = elseConsqVisited;
+            
+        }
+        return ans;
     }
 }

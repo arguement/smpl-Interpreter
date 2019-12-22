@@ -85,6 +85,9 @@ terminal PROC;
 terminal DOT;
 terminal CALL;
 terminal SIZE;
+terminal IF;
+terminal THEN;
+terminal ELSE;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -150,6 +153,7 @@ non terminal ArrayList<Exp> vParamListE;
 non terminal ArrayList<Exp> vParamList;
 non terminal VectorIndex vecIndex;
 non terminal SizeVectorFunction vecSize;
+non terminal IfStatement stmtIf;
 
 // non terminal StmtFun funExp;
 
@@ -166,12 +170,20 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :} ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} | vecIndex:vc SEMI{: RESULT =vc; :} ;
+
+
+
+
+stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:consq2 LSQBRACKET {:
+	System.out.println("if stat");
+	RESULT = new IfStatement(pred,consq,consq2);
+:};
 
 
 vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
  
-// vecIndex ::= vector:v LSQBRACKET expression:e RSQBRACKET {: RESULT = new VectorIndex(v,e); :};
+vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
 
 vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
@@ -292,7 +304,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | vector:vc {: RESULT = vc; :}| vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
+		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
 		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :}   ;
 
 letExp ::= LET bindings:bs IN expression:body {:
@@ -371,6 +383,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :}  ;
+	   LPAREN expression:e RPAREN {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
 
 empty ::= ;

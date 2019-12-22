@@ -33,6 +33,7 @@ import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpVecSpec;
+import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
@@ -209,5 +210,7 @@ public interface Visitor<S, T> {
 	public T visitVectorFunction(VectorIndex vectorIndex, S state) throws FnPlotException;
 
 	public T visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction, S state) throws FnPlotException;
+
+	public T visitStmtIf(IfStatement ifStatement, S arg) throws FnPlotException;
 
 }

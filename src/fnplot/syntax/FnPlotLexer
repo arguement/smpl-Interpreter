@@ -99,6 +99,9 @@ bin = #b[01]+
 
 // project code below
 
+<YYINITIAL> "else" {return new Symbol(sym.ELSE);}
+<YYINITIAL> "then" {return new Symbol(sym.THEN);}
+<YYINITIAL> "if" {return new Symbol(sym.IF);}
 <YYINITIAL> "size" {return new Symbol(sym.SIZE);}
 <YYINITIAL> "call" {return new Symbol(sym.CALL);}
 <YYINITIAL> "proc" {return new Symbol(sym.PROC);}
