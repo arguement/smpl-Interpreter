@@ -111,6 +111,7 @@ bin = #b[01]+
 <YYINITIAL> "pair?" {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair" {return new Symbol(sym.PAIR);}
 <YYINITIAL> "car" {return new Symbol(sym.CAR);}
+<YYINITIAL> "cdr" {return new Symbol(sym.CDR);}
 
 <YYINITIAL> "^" {return new Symbol(sym.EXPO);}
 

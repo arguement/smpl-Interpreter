@@ -74,6 +74,7 @@ terminal EXPO;
 // terminal HEX_INTEGER;
 terminal PAIR;
 terminal CAR;
+terminal CDR;
 terminal IS_PAIR;
 terminal LIST;
 terminal NIL;
@@ -120,6 +121,7 @@ non terminal ArrayList<Exp> expList;
 non terminal Exp power;
 non terminal PairFunction pair;
 non terminal CarFunction car;
+non terminal CdrFunction cdr;
 non terminal IsPairFunction isPair;
 non terminal ListFunction list;
 non terminal ListFunction list2;
@@ -271,6 +273,13 @@ car ::= CAR LPAREN pair:p RPAREN {:
 		RESULT = new CarFunction(var);
 :}; 
 
+cdr ::= CDR LPAREN pair:p RPAREN {:
+		RESULT = new CdrFunction(p);
+:} |  CDR LPAREN VARIABLE:p RPAREN {:
+		ExpVar var = new ExpVar(p);
+		RESULT = new CdrFunction(var);
+:}; 
+
 
 
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
@@ -282,7 +291,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
+		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vector:vc {: RESULT = vc; :}| vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
 		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :}   ;
 
