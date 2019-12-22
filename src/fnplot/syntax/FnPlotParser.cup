@@ -157,8 +157,7 @@ substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:
 :};
 
 //britt
-concat ::= LIST LPAREN list2:lst RPAREN CONCAT concat:c {: RESULT = new ExpConcat(list, c); :} | 
-		   LIST LPAREN list2:lst RPAREN {: RESULT = lst2; :};
+concat ::= allLists:l1 CONCAT allLists:l2 {: RESULT = new ExpConcat(l1, l2); :};
 
 isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
 							RESULT = new IsEqual(e1,e2);

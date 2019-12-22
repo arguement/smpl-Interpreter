@@ -547,15 +547,20 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> lst1 = exp.getExpL().visit(this, state);
         FnPlotValue<?> lst2 = exp.getExpR().visit(this, state);
 
-        FnInBuiltFunction ListFunction1 = ((FnInBuiltFunction) exp.ListFunction(lst1).visit(this, state));
-        FnInBuiltFunction ListFunction2 = ((FnInBuiltFunction) exp.ListFunction(lst2).visit(this, state));
+        FnInBuiltFunction ListFunction1 = ((FnInBuiltFunction) lst1);
+        FnInBuiltFunction ListFunction2 = ((FnInBuiltFunction) lst2);
 
-        ListFunction list1 = ((ListFunction1) ListFunction.getArguments());
-        ListFunction list2 = ((ListFunction2) ListFunction2.getArguments());
+        ListFunction list1 = ((ListFunction) ListFunction1.getFunExp());
+        ListFunction list2 = ((ListFunction) ListFunction2.getFunExp());
 
-        ArrayList<Exp>  list3 = new ArrayList<Exp> [list1 + list2];
+        ArrayList<Exp>  list3 = new ArrayList<Exp>();
         
-        return FnPlotValue.make(list3);
+        list3.addAll(list1.getArguments());
+        list3.addAll(list2.getArguments());
+
+        ListFunction result = new ListFunction(list3);
+
+        return new FnInBuiltFunction(result, state);
     }
 
     @Override
