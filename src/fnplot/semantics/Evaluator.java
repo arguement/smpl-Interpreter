@@ -911,6 +911,20 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         for (Clause clause : caseList) {
             Exp ant= clause.getAnTqExp();
             Exp consq= clause.getConsqExp();
+            
+            boolean found = false;
+            if (ant instanceof ExpVar){
+                String var = ((ExpVar)ant).getVar();
+
+                if (var.equals("else")){
+                    found = true;
+                }
+                
+            }
+
+            if (found) {
+                return consq.visit(this, env);
+            }
 
             FnPlotValue<?> evalAnt = ant.visit(this, env);
             FnPlotValue<?> evalConsq = consq.visit(this, env);
