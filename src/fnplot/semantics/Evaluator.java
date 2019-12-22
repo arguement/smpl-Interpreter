@@ -511,18 +511,48 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpHeap(ExpHeap exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         Exp val1=exp.getExp(); 
-        System.out.println(val1);
+        //System.out.println(val1);
         //ArrayList<String> gaza = ((ListFunction)val). 
         ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
         //System.out.println("null");
         //System.out.println(test); 
-        ArrayList<String> newArg = new ArrayList<>();
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
         liste.forEach((e) -> {
-            newArg.add(e.toString());
-        }); 
-        System.out.println("null");
-        System.out.println(newArg);
-        return null;
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Double> newArg2 = new ArrayList<>();
+        //System.out.println("null");
+        //System.out.println(newArg.get(0)); 
+        newArg.forEach((e) -> {
+            newArg2.add(Double.parseDouble(e));
+        });  
+        //PriorityQueue<Double> minHeap = new PriorityQueue<Double>();  
+
+        //System.out.println("Before Hepification");
+        //System.out.println(newArg2); 
+
+        PriorityQueue<Double> newArg3=BinaryHeap.heapify(newArg2); 
+
+        //Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
+                //new ArrayList<FnPlotValue<?>>(), val1.getClosingEnv());
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          //newEnv.put(expFn.getParameters().get(0),i); 
+          //FnPlotValue<?> j=expFn.getBody().visit(this,newEnv);
+           //outList.add((double)g_iterator.next()) ;
+            //System.out.println(outList);
+             outList.add(new ExpLit(i)); 
+             //System.out.println(i);
+        } 
+        //System.out.println("After Hepification");
+        //System.out.println(outList);  
+        ListFunction List=new ListFunction(outList);
+        return new FnInBuiltFunction(List, arg); 
+        //return null;
     } 
     @Override
     public FnPlotValue<?> visitExpLit(ExpLit exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {

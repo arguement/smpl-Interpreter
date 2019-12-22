@@ -73,7 +73,8 @@ public class Environment<T extends FnPlotValue<?>> {
         for (int i = 0; i < ids.size(); i++) {
             put(ids.get(i), values.get(i));
         }
-    }
+    } 
+    
 
     /**
      * Create an instance of a global environment suitable for
