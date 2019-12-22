@@ -13,8 +13,10 @@ import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SizeVectorFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
+import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
@@ -789,7 +791,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val = size.visit(this, env);
 
         ArrayList<Integer> a = new ArrayList<>(
-                IntStream.rangeClosed(0, val.intValue()-1).boxed().collect(Collectors.toList()));
+                IntStream.rangeClosed(0, val.intValue() - 1).boxed().collect(Collectors.toList()));
 
         /*
          * ArrayList<FnPlotValue<?>> values = new ArrayList<>(); ArrayList<Exp>
@@ -821,21 +823,38 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitVectorFunction(VectorFunction vectorFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        // System.out.println(  ((ExpVecSpec)vectorFunction.getArguments().get(1)).visit(this, env)  );
+        // System.out.println(
+        // ((ExpVecSpec)vectorFunction.getArguments().get(1)).visit(this, env) );
         ArrayList<Exp> exp = vectorFunction.getArguments();
         ArrayList<Exp> store = new ArrayList<>();
         for (Exp exp2 : exp) {
-            if (exp2 instanceof ExpVecSpec){
-               FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec)exp2).visit(this, env));
-               ArrayList<Exp> an = ((ListFunction)spec.getFunExp()).getArguments();
-               store.addAll(an);
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, env));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
 
-            }else{
+            } else {
                 Exp temp = new ExpLit(exp2.visit(this, env));
                 store.add(temp);
             }
         }
         VectorFunction ans = new VectorFunction(store);
         return new FnInBuiltFunction(ans, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction,
+            Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        VectorFunction v =  (VectorFunction)((FnInBuiltFunction)sizeVectorFunction.getVector().visit(this, env)).getFunExp();
+        int len = v.getArguments().size();
+        return FnPlotValue.make(len);
     }
 }

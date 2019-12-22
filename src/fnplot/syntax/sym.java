@@ -9,17 +9,17 @@ package fnplot.syntax;
 public class sym {
   /* terminals */
   public static final int EEQUAL = 24;
-  public static final int STR = 40;
+  public static final int STR = 41;
   public static final int CAR = 27;
-  public static final int DOUBLE = 38;
-  public static final int INTEGER = 37;
+  public static final int DOUBLE = 39;
+  public static final int INTEGER = 38;
   public static final int NOTEQUAL = 23;
   public static final int LPAREN = 2;
   public static final int GREATER = 19;
   public static final int SEMI = 18;
   public static final int EXPO = 25;
-  public static final int MODIFIER = 45;
-  public static final int BOOL_TRUE = 41;
+  public static final int MODIFIER = 46;
+  public static final int BOOL_TRUE = 42;
   public static final int MINUS = 8;
   public static final int RPAREN = 3;
   public static final int NIL = 30;
@@ -34,6 +34,7 @@ public class sym {
   public static final int IS_EQUAL = 32;
   public static final int DOT = 35;
   public static final int EOF = 0;
+  public static final int SIZE = 37;
   public static final int error = 1;
   public static final int MUL = 9;
   public static final int MOD = 11;
@@ -42,17 +43,17 @@ public class sym {
   public static final int IS_EQV = 31;
   public static final int IS_PAIR = 28;
   public static final int GREATEREQUAL = 21;
-  public static final int BOOL_FALSE = 42;
+  public static final int BOOL_FALSE = 43;
   public static final int COLON = 6;
   public static final int LBRACE = 15;
-  public static final int VARIABLE = 39;
+  public static final int VARIABLE = 40;
   public static final int LIST = 29;
   public static final int SUBSTR = 33;
   public static final int LET = 13;
-  public static final int BIN_INTEGER = 43;
+  public static final int BIN_INTEGER = 44;
   public static final int RBRACE = 16;
   public static final int RSQBRACKET = 4;
-  public static final int HEX_INTEGER = 44;
+  public static final int HEX_INTEGER = 45;
   public static final int PROC = 34;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -92,6 +93,7 @@ public class sym {
   "PROC",
   "DOT",
   "CALL",
+  "SIZE",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",

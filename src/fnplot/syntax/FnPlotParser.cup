@@ -83,6 +83,7 @@ terminal SUBSTR;
 terminal PROC;
 terminal DOT;
 terminal CALL;
+terminal SIZE;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -145,6 +146,8 @@ non terminal Exp vecSpec;
 non terminal VectorFunction vector;
 non terminal ArrayList<Exp> vParamListE;
 non terminal ArrayList<Exp> vParamList;
+non terminal VectorIndex vecIndex;
+non terminal SizeVectorFunction vecSize;
 
 // non terminal StmtFun funExp;
 
@@ -163,6 +166,10 @@ stmtList ::= stmtList:lst stmt:s {:
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :} ;
 
+
+vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
+ 
+// vecIndex ::= vector:v LSQBRACKET expression:e RSQBRACKET {: RESULT = new VectorIndex(v,e); :};
 
 vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
@@ -276,8 +283,8 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | vector:vc {: RESULT = vc; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
-		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :}  ;
+		|allLists:lst {: RESULT = lst; :} | vector:vc {: RESULT = vc; :}| vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
+		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :}   ;
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -301,7 +308,7 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 
 definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:};
+		:} ;
 
 arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
@@ -339,7 +346,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :}   ;
+		power:p {: RESULT= p; :}  ;
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 

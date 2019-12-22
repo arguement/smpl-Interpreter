@@ -99,6 +99,7 @@ bin = #b[01]+
 
 // project code below
 
+<YYINITIAL> "size" {return new Symbol(sym.SIZE);}
 <YYINITIAL> "call" {return new Symbol(sym.CALL);}
 <YYINITIAL> "proc" {return new Symbol(sym.PROC);}
 <YYINITIAL> "lazy" {return new Symbol(sym.MODIFIER,yytext());}

@@ -12,8 +12,10 @@ import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SizeVectorFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
+import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.ExpComp; //added by dean 
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpDiv;
@@ -200,5 +202,9 @@ public interface Visitor<S, T> {
 	public T visitExpVecSpec(ExpVecSpec expVecSpec, S arg) throws FnPlotException;
 
 	public T visitVectorFunction(VectorFunction vectorFunction, S state) throws FnPlotException;
+
+	public T visitVectorFunction(VectorIndex vectorIndex, S state) throws FnPlotException;
+
+	public T visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction, S state) throws FnPlotException;
 
 }
