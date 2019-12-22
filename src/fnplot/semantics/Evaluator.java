@@ -6,7 +6,13 @@ import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.InBuilt;
+import fnplot.syntax.inbuiltfunctions.IsEqual;
+import fnplot.syntax.inbuiltfunctions.IsEqv;
+import fnplot.syntax.inbuiltfunctions.IsPairFunction;
+import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
@@ -15,8 +21,14 @@ import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
-import fnplot.syntax.ExpSub;
-import fnplot.syntax.Binding;
+import fnplot.syntax.ExpSub; 
+import fnplot.syntax.ExpComp; /// Gaza 
+import fnplot.syntax.ExpLesser;
+import fnplot.syntax.ExpGreaterEqual;
+import fnplot.syntax.ExpLesserEqual;
+import fnplot.syntax.ExpNotEqual;
+import fnplot.syntax.ExpGreater;
+import fnplot.syntax.Binding; 
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
 import fnplot.syntax.ExpFunction;
@@ -25,12 +37,14 @@ import fnplot.syntax.PlotStatement;
 import fnplot.sys.FnPlotException;
 import fnplot.values.FnPlotReal;
 import fnplot.values.FnPlotValue;
+import fnplot.values.FnPlotBoolean;
 import fnplot.values.FnPlotFunction;
 import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
 import java.awt.geom.Point2D;
+import fnplot.syntax.ExpConcat;
 import fnplot.syntax.ExpConcat;
 
 
@@ -426,8 +440,69 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.div(val2);
+    } 
+    //dean
+    @Override
+    public FnPlotValue<?> visitExpComp(ExpComp exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        //FnPlotValue<FnNone> result=true; 
+        return val1.eequals(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        return val1.notequal(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        return val1.lesserequal(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpLesser(ExpLesser exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        return val1.lesser(val2);
+    } 
+    @Override
+    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        return val1.greaterequal(val2);
     }
-
+    @Override
+    public FnPlotValue<?> visitExpGreater(ExpGreater exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        
+        FnPlotValue<?> val1, val2; 
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        // System.out.println(val1);
+        // System.out.println(val2);
+        return val1.greater(val2);
+    }
     @Override
     public FnPlotValue<?> visitExpMod(ExpMod exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         FnPlotValue<?> val1, val2;
@@ -449,27 +524,134 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpPair(PairFunction pairFunction, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-        
+
         return new FnInBuiltFunction(pairFunction, env);
     }
 
     @Override
-    public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state) throws FnPlotException{
-        // TODO Auto-generated method stub
-        FnInBuiltFunction pair = ((FnInBuiltFunction)carFunction.getPair().visit(this, state));
+    public FnPlotValue<?> visitCarFunction(CarFunction carFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
 
-        PairFunction p = ((PairFunction)pair.getFunExp());
+        FnInBuiltFunction pair = ((FnInBuiltFunction) carFunction.getPair().visit(this, state));
+
+        PairFunction p = ((PairFunction) pair.getFunExp());
 
         Exp exp = p.getArguments().get(0);
-        
+
         return exp.visit(this, state);
     }
 
     //Britt
     @Override
-    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        val1 =  env.get(exp.getExpL());
-        val2 = env.get(exp.getExpR());
-        return val1.concat(val2);
+    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> state) throws FnPlotException { 
+        FnPlotValue<?> lst1 = exp.getExpL().visit(this, state);
+        FnPlotValue<?> lst2 = exp.getExpR().visit(this, state);
+
+        FnInBuiltFunction ListFunction1 = ((FnInBuiltFunction) exp.ListFunction(lst1).visit(this, state));
+        FnInBuiltFunction ListFunction2 = ((FnInBuiltFunction) exp.ListFunction(lst2).visit(this, state));
+
+        ListFunction list1 = ((ListFunction1) ListFunction.getArguments());
+        ListFunction list2 = ((ListFunction2) ListFunction2.getArguments());
+
+        ArrayList<Exp>  list3 = new ArrayList<Exp> [list1 + list2];
+        
+        return FnPlotValue.make(list3);
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsPairFunction(IsPairFunction isPairFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+
+        Exp isPair = isPairFunction.getPair();
+        boolean checkPair = isPair instanceof PairFunction;
+
+        result = FnPlotValue.make(checkPair);
+
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitListFunction(ListFunction listFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return new FnInBuiltFunction(listFunction, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsEqvFunction(IsEqv isEqv, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+
+        boolean isEqvBool = false;
+
+        FnPlotValue<?> expLVal = isEqv.getExpL().visit(this, env);
+        FnPlotValue<?> expRVal = isEqv.getExpR().visit(this, env);
+
+        if (expRVal instanceof FnInBuiltFunction && expLVal instanceof FnInBuiltFunction) {
+            FnInBuiltFunction expLFn = ((FnInBuiltFunction) expLVal);
+            FnInBuiltFunction expRFn = ((FnInBuiltFunction) expRVal);
+
+            String stringEvalL = expLFn.getFunExp().toString();
+            String stringEvalR = expRFn.getFunExp().toString();
+
+            int refL = expLFn.getFunExp().getRef();
+            int refR = expRFn.getFunExp().getRef();
+            if (stringEvalR.equals(stringEvalL) && refL == refR) {
+                isEqvBool = true;
+            }
+        }
+
+        result = FnPlotValue.make(isEqvBool);
+
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitIsEqualFunction(IsEqual isEqual, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        FnPlotValue<?> expLVal = isEqual.getExpL().visit(this, env);
+        FnPlotValue<?> expRVal = isEqual.getExpR().visit(this, env);
+        boolean isEqvBool = false;
+
+        if (expLVal.toString().equals(expRVal.toString())) {
+
+            isEqvBool = true;
+        }
+
+        result = FnPlotValue.make(isEqvBool);
+
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitSubstrFunction(SubstrFunction substrFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp str = substrFunction.getStr();
+        Exp start = substrFunction.getStart();
+        Exp end = substrFunction.getEnd();
+
+        FnPlotValue<?> strVal = str.visit(this, env);
+        FnPlotValue<?> startVal = start.visit(this, env);
+        FnPlotValue<?> endVal = end.visit(this, env);
+
+        String strString = strVal.stringValue();
+        int startInt = startVal.intValue();
+        int endInt = endVal.intValue();
+
+        // System.out.println(strString);
+        // System.out.println(startInt);
+        // System.out.println(endInt);
+
+        String val = "";
+        int strLen = strString.length();
+        if (endInt > startInt){
+            if (startInt < strLen ){
+                val = strString.substring(startInt, endInt );
+            }
+
+        }
+        result = FnPlotValue.make(val);
+        return result;
     }
 }

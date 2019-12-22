@@ -6,9 +6,20 @@ import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.IsEqual;
+import fnplot.syntax.inbuiltfunctions.IsEqv;
+import fnplot.syntax.inbuiltfunctions.IsPairFunction;
+import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SubstrFunction;
+import fnplot.syntax.ExpComp; //added by dean 
+import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
+import fnplot.syntax.ExpLesser;
+import fnplot.syntax.ExpGreaterEqual;
+import fnplot.syntax.ExpLesserEqual;
+import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
@@ -89,7 +100,20 @@ public interface Visitor<S, T> {
 
     public T visitStmtClear(StatementClear exp, S arg) throws FnPlotException;
     //above added by me
+    
+    //dean
+    public T visitExpComp(ExpComp exp,S arg) throws FnPlotException; 
+    
+    public T visitExpGreater(ExpGreater exp,S arg) throws FnPlotException; 
+    
+    public T visitExpLesser(ExpLesser exp,S arg) throws FnPlotException; 
+    
+    public T visitExpGreaterEqual(ExpGreaterEqual exp,S arg) throws FnPlotException; 
 
+    public T visitExpLesserEqual(ExpLesserEqual exp,S arg) throws FnPlotException; 
+
+    public T visitExpNotEqual(ExpNotEqual exp,S arg) throws FnPlotException;
+    //dean
     public T visitExpAdd(ExpAdd exp, S arg) throws FnPlotException ;
     
     /**
@@ -156,6 +180,17 @@ public interface Visitor<S, T> {
 
 	public T visitCarFunction(CarFunction carFunction, S state) throws FnPlotException;
 
-    //Britt Adds
-    public T visitExpConcat(ExpConcat exp, S arg) throws FnPlotException;
+    //britt
+    public T visitExpConcat(ExpConcat exp, S state) throws FnPlotException;
+	
+    public T visitIsPairFunction(IsPairFunction isPairFunction, S state) throws FnPlotException;
+
+	public T visitListFunction(ListFunction listFunction, S state) throws FnPlotException;
+
+	public T visitIsEqvFunction(IsEqv isEqv, S state) throws FnPlotException;
+
+	public T visitIsEqualFunction(IsEqual isEqual, S state) throws FnPlotException;
+
+	public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
+
 }

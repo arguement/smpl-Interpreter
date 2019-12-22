@@ -26,7 +26,9 @@ package fnplot.values;
 public enum FnPlotType {
     INTEGER("int"), 
     REAL("real"), 
-    FUNCTION("user function");
+    FUNCTION("user function"),
+    BOOLEAN("boolean"),
+    STRING("string");
     
     private final String docString;
     

@@ -19,21 +19,21 @@ public class ExpConcat extends Exp {
         exp2 = e2;
     }
 
-    public String getExpL() {
+    public Exp getExpL() {
         return exp1;
     }
 
-    public String getExpR() {
+    public Exp getExpR() {
         return exp2;
     }
 
     @Override
-    public <S, T> T visit(Visitor<S, T> v, S arg) throws FnPlotException {
-        return v.visitExpConcat(this, arg);
+    public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
+        return v.visitExpConcat(this, state);
     }
 
     @Override
     public String toString() {
-        return exp1 + " @ " + exp2;
+        return exp1.toString() + " @ " + exp2.toString();
     }
 }

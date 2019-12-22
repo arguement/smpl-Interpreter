@@ -1,11 +1,11 @@
 package fnplot.syntax.inbuiltfunctions;
 
-import java.util.ArrayList;
+
 import fnplot.semantics.Visitor;
 import fnplot.syntax.Exp;
-import fnplot.syntax.ExpLit;
+
 import fnplot.sys.FnPlotException;
-import fnplot.values.FnPlotValue;
+
 
 /**
  * @@author Jordan

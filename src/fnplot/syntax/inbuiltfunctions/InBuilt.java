@@ -1,17 +1,27 @@
 package fnplot.syntax.inbuiltfunctions;
 
-import java.util.ArrayList;
 
-import fnplot.semantics.Visitor;
+
+
 import fnplot.syntax.Exp;
-import fnplot.sys.FnPlotException;
+
 
 
 /**Parent of all inbuilt types
- * @@author Jordan
+ * @author Jordan
  */
 public abstract class InBuilt extends Exp{
 
+    private static int counter;
+    private int ref;
+
+    public InBuilt(){
+        this.ref = ++counter;
+    }
+
+    public int getRef() {
+        return ref;
+    }
     // public abstract String toString();
         
 }

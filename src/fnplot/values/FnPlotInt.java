@@ -56,7 +56,7 @@ public class FnPlotInt extends FnPlotValue<FnPlotInt> {
     public FnPlotInt mul(FnPlotValue<?> arg) throws FnPlotException {
         return make(value * arg.intValue());
     }
-
+    
     /**
      * Divide the given value by this value.
      * @param arg The divisor
@@ -84,8 +84,47 @@ public class FnPlotInt extends FnPlotValue<FnPlotInt> {
         } else {
             return make(value % arg.intValue());
         }
-    }
-    
+    } 
+    @Override
+     public FnPlotBoolean eequals (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+           
+         return  make(value == arg.intValue());
+     } 
+    @Override
+     public FnPlotBoolean greater (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value > arg.intValue();
+         return  make(val);
+     }
+     
+     @Override
+     public FnPlotBoolean notequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value != arg.intValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean lesserequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value <= arg.intValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean lesser (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value < arg.intValue();
+         return  make(val);
+     } 
+
+     @Override
+     public FnPlotBoolean greaterequal (FnPlotValue<?> arg) throws FnPlotException { 
+          //boolean value= val1==arg.doubleValue();
+          Boolean val = value >= arg.intValue();
+         return  make(val);
+     }
     @Override
     public int intValue() {
         return value;

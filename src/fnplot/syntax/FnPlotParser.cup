@@ -52,26 +52,43 @@ scan with {:
 // special symbols
 terminal LPAREN, RPAREN;
 
-//Britt 
+//britt
 terminal CONCAT;
-non terminal Exp concatenation; 
+terminal string STRING;
+non terminal Exp concat; 
 
 /*terminal IF, THEN, ELSE;
 non terminal StmtDefinition funDef; 
 non terminal Exp condition;
 */
 //special symbols i added
-terminal RSQBRACKET,LSQBRACKET,COLON;
+terminal RSQBRACKET,LSQBRACKET, COLON;
 
 // arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD, ASSIGN;
 terminal LET, IN, LBRACE, RBRACE, COMMA;
-terminal SEMI;
+terminal SEMI; 
+
+//Relational Operators 
+terminal GREATER;
+terminal LESSER;
+terminal GREATEREQUAL;
+terminal LESSEREQUAL;
+terminal NOTEQUAL; 
+terminal EEQUAL;
 
 // arithmetic operators i created
-terminal EXPO,BIN_INTEGER,HEX_INTEGER;
+terminal EXPO;
+// terminal BIN_INTEGER;
+// terminal HEX_INTEGER;
 terminal PAIR;
 terminal CAR;
+terminal IS_PAIR;
+terminal LIST;
+terminal NIL;
+terminal IS_EQV;
+terminal IS_EQUAL;
+terminal SUBSTR;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -80,6 +97,8 @@ terminal String VARIABLE;
 terminal String STR; // for strings encased in "" e.g "smpl"
 terminal Boolean BOOL_TRUE;
 terminal Boolean BOOL_FALSE;
+terminal String BIN_INTEGER;
+terminal String HEX_INTEGER;
 
 /* Non terminals */
 non terminal ArithProgram program;
@@ -93,17 +112,28 @@ non terminal ArrayList<Binding> bindingsAux;
 non terminal Binding binding;
 
 non terminal Exp expression;
-non terminal Exp arithExp;
+non terminal Exp arithExp; 
 non terminal Exp term;
 non terminal Exp factor;
 non terminal FnPlotValue<?> number;
 non terminal empty;
-
-/* non terminals Jordan made */
+non terminal ArrayList<Exp> expListE;
+non terminal ArrayList<Exp> expList;
+/* non terminals I made */
 
 non terminal Exp power;
 non terminal PairFunction pair;
 non terminal CarFunction car;
+non terminal IsPairFunction isPair;
+non terminal ListFunction list;
+non terminal ListFunction list2;
+non terminal ListFunction allLists;
+non terminal Exp string;
+non terminal IsEqv isEqv;
+non terminal IsEqual isEqual;
+non terminal SubstrFunction substr;
+non terminal Boolean complits;
+non terminal Exp comp; //dean 
 
 // non terminal StmtFun funExp;
 
@@ -122,30 +152,55 @@ stmtList ::= stmtList:lst stmt:s {:
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :};
 
-//Britt
-concatenation ::= VARIABLE:v1 CONCAT VARIABLE:v2 {: RESULT = new ExpConcat(v1, v2); :};
+substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:end RPAREN {:
+	RESULT = new SubstrFunction(str,start,end);
+:};
 
-/*funDef ::= DEF VARIABLE:v expression:e SEMI {: RESULT = new StmtDefinition(v, e); :};
+//britt
+concat ::= LIST LPAREN list2:lst RPAREN CONCAT concat:c {: RESULT = new ExpConcat(list, c); :} | 
+		   LIST LPAREN list2:lst RPAREN {: RESULT = lst2; :};
 
-ifExp ::= IF condition:c THEN action:a1 ELSE action:a2 {: RESULT = new ExpIf(c, a1, a2); :} |
-          If condition:c THEN action:a1 {: RESULT = ExpIf(c, a1); :};
+isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
+							RESULT = new IsEqual(e1,e2);
+ :};
 
-action ::= expression:e {: RESULT = new StmtSequence(e); :} |
-           stmtList:s  {: RESULT = s; :};
- 
-condition ::= logOp:l {: RESULT = l; :} |
-			  bitOp:b {: RESULT = b; :} |
-			  relOp:r {: RESULT = r; :};
-*/
+isEqv ::= IS_EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
+							RESULT = new IsEqv(e1,e2);
+ :};
+
+allLists ::= list:lst {: RESULT = lst; :} | list2:lst2 {: RESULT=lst2; :};
+
+list2 ::= RSQBRACKET expListE:lst LSQBRACKET{:
+				RESULT = new ListFunction(lst);
+:};
+
+list ::= LIST LPAREN list2:lst RPAREN {:
+			RESULT = lst;
+:};
+
+expListE ::= expList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
+
+expList ::=  expression:v COMMA expList:pl {: 
+											
+											pl.add(0,v); 
+											RESULT = pl; :} | NIL:n {: 
+									RESULT = new ArrayList<>();
+									:};
+
+isPair ::= IS_PAIR LPAREN expression:p RPAREN {:
+		RESULT = new IsPairFunction(p);
+:};
 
 car ::= CAR LPAREN pair:p RPAREN {:
-		System.out.println("inside car");
-		RESULT = new CarFunction( p);
+		// System.out.println("inside car");
+		RESULT = new CarFunction(p);
 :} |  CAR LPAREN VARIABLE:p RPAREN {:
-		System.out.println("inside car");
+		// System.out.println("inside car");
 		ExpVar var = new ExpVar(p);
 		RESULT = new CarFunction(var);
 :}; 
+
+
 
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 		ArrayList<Exp> store = new ArrayList<>();
@@ -156,12 +211,9 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :} | 
-		pair:p {: RESULT = p; :} | 
-		car:c {: RESULT = c; :} |
-		//Britt
-		concatenation:concat {: RESULT = concat; :};
-		
+		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
+		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
+		|comp:n {: RESULT= n; :} | concat:c {: RESULT= c; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -196,19 +248,49 @@ arithExp ::= arithExp:e PLUS term:t {:
 power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
 						factor:f {: RESULT=f; :};
 
+comp ::= power:e1 EEQUAL expression:e2 {: 
+              System.out.println("in here");
+              RESULT=new ExpComp(e1,e2); :}| 
+         
+		 power:e1 GREATER expression:e2 {:
+		      RESULT= new ExpGreater(e1,e2); :}| 
+		 
+		 power:e1 LESSER expression:e2 {: 
+		      RESULT= new ExpLesser(e1,e2); :} |
+		 
+		 power:e1 GREATEREQUAL expression:e2 {:
+		  RESULT= new ExpGreaterEqual(e1,e2); :}| 
+		 
+		 power:e1 LESSEREQUAL expression:e2 {: 
+		  RESULT= new ExpLesserEqual(e1,e2);:}|
+		 
+		 power:e1 NOTEQUAL expression:e2 {:
+		  RESULT= new ExpNotEqual(e1,e2);
+		  :}
+		;
+
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
 	 power:f DIV term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :};
+		power:p {: RESULT= p; :}  ;
 
+string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
-number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :};
+complits ::= BOOL_FALSE:f {: RESULT= new Boolean("false"); :} | BOOL_TRUE:t {: RESULT= new Boolean("true"); :} ;
+
+number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :} | BIN_INTEGER:ilit {: 
+Integer val = Integer.parseInt(ilit, 2);
+RESULT = FnPlotValue.make(val);
+ :} | HEX_INTEGER:ilit {: 
+Integer val = Integer.parseInt(ilit, 16);
+RESULT = FnPlotValue.make(val);
+ :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :};
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} ;
 
 empty ::= ;
