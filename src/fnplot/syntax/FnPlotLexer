@@ -77,6 +77,8 @@ bin = #b[01]+
 <YYINITIAL>	"%"	{return new Symbol(sym.MOD);}
 <YYINITIAL>	"="	{return new Symbol(sym.ASSIGN);}
 
+<YYINITIAL>	"~"	{return new Symbol(sym.BITNOT);}
+
 <YYINITIAL>	"("	{return new Symbol(sym.LPAREN);}
 <YYINITIAL>	")"	{return new Symbol(sym.RPAREN);}
 

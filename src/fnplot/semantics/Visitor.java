@@ -28,6 +28,7 @@ import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpAdd;
+import fnplot.syntax.ExpBitNot;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.PlotStatement;
@@ -190,6 +191,8 @@ public interface Visitor<S, T> {
 
 	public T visitIsEqualFunction(IsEqual isEqual, S state) throws FnPlotException;
 
-	public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
+    public T visitSubstrFunction(SubstrFunction substrFunction, S state) throws FnPlotException;
+    
+    public T visitExpBitNot(ExpBitNot bitNot, S state) throws FnPlotException;
 
 }

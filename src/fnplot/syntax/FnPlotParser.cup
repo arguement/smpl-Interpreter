@@ -49,6 +49,9 @@ scan with {:
 
 /* Terminals (tokens returned by the scanner). */
 
+//Bitwise operators
+terminal BITNOT;
+
 // special symbols
 terminal LPAREN, RPAREN;
 
@@ -127,7 +130,7 @@ non terminal IsEqual isEqual;
 non terminal SubstrFunction substr;
 non terminal Boolean complits;
 non terminal Exp comp; //dean 
-
+non terminal Exp bitOps; //derwent
 // non terminal StmtFun funExp;
 
 /* Grammar rules */
@@ -209,7 +212,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
-		|comp:n {: RESULT= n; :};
+		|comp:n {: RESULT= n; :} | bitOps:b {: RESULT=b; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -240,6 +243,8 @@ arithExp ::= arithExp:e PLUS term:t {:
 		arithExp:e MINUS term:t {:
 			RESULT = new ExpSub(e, t); :} |
 		term:t {: RESULT = t; :} ;
+
+bitOps ::= BITNOT arithExp:a {: RESULT = new ExpBitNot(a); :};
 
 power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
 						factor:f {: RESULT=f; :};

@@ -16,6 +16,7 @@ import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
+import fnplot.syntax.ExpBitNot;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpAdd;
@@ -648,5 +649,13 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         }
         result = FnPlotValue.make(val);
         return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpBitNot(ExpBitNot bitNot, Environment<FnPlotValue<?>> env) throws FnPlotException{
+        Exp val = bitNot.getBitExp();
+
+        FnPlotValue<?> res = val.visit(this, env);
+        return res;
     }
 }
