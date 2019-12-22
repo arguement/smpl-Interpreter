@@ -29,6 +29,9 @@ import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpGreater; 
 import fnplot.syntax.ExpHeap;
+import fnplot.syntax.ExpHeapDelete;
+import fnplot.syntax.ExpHeapInsert; 
+import fnplot.syntax.ExpGetMin;
 import fnplot.syntax.Binding; 
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
@@ -553,6 +556,115 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         ListFunction List=new ListFunction(outList);
         return new FnInBuiltFunction(List, arg); 
         //return null;
+    }  
+    @Override
+    public FnPlotValue<?> visitExpHeapInsert(ExpHeapInsert exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        Exp val2=exp.getNum(); 
+        System.out.println(val1); 
+        //Exp val1=
+        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
+        
+        String val3= val2.toString(); 
+        System.out.println(val3);
+        //String val4=val3.toString(); 
+        Double val5=Double.parseDouble(val3);
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        liste.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Double> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Double.parseDouble(e));
+        });  
+        
+        PriorityQueue<Double> newArg3=BinaryHeap.heapinsert(newArg2,(double)val5); //hope this work
+
+        
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          outList.add(new ExpLit(i)); 
+             
+        } 
+         
+        ListFunction List=new ListFunction(outList);
+        return new FnInBuiltFunction(List, arg); 
+        
+    }  
+    @Override
+    public FnPlotValue<?> visitExpHeapDelete(ExpHeapDelete exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        
+        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
+        
+        
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        liste.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Double> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Double.parseDouble(e));
+        });  
+        
+        PriorityQueue<Double> newArg3=BinaryHeap.heapdelete(newArg2); //hope this work
+
+        
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          outList.add(new ExpLit(i)); 
+             
+        } 
+         
+        ListFunction List=new ListFunction(outList);
+        return new FnInBuiltFunction(List, arg); 
+        
+    }  
+    @Override
+    public FnPlotValue<?> visitExpGetMin(ExpGetMin exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        
+        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
+        
+        
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        liste.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Double> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Double.parseDouble(e));
+        });  
+        
+        Double newArg3=BinaryHeap.min(newArg2); //hope this work
+
+        
+        Exp outList; 
+        
+       
+          FnPlotValue<?> i = FnPlotValue.make((double)newArg3); 
+          //outList=(new ExpLit(i)); 
+             
+        
+         
+        
+        return i; 
+        
     } 
     @Override
     public FnPlotValue<?> visitExpLit(ExpLit exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {

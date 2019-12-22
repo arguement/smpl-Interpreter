@@ -82,6 +82,9 @@ terminal IS_EQUAL;
 terminal SUBSTR;
 terminal DOTOPERATOR;// heap operator
 terminal HEAP; //heap operator
+terminal HEAPINSERT; //heap operator 
+terminal HEAPDELETE;//heap operator
+terminal GETMIN;//HEAP OPERATOR
 // terminals with values
 terminal Integer INTEGER;
 terminal Double DOUBLE;
@@ -126,7 +129,11 @@ non terminal IsEqual isEqual;
 non terminal SubstrFunction substr;
 non terminal Boolean complits;
 non terminal Exp comp; //dean  
-non terminal Exp heap;
+non terminal Exp heap; 
+non terminal Exp heapinsert ; 
+non terminal Exp heapdelete ; 
+non terminal Exp getmin;
+
 
 // non terminal StmtFun funExp;
 
@@ -203,7 +210,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
-		|comp:n {: RESULT= n; :} | heap:h {: RESULT=h; :};
+		|comp:n {: RESULT= n; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -260,7 +267,20 @@ comp ::= power:e1 EEQUAL expression:e2 {:
 		;
 heap ::= HEAP  list2:e {: 
  RESULT= new ExpHeap(e);
+:};  
+
+heapinsert ::= list2:e1 DOTOPERATOR HEAPINSERT LPAREN term:p RPAREN{: 
+System.out.println("in here");
+RESULT = new ExpHeapInsert(e1,p);
+:}; 
+
+heapdelete ::= list2:e1 DOTOPERATOR HEAPDELETE LPAREN RPAREN {: 
+RESULT= new ExpHeapDelete(e1);
+:}; 
+getmin ::= list2:e1 DOTOPERATOR GETMIN LPAREN RPAREN  {:
+  RESULT= new ExpGetMin(e1);
 :};
+
 
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
@@ -276,6 +296,7 @@ complits ::= BOOL_FALSE:f {: RESULT= new Boolean("false"); :} | BOOL_TRUE:t {: R
 
 number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :} | BIN_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 2);
+
 RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);

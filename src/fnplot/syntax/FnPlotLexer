@@ -118,8 +118,10 @@ bin = #b[01]+
 <YYINITIAL> "!=" {return new Symbol(sym.NOTEQUAL);} 
 <YYINITIAL> "==" {return new Symbol(sym.EEQUAL);}
 <YYINITIAL> "." { return new Symbol(sym.DOTOPERATOR);}
-<YYINITIAL> "heapify" { return new Symbol(sym.HEAP);}
-
+<YYINITIAL> "heapify" { return new Symbol(sym.HEAP);} 
+<YYINITIAL> "insert" {return new Symbol(sym.HEAPINSERT);}
+<YYINITIAL> "deleteMin" {return new Symbol(sym.HEAPDELETE);}
+<YYINITIAL> "getMin"  {return new Symbol(sym.GETMIN); }
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
 
 <YYINITIAL> #e {return new Symbol(sym.NIL);}
