@@ -13,6 +13,7 @@ import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
+import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.ExpComp; //added by dean 
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpDiv;
@@ -197,5 +198,7 @@ public interface Visitor<S, T> {
 	public T visitCallFunction(CallFunction callFunction, S state) throws FnPlotException;
 
 	public T visitExpVecSpec(ExpVecSpec expVecSpec, S arg) throws FnPlotException;
+
+	public T visitVectorFunction(VectorFunction vectorFunction, S state) throws FnPlotException;
 
 }

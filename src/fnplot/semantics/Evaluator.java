@@ -14,6 +14,7 @@ import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
+import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
@@ -48,6 +49,7 @@ import java.awt.geom.Point2D;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.awt.geom.Point2D;
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
@@ -230,11 +232,10 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // String name = callExp.getName();
 
         // testing
-        FnPlotFunction obj =  (FnPlotFunction)callExp.getName().visit(this, env);
+        FnPlotFunction obj = (FnPlotFunction) callExp.getName().visit(this, env);
         // String name = obj.getFunExp().toString();
         String name = obj.toString();
-        System.out.println("the name is "+name);
-        
+        System.out.println("the name is " + name);
 
         // System.out.println(name);
         ArrayList<Exp> args = callExp.getArguments();
@@ -347,9 +348,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         if (expression instanceof ExpFunCall) {
             // String name = ((ExpFunCall) expression).getName();
 
-            String name = ((FnPlotFunction)((ExpFunCall) expression).getName().visit(this, env)).getFunExp().getId();
-        //     FnPlotFunction obj =  (FnPlotFunction)callExp.getName().visit(this, env);
-        // String name = obj.getFunExp().getId();
+            String name = ((FnPlotFunction) ((ExpFunCall) expression).getName().visit(this, env)).getFunExp().getId();
+            // FnPlotFunction obj = (FnPlotFunction)callExp.getName().visit(this, env);
+            // String name = obj.getFunExp().getId();
 
             // the closure is the binds of parameters with the environment
             Closure closure = (Closure) env.get(env.get(name).toString());
@@ -787,6 +788,39 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         FnPlotValue<?> val = size.visit(this, env);
 
+        ArrayList<Integer> a = new ArrayList<>(
+                IntStream.rangeClosed(0, val.intValue()).boxed().collect(Collectors.toList()));
+
+        /*
+         * ArrayList<FnPlotValue<?>> values = new ArrayList<>(); ArrayList<Exp>
+         * valuesExp = new ArrayList<>(); for (Integer e : a) {
+         * values.add(FnPlotValue.make(e)); valuesExp.add(new ExpLit(e));
+         * 
+         * } ListFunction list = new ListFunction(valuesExp);
+         */
+
+        Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
+                new ArrayList<FnPlotValue<?>>(), fun.getClosingEnv());
+
+        // ArrayList<FnPlotValue<?>> values = new ArrayList<>();
+        ArrayList<Exp> valuesExp = new ArrayList<>();
+
+        for (Integer integer : a) {
+            FnPlotValue<?> i = FnPlotValue.make(integer);
+            newEnv.put(expFn.getParameters().get(0), i);
+            FnPlotValue<?> j = expFn.getBody().visit(this, newEnv);
+            valuesExp.add(new ExpLit(j));
+        }
+
+        ListFunction list = new ListFunction(valuesExp);
+
+        return new FnInBuiltFunction(list, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitVectorFunction(VectorFunction vectorFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
         return null;
     }
 }
