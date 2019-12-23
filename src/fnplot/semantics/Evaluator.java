@@ -893,7 +893,10 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        return null;
+        FnInBuiltFunction val = (FnInBuiltFunction)vectorIndex.getVector().visit(this, state);
+        VectorFunction vec =  (VectorFunction)val.getFunExp() ;
+        Exp exp = vec.getArguments().get(vectorIndex.getIndex().visit(this, state).intValue());
+        return exp.visit(this, state);
     }
 
     @Override

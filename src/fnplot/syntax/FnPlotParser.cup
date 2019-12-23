@@ -180,7 +180,6 @@ non terminal StatementPrintLn println;
 non terminal Exp and; 
 non terminal Exp or;
 non terminal Exp not;
-non terminal Exp LogExp;
 
 
 // non terminal StmtFun funExp;
@@ -198,7 +197,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:} | println:pn {: RESULT = pn;:}  ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :}  ;
 
 
 // LogExp ::= LogExp:e AND termL:t {:
@@ -235,7 +234,7 @@ stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:c
 
 vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
  
-// vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
+vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
 
 vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
