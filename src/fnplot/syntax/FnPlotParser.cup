@@ -54,8 +54,10 @@ terminal LPAREN, RPAREN;
 
 //britt
 terminal CONCAT;
-terminal string STRING;
+terminal LOG_AND;
 non terminal Exp concat; 
+non terminal Exo condition;
+non terminal Exp logOp;
 
 /*terminal IF, THEN, ELSE;
 non terminal StmtDefinition funDef; 
@@ -159,6 +161,14 @@ substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:
 //britt
 concat ::= allLists:l1 CONCAT allLists:l2 {: RESULT = new ExpConcat(l1, l2); :};
 
+logOp ::= condition:c1 LOG_AND condition:c2 {: RESULT = ExpLogAnd(c1, c2); :};
+		  		  
+
+condition ::= isEqual:equal {: RESULT = equal; :} |
+			isEqv:eqv {: RESULT = eqv; :} |
+			comp:c {: RESULT = c; :} |
+			isPair:p {: RESULT = p; :};
+
 isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
 							RESULT = new IsEqual(e1,e2);
  :};
@@ -210,9 +220,8 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
-		|comp:n {: RESULT= n; :} | concat:c {: RESULT= c; :};
+		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | 
+		allLists:lst {: RESULT = lst; :} |substr:subs {: RESULT=subs; :}| concat:c {: RESULT= c; :} | condition:cond {: RESULT = cond; :};
 
 letExp ::= LET bindings:bs IN expression:body {:
 			RESULT = new StmtLet(bs, body);

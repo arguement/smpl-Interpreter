@@ -37,7 +37,7 @@ import fnplot.syntax.PlotStatement;
 import fnplot.sys.FnPlotException;
 import fnplot.values.FnPlotReal;
 import fnplot.values.FnPlotValue;
-import fnplot.values.FnPlotBoolean;
+import fnplot.values.FnPlotBool;
 import fnplot.values.FnPlotFunction;
 import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
@@ -46,6 +46,7 @@ import java.util.*;
 import java.awt.geom.Point2D;
 import fnplot.syntax.ExpConcat;
 import fnplot.syntax.ExpConcat;
+import fnplot.syntax.ExpLogAnd;
 
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
@@ -559,8 +560,24 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         list3.addAll(list2.getArguments());
 
         ListFunction result = new ListFunction(list3);
-
         return new FnInBuiltFunction(result, state);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpLogAnd(ExpLogAnd exp, Environment<FnPlotValue<?>> state) throws FnPlotException { 
+
+        FnPlotValue<?> condition1 = exp.getExpL().visit(this, state);
+        FnPlotValue<?> condition2 = exp.getExpR().visit(this, state);
+
+        FnPlotBool cond1 = ((FnPlotBool) condition1);
+        FnPlotBool cond2 = ((FnPlotBool) condition2);
+
+        boolean c1 = ((boolean) cond1.booleanValue());
+        boolean c2 = ((boolean) cond2.booleanValue());
+
+        boolean result = c1 && c2;
+
+        return new FnPlotBool(result);         
     }
 
     @Override

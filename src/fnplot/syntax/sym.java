@@ -50,15 +50,15 @@ public class sym {
   public static final int BIN_INTEGER = 42;
   public static final int RBRACE = 18;
   public static final int RSQBRACKET = 6;
+  public static final int LOG_AND = 5;
   public static final int HEX_INTEGER = 43;
-  public static final int STRING = 5;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "LPAREN",
   "RPAREN",
   "CONCAT",
-  "STRING",
+  "LOG_AND",
   "RSQBRACKET",
   "LSQBRACKET",
   "COLON",
@@ -96,7 +96,8 @@ public class sym {
   "BOOL_TRUE",
   "BOOL_FALSE",
   "BIN_INTEGER",
-  "HEX_INTEGER"
+  "HEX_INTEGER",
+  "AND"
   };
 }
 
