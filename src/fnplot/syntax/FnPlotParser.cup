@@ -177,9 +177,10 @@ non terminal ArrayList<Clause> cParamList;
 non terminal StatementPrint print;
 non terminal StatementPrintLn println;
 
-non terminal Exp LogExp; 
-non terminal Exp termL;
-non terminal Exp factorL;
+non terminal Exp and; 
+non terminal Exp or;
+non terminal Exp not;
+non terminal Exp LogExp;
 
 
 // non terminal StmtFun funExp;
@@ -357,9 +358,9 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		arithExp:a {: RESULT = a; :} |string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
+		string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
-		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :}  ;
+		 | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :}  ;
 
 letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -385,42 +386,37 @@ definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
 		:} ;
 
+
+
 arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
 		arithExp:e MINUS term:t {:
 			RESULT = new ExpSub(e, t); :} |
-		term:t {: RESULT = t; :} | arithExp:e AND term:t {: RESULT = new ExpAnd(e, t); :} ;
+		term:t {: RESULT = t; :} ;
 
-// LogExp ::= LogExp:e AND termL:t {:
-// 			RESULT = new ExpAnd(e, t); :} | termL:t {: RESULT= t; :};
 
-// termL ::= termL:t OR factorL:l {: RESULT = new ExpOr(t,l); :} | factorL:f {: RESULT = f; :};
+or ::= or:loe OR and:lae {: RESULT = new ExpOr(loe,lae); :}|
+                and:lae {: RESULT = lae ; :};
 
-// factorL ::= NOT complits:n {: RESULT = new ExpNot(new ExpLit(n)); :} | complits:nm {: RESULT = new ExpLit(nm); :};
+and ::= and:lae AND not:lne {: RESULT = new ExpAnd(lae,lne); :}|
+                not:lne {: RESULT = lne; :};
 
-power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} | 
-						factor:f {: RESULT=f; :} | NOT factor:f {: RESULT = new ExpNot(f) ;  :};
+not ::= NOT not:lne {: RESULT = new ExpNot(lne); :}|
+                comp:re {: RESULT = re; :};
 
-comp ::= power:e1 EEQUAL expression:e2 {: 
-              System.out.println("in here");
-              RESULT=new ExpComp(e1,e2); :}| 
-         
-		 power:e1 GREATER expression:e2 {:
-		      RESULT= new ExpGreater(e1,e2); :}| 
-		 
-		 power:e1 LESSER expression:e2 {: 
-		      RESULT= new ExpLesser(e1,e2); :} |
-		 
-		 power:e1 GREATEREQUAL expression:e2 {:
-		  RESULT= new ExpGreaterEqual(e1,e2); :}| 
-		 
-		 power:e1 LESSEREQUAL expression:e2 {: 
-		  RESULT= new ExpLesserEqual(e1,e2);:}|
-		 
-		 power:e1 NOTEQUAL expression:e2 {:
-		  RESULT= new ExpNotEqual(e1,e2);
-		  :}
-		;
+comp ::= comp:re EEQUAL arithExp:be {: RESULT = new ExpComp(re, be); :}|
+              comp:re GREATER arithExp:be {: RESULT = new ExpGreater(re, be); :}|
+               comp:re LESSER arithExp:be {: RESULT = new ExpLesser(re, be); :}|
+             comp:re GREATEREQUAL arithExp:be {: RESULT = new ExpGreaterEqual(re, be); :}|
+             comp:re  LESSEREQUAL arithExp:be {: RESULT = new ExpLesserEqual(re, be); :}|
+             comp:re NOTEQUAL arithExp:be {: RESULT = new  ExpNotEqual(re, be); :}|
+             arithExp:re {: RESULT = re; :};
+
+
+
+power ::= factor:f EXPO power:p {: RESULT= new ExpExpo(f,p); :} | 
+						factor:f {: RESULT=f; :} ;
+
 
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
@@ -428,7 +424,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :}  | power:f OR term:t {: RESULT = new ExpOr(f,t); :};
+		power:p {: RESULT= p; :}  ;
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 

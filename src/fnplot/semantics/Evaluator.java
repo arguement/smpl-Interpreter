@@ -962,6 +962,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             if (evalAnt.booleanValue()) {
 
                 ans = evalConsq;
+                break;
 
             }
 
