@@ -30,6 +30,24 @@ public class FnPlotBoolean extends FnPlotValue<FnPlotBoolean> {
           Boolean val = value == arg.booleanValue();
          return  make(val);
      }
+
+     @Override
+     public FnPlotValue<?> and(FnPlotValue<?> arg) throws FnPlotException {
+         // TODO Auto-generated method stub
+         return make(value && arg.booleanValue());
+     }
+
+     @Override
+     public FnPlotValue<?> or(FnPlotValue<?> arg) throws FnPlotException {
+         // TODO Auto-generated method stub
+         return make(value || arg.booleanValue());
+     }
+
+     @Override
+     public FnPlotValue<?> not() throws FnPlotException {
+         // TODO Auto-generated method stub
+         return make(!value);
+     }
     
      @Override
     public boolean booleanValue() throws TypeFnPlotException {

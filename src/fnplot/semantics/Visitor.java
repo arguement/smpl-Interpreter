@@ -26,16 +26,19 @@ import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
+import fnplot.syntax.ExpOr;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpNoLimitProc;
+import fnplot.syntax.ExpNot;
 import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpVecSpec;
 import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpAdd;
+import fnplot.syntax.ExpAnd;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.StatementPrint;
@@ -228,5 +231,11 @@ public interface Visitor<S, T> {
 	public T visitStmtPrint(StatementPrint statementPrint, S arg) throws FnPlotException;
 
 	public T visitStmtPrintLn(StatementPrintLn statementPrintLn, S arg) throws FnPlotException;
+
+	public T visitExpAnd(ExpAnd expAnd, S arg) throws FnPlotException;
+
+	public T visitExpOr(ExpOr expOr, S arg) throws FnPlotException;
+
+	public T visitExpNot(ExpNot expNot, S arg) throws FnPlotException;
 
 }

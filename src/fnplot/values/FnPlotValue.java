@@ -115,27 +115,36 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     } 
     //dean was here
     public FnPlotValue<?> eequals(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something"); 
+        throw new TypeFnPlotException("error"); 
     } 
 
     public FnPlotValue<?> greater(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something2"); 
+        throw new TypeFnPlotException("error2"); 
     } 
 
     public FnPlotValue<?> notequal(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something3"); 
+        throw new TypeFnPlotException("error3"); 
     } 
 
     public FnPlotValue<?> lesserequal(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something4"); 
+        throw new TypeFnPlotException("error4"); 
     }  
 
     public FnPlotValue<?> lesser(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something5"); 
+        throw new TypeFnPlotException("error5"); 
     } 
 
     public FnPlotValue<?> greaterequal(FnPlotValue<?> arg) throws FnPlotException {
-        throw new TypeFnPlotException("something6"); 
+        throw new TypeFnPlotException("error6"); 
+    }
+    public FnPlotValue<?> and(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("error7"); 
+    }
+    public FnPlotValue<?> or(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("error8"); 
+    }
+    public FnPlotValue<?> not() throws FnPlotException {
+        throw new TypeFnPlotException("error9"); 
     }
     /**
      *

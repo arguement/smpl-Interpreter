@@ -10,11 +10,11 @@ public class sym {
   /* terminals */
   public static final int EEQUAL = 25;
   public static final int CONCAT = 4;
-  public static final int STR = 49;
+  public static final int STR = 52;
   public static final int CASE = 43;
   public static final int CAR = 28;
-  public static final int DOUBLE = 47;
-  public static final int INTEGER = 46;
+  public static final int DOUBLE = 50;
+  public static final int INTEGER = 49;
   public static final int NOTEQUAL = 24;
   public static final int CDR = 29;
   public static final int LPAREN = 2;
@@ -22,11 +22,14 @@ public class sym {
   public static final int SEMI = 19;
   public static final int EXPO = 26;
   public static final int PRINTLN = 44;
-  public static final int MODIFIER = 54;
-  public static final int BOOL_TRUE = 50;
+  public static final int MODIFIER = 57;
+  public static final int BOOL_TRUE = 53;
   public static final int MINUS = 9;
   public static final int RPAREN = 3;
+  public static final int NOT = 48;
+  public static final int AND = 46;
   public static final int NIL = 32;
+  public static final int OR = 47;
   public static final int IN = 15;
   public static final int COMMA = 18;
   public static final int CALL = 38;
@@ -48,19 +51,19 @@ public class sym {
   public static final int IS_EQV = 33;
   public static final int IS_PAIR = 30;
   public static final int GREATEREQUAL = 22;
-  public static final int BOOL_FALSE = 51;
+  public static final int BOOL_FALSE = 54;
   public static final int COLON = 7;
   public static final int ELSE = 42;
   public static final int LBRACE = 16;
-  public static final int VARIABLE = 48;
+  public static final int VARIABLE = 51;
   public static final int LIST = 31;
   public static final int SUBSTR = 35;
   public static final int LET = 14;
-  public static final int BIN_INTEGER = 52;
+  public static final int BIN_INTEGER = 55;
   public static final int THEN = 41;
   public static final int RBRACE = 17;
   public static final int RSQBRACKET = 5;
-  public static final int HEX_INTEGER = 53;
+  public static final int HEX_INTEGER = 56;
   public static final int PROC = 36;
   public static final int PRINT = 45;
   public static final String[] terminalNames = new String[] {
@@ -110,6 +113,9 @@ public class sym {
   "CASE",
   "PRINTLN",
   "PRINT",
+  "AND",
+  "OR",
+  "NOT",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",

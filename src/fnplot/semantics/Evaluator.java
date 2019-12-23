@@ -25,7 +25,9 @@ import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpNoLimitProc;
+import fnplot.syntax.ExpNot;
 import fnplot.syntax.ExpAdd;
+import fnplot.syntax.ExpAnd;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpVecSpec;
 import fnplot.syntax.IfStatement;
@@ -38,6 +40,7 @@ import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
+import fnplot.syntax.ExpOr;
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.Binding;
 import fnplot.syntax.CaseStatement;
@@ -987,5 +990,29 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // TODO Auto-generated method stub
         System.out.println(statementPrintLn.getSeq().visit(this, env));
         return new FnNone();
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpAnd(ExpAnd expAnd, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        FnPlotValue<?> left= expAnd.getExpL().visit(this, env);
+        FnPlotValue<?> right= expAnd.getExpR().visit(this, env);
+        
+        return left.and(right);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpOr(ExpOr expOr, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        FnPlotValue<?> left= expOr.getExpL().visit(this, env);
+        FnPlotValue<?> right= expOr.getExpR().visit(this, env);
+        return left.or(right);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpNot(ExpNot expNot, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        FnPlotValue<?> left= expNot.getExp().visit(this, env);
+        return left.not();
     }
 }

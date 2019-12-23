@@ -100,6 +100,9 @@ terminal ELSE;
 terminal CASE;
 terminal PRINTLN;
 terminal PRINT;
+terminal AND;
+terminal OR;
+terminal NOT;
 // terminal COMMENT;
 
 // terminals with values
@@ -174,6 +177,10 @@ non terminal ArrayList<Clause> cParamList;
 non terminal StatementPrint print;
 non terminal StatementPrintLn println;
 
+non terminal Exp LogExp; 
+non terminal Exp termL;
+non terminal Exp factorL;
+
 
 // non terminal StmtFun funExp;
 
@@ -191,6 +198,14 @@ stmtList ::= stmtList:lst stmt:s {:
 
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:} | println:pn {: RESULT = pn;:}  ;
+
+
+// LogExp ::= LogExp:e AND termL:t {:
+// 			RESULT = new ExpAnd(e, t); :} | termL:t {: RESULT= t; :};
+
+// termL ::= termL:t OR factorL:l {: RESULT = new ExpOr(t,l); :} | factorL:f {: RESULT = f; :};
+
+// factorL ::= NOT complits:n {: RESULT = new ExpNot(new ExpLit(n)); :} | complits:nm {: RESULT = new ExpLit(nm); :};
 
 
 print ::= PRINT LPAREN expression:e RPAREN {: RESULT = new StatementPrint(e); :};
@@ -374,10 +389,17 @@ arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
 		arithExp:e MINUS term:t {:
 			RESULT = new ExpSub(e, t); :} |
-		term:t {: RESULT = t; :} ;
+		term:t {: RESULT = t; :} | arithExp:e AND term:t {: RESULT = new ExpAnd(e, t); :} ;
+
+// LogExp ::= LogExp:e AND termL:t {:
+// 			RESULT = new ExpAnd(e, t); :} | termL:t {: RESULT= t; :};
+
+// termL ::= termL:t OR factorL:l {: RESULT = new ExpOr(t,l); :} | factorL:f {: RESULT = f; :};
+
+// factorL ::= NOT complits:n {: RESULT = new ExpNot(new ExpLit(n)); :} | complits:nm {: RESULT = new ExpLit(nm); :};
 
 power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} | 
-						factor:f {: RESULT=f; :};
+						factor:f {: RESULT=f; :} | NOT factor:f {: RESULT = new ExpNot(f) ;  :};
 
 comp ::= power:e1 EEQUAL expression:e2 {: 
               System.out.println("in here");
@@ -406,7 +428,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpDiv(f, t); :} |
 	 power:f MOD term:t {:
 		RESULT = new ExpMod(f, t); :} |
-		power:p {: RESULT= p; :}  ;
+		power:p {: RESULT= p; :}  | power:f OR term:t {: RESULT = new ExpOr(f,t); :};
 
 string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 

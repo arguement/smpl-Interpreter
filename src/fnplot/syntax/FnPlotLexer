@@ -101,7 +101,9 @@ string = "?:[^"]}*|'?:[^']*
 
 // project code below
 
-
+<YYINITIAL> "and" {return new Symbol(sym.AND);}
+<YYINITIAL> "or" {return new Symbol(sym.OR);}
+<YYINITIAL> "not" {return new Symbol(sym.NOT);}
 
 <YYINITIAL> "print" {return new Symbol(sym.PRINT);}
 <YYINITIAL> "println" {return new Symbol(sym.PRINTLN);}
