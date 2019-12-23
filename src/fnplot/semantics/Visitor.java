@@ -18,6 +18,7 @@ import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.ExpComp; //added by dean 
+import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpFunction;
@@ -219,5 +220,7 @@ public interface Visitor<S, T> {
 	public T visitStmtIf(IfStatement ifStatement, S arg) throws FnPlotException;
 
 	public T visitStmtCase(CaseStatement caseStatement, S state) throws FnPlotException;
+
+	public T visitExpCompount(ExpCompound expCompound, S arg) throws FnPlotException;
 
 }

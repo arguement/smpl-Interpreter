@@ -143,12 +143,6 @@ string = "?:[^"]}*|'?:[^']*
 <YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
 
 
-<YYINITIAL>    {string} {
-	       // STRING
-	       return new Symbol(sym.STRING, yytext());
-	       }
-
-
 <YYINITIAL>   ( {num}+|{neg}+ ) {
 	       // INTEGER
 	       return new Symbol(sym.INTEGER, 

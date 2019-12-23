@@ -31,6 +31,7 @@ import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpComp; /// Gaza 
+import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
@@ -59,7 +60,6 @@ import java.util.stream.IntStream;
 import java.awt.geom.Point2D;
 import fnplot.syntax.ExpConcat;
 import fnplot.syntax.ExpConcat;
-
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
     /*
@@ -233,7 +233,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.expo(val2);
     }
-
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
 
@@ -648,9 +647,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         return exp.visit(this, state);
     }
 
-    //Britt
+    // Britt
     @Override
-    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> state) throws FnPlotException { 
+    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> state) throws FnPlotException {
         FnPlotValue<?> lst1 = exp.getExpL().visit(this, state);
         FnPlotValue<?> lst2 = exp.getExpR().visit(this, state);
 
@@ -660,8 +659,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         ListFunction list1 = ((ListFunction) ListFunction1.getFunExp());
         ListFunction list2 = ((ListFunction) ListFunction2.getFunExp());
 
-        ArrayList<Exp>  list3 = new ArrayList<Exp>();
-        
+        ArrayList<Exp> list3 = new ArrayList<Exp>();
+
         list3.addAll(list1.getArguments());
         list3.addAll(list2.getArguments());
 
@@ -932,20 +931,20 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitStmtCase(CaseStatement caseStatement, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        ArrayList<Clause> caseList =  caseStatement.getClause();
+        ArrayList<Clause> caseList = caseStatement.getClause();
         FnPlotValue<?> ans = new FnNone();
         for (Clause clause : caseList) {
-            Exp ant= clause.getAnTqExp();
-            Exp consq= clause.getConsqExp();
-            
-            boolean found = false;
-            if (ant instanceof ExpVar){
-                String var = ((ExpVar)ant).getVar();
+            Exp ant = clause.getAnTqExp();
+            Exp consq = clause.getConsqExp();
 
-                if (var.equals("else")){
+            boolean found = false;
+            if (ant instanceof ExpVar) {
+                String var = ((ExpVar) ant).getVar();
+
+                if (var.equals("else")) {
                     found = true;
                 }
-                
+
             }
 
             if (found) {
@@ -958,10 +957,17 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             if (evalAnt.booleanValue()) {
 
                 ans = evalConsq;
-    
+
             }
-            
+
         }
         return ans;
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpCompount(ExpCompound expCompound, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -54,7 +54,7 @@ terminal LPAREN, RPAREN;
 
 //britt
 terminal CONCAT;
-terminal string STRING;
+// terminal string STRING;
 non terminal Exp concat; 
 
 /*terminal IF, THEN, ELSE;
@@ -169,6 +169,7 @@ non terminal CaseStatement case;
 non terminal ArrayList<Clause> cParamListE;
 non terminal ArrayList<Clause> cParamList;
 
+
 // non terminal StmtFun funExp;
 
 /* Grammar rules */
@@ -184,7 +185,8 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | vecIndex:vc SEMI{: RESULT =vc; :} ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}    ;
+
 
 
 cParamListE ::=  cParamList:pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
@@ -209,7 +211,7 @@ stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:c
 
 vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
  
-vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
+// vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
 
 vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
@@ -412,6 +414,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | vector:vc {: RESULT = vc; :};
 
 empty ::= ;
