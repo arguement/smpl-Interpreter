@@ -563,6 +563,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         return new FnInBuiltFunction(result, state);
     }
 
+    //Britt
     @Override
     public FnPlotValue<?> visitExpLogAnd(ExpLogAnd exp, Environment<FnPlotValue<?>> state) throws FnPlotException { 
 
@@ -576,6 +577,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         boolean c2 = ((boolean) cond2.booleanValue());
 
         boolean result = c1 && c2;
+        System.out.println(c1);
 
         return new FnPlotBool(result);         
     }

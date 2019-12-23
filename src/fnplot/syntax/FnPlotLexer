@@ -130,9 +130,9 @@ string = "?:[^"]}*|'?:[^']*
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }
 
-<YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
+<YYINITIAL> " @ " {return new Symbol(sym.CONCAT);}
 
-<YYINITIAL> " and " {return new Symbol (sym.AND);}
+<YYINITIAL> " and " {return new Symbol(sym.LOG_AND);}
 
 
 

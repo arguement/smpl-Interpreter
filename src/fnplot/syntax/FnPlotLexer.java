@@ -980,8 +980,8 @@ public class FnPlotLexer implements java_cup.runtime.Scanner {
           case 80: break;
           case 37: 
             System.out.println("line: "+(yyline+1)+" "+"char: "+yychar+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [133] { return new Symbol (sym.CONCAT); }");
-            { return new Symbol (sym.CONCAT);
+            System.out.println("action [133] { return new Symbol(sym.CONCAT); }");
+            { return new Symbol(sym.CONCAT);
             } 
             // fall through
           case 81: break;
@@ -1015,8 +1015,8 @@ public class FnPlotLexer implements java_cup.runtime.Scanner {
           case 85: break;
           case 42: 
             System.out.println("line: "+(yyline+1)+" "+"char: "+yychar+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [135] { return new Symbol (sym.AND); }");
-            { return new Symbol (sym.AND);
+            System.out.println("action [135] { return new Symbol(sym.LOG_AND); }");
+            { return new Symbol(sym.LOG_AND);
             } 
             // fall through
           case 86: break;

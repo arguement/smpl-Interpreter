@@ -96,8 +96,7 @@ public class sym {
   "BOOL_TRUE",
   "BOOL_FALSE",
   "BIN_INTEGER",
-  "HEX_INTEGER",
-  "AND"
+  "HEX_INTEGER"
   };
 }
 
