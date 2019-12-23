@@ -172,6 +172,7 @@ non terminal CaseStatement case;
 non terminal ArrayList<Clause> cParamListE;
 non terminal ArrayList<Clause> cParamList;
 non terminal StatementPrint print;
+non terminal StatementPrintLn println;
 
 
 // non terminal StmtFun funExp;
@@ -189,10 +190,11 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:}   ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:} | println:pn {: RESULT = pn;:}  ;
 
 
 print ::= PRINT LPAREN expression:e RPAREN {: RESULT = new StatementPrint(e); :};
+println ::= PRINTLN LPAREN expression:e RPAREN {: RESULT = new StatementPrintLn(e); :};
 
 
 cParamListE ::=  cParamList:pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
@@ -344,7 +346,7 @@ expression ::=  letExp:l {: RESULT = l; :} |
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
 		|comp:n {: RESULT= n; :} | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :}  ;
 
-letExp ::= LET bindings:bs IN expression:body {:
+letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);
            :} ;
 
