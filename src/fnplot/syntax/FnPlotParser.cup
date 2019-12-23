@@ -52,8 +52,17 @@ scan with {:
 // special symbols
 terminal LPAREN, RPAREN;
 
+//britt
+terminal CONCAT;
+// terminal string STRING;
+non terminal Exp concat; 
+
+/*terminal IF, THEN, ELSE;
+non terminal StmtDefinition funDef; 
+non terminal Exp condition;
+*/
 //special symbols i added
-terminal RSQBRACKET,LSQBRACKET,COLON;
+terminal RSQBRACKET,LSQBRACKET, COLON;
 
 // arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD, ASSIGN;
@@ -74,17 +83,30 @@ terminal EXPO;
 // terminal HEX_INTEGER;
 terminal PAIR;
 terminal CAR;
+terminal CDR;
 terminal IS_PAIR;
 terminal LIST;
 terminal NIL;
 terminal IS_EQV;
 terminal IS_EQUAL;
 terminal SUBSTR;
-terminal DOTOPERATOR;// heap operator
+//terminal DOTOPERATOR;// heap operator
 terminal HEAP; //heap operator
 terminal HEAPINSERT; //heap operator 
 terminal HEAPDELETE;//heap operator
 terminal GETMIN;//HEAP OPERATOR
+terminal PROC;
+terminal DOT;
+terminal CALL;
+terminal SIZE;
+terminal IF;
+terminal THEN;
+terminal ELSE;
+terminal CASE;
+terminal PRINTLN;
+terminal PRINT;
+// terminal COMMENT;
+
 // terminals with values
 terminal Integer INTEGER;
 terminal Double DOUBLE;
@@ -94,6 +116,7 @@ terminal Boolean BOOL_TRUE;
 terminal Boolean BOOL_FALSE;
 terminal String BIN_INTEGER;
 terminal String HEX_INTEGER;
+terminal String MODIFIER;
 
 /* Non terminals */
 non terminal ArithProgram program;
@@ -119,6 +142,7 @@ non terminal ArrayList<Exp> expList;
 non terminal Exp power;
 non terminal PairFunction pair;
 non terminal CarFunction car;
+non terminal CdrFunction cdr;
 non terminal IsPairFunction isPair;
 non terminal ListFunction list;
 non terminal ListFunction list2;
@@ -133,6 +157,31 @@ non terminal Exp heap;
 non terminal Exp heapinsert ; 
 non terminal Exp heapdelete ; 
 non terminal Exp getmin;
+non terminal ExpPara paramter; //dean 
+non terminal ArrayList<ExpPara> paramListE;
+non terminal ArrayList<ExpPara> paramList;
+non terminal ExpFunction procDef;
+non terminal ExpFunction procDefWithOverflow;
+// non terminal ExpFunction procedures;
+non terminal Exp procedures;
+non terminal ExpFunction noLimitProc;
+non terminal ExpFunCall funCall;
+non terminal ArrayList<Exp> funCallExpListE;
+non terminal ArrayList<Exp> funCallExpList;
+non terminal CallFunction call;
+non terminal Exp vecSpec;
+non terminal VectorFunction vector;
+non terminal ArrayList<Exp> vParamListE;
+non terminal ArrayList<Exp> vParamList;
+non terminal VectorIndex vecIndex;
+non terminal SizeVectorFunction vecSize;
+non terminal IfStatement stmtIf;
+non terminal Clause clause;
+non terminal CaseStatement case;
+non terminal ArrayList<Clause> cParamListE;
+non terminal ArrayList<Clause> cParamList;
+non terminal StatementPrint print;
+non terminal StatementPrintLn println;
 
 
 // non terminal StmtFun funExp;
@@ -150,11 +199,99 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :} ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:} | println:pn {: RESULT = pn;:}  ;
+
+
+print ::= PRINT LPAREN expression:e RPAREN {: RESULT = new StatementPrint(e); :};
+println ::= PRINTLN LPAREN expression:e RPAREN {: RESULT = new StatementPrintLn(e); :};
+
+
+cParamListE ::=  cParamList:pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
+
+cParamList ::=  cParamList:pl COMMA clause:v  {: pl.add(v); 
+												RESULT = pl; :} | clause:v {: 
+												ArrayList<Clause> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+
+case ::= CASE LBRACE RSQBRACKET cParamListE:cp LSQBRACKET RBRACE {: RESULT = new CaseStatement( cp );  :};
+
+
+clause ::= expression:pred COLON expression:consq {: RESULT = new Clause(pred,consq); :};
+
+stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:consq2 LSQBRACKET {:
+	
+	RESULT = new IfStatement(pred,consq,consq2);
+:};
+
+
+vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
+ 
+// vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
+
+vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
+
+vParamList ::=  vParamList:pl COMMA vecSpec:v  {: pl.add(v); 
+												RESULT = pl; :} | vecSpec:v {: 
+												ArrayList<Exp> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+
+vector ::= RSQBRACKET COLON RSQBRACKET vParamListE:v LSQBRACKET COLON LSQBRACKET {: RESULT = new VectorFunction(v);  :};
+
+vecSpec ::= expression:e COLON expression:f {: RESULT = new ExpVecSpec(e,f); :} | expression:en {: RESULT = en; :}; 
+
+call ::= CALL LPAREN expression:func COMMA expression:lst RPAREN {:
+	RESULT = new CallFunction(func,lst);
+:};
+
+funCall ::= factor:v LPAREN funCallExpListE:el RPAREN {: RESULT= new ExpFunCall(v,el); :} ;
+
+funCallExpListE ::= funCallExpList: pl {: RESULT = pl; :} | empty {: RESULT = new ArrayList(); :};
+
+funCallExpList ::= funCallExpList:pl COMMA expression:v {: pl.add(v); 
+											RESULT = pl; :} | expression:v {: ArrayList<Exp> ls = new ArrayList<>(); 
+									ls.add(v) ;
+									RESULT = ls;
+									:};
+
+procedures ::= procDef:pd {: RESULT = pd; :} | procDefWithOverflow:pdOverFlow {: RESULT = pdOverFlow; :} | noLimitProc:nlp {: RESULT=nlp; :};
+
+noLimitProc ::= PROC VARIABLE:v expression:body {: RESULT= new ExpFunction(v,body); :};
+
+procDefWithOverflow ::= PROC LPAREN paramListE:p DOT paramter:overflow RPAREN expression:body {:
+	RESULT=new ExpFunction(p,body,overflow); 				
+:};
+
+procDef ::= PROC LPAREN RSQBRACKET paramListE:pl LSQBRACKET RPAREN expression:body {: 
+
+System.out.println("procDeof");
+RESULT=new ExpFunction(pl,body); 
+:};
+
+paramListE ::=  paramList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
+
+paramList ::=  paramList:pl COMMA paramter:v  {: pl.add(v); 
+												RESULT = pl; :} | paramter:v {: 
+												ArrayList<ExpPara> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+
+paramter ::= MODIFIER:m VARIABLE:v {: 
+
+			RESULT = new ExpPara(m,v); 
+
+			:} | VARIABLE:v {: RESULT = new ExpPara("default",v); :};
 
 substr ::= SUBSTR LPAREN expression:str COMMA expression:start COMMA expression:end RPAREN {:
 	RESULT = new SubstrFunction(str,start,end);
 :};
+
+//britt
+concat ::= allLists:l1 CONCAT allLists:l2 {: RESULT = new ExpConcat(l1, l2); :};
 
 isEqual ::= IS_EQUAL LPAREN expression:e1 COMMA expression:e2 RPAREN {: 
 							RESULT = new IsEqual(e1,e2);
@@ -167,7 +304,7 @@ isEqv ::= IS_EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 allLists ::= list:lst {: RESULT = lst; :} | list2:lst2 {: RESULT=lst2; :};
 
 list2 ::= RSQBRACKET expListE:lst LSQBRACKET{:
-                System.out.println("inhere");
+                //System.out.println("inhere");
 				RESULT = new ListFunction(lst);
 :};
 
@@ -197,6 +334,13 @@ car ::= CAR LPAREN pair:p RPAREN {:
 		RESULT = new CarFunction(var);
 :}; 
 
+cdr ::= CDR LPAREN pair:p RPAREN {:
+		RESULT = new CdrFunction(p);
+:} |  CDR LPAREN VARIABLE:p RPAREN {:
+		ExpVar var = new ExpVar(p);
+		RESULT = new CdrFunction(var);
+:}; 
+
 
 
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
@@ -209,10 +353,12 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		arithExp:a {: RESULT = a; :}|string:s {: RESULT=s; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
-		|comp:n {: RESULT= n; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:};
+		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:} |isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :}
+		|call:c {: RESULT = c; :}|funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :}|comp:n {: RESULT= n; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:}| procedures:prd {: RESULT=prd; :}| cdr:c {: RESULT = c; :} ;
 
-letExp ::= LET bindings:bs IN expression:body {:
+		
+
+letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);
            :} ;
 
@@ -234,7 +380,7 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 
 definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:};
+		:} ;
 
 arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpAdd(e, t); :} |
@@ -242,7 +388,7 @@ arithExp ::= arithExp:e PLUS term:t {:
 			RESULT = new ExpSub(e, t); :} |
 		term:t {: RESULT = t; :} ;
 
-power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} |
+power ::= factor:f EXPO power: p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :};
 
 comp ::= power:e1 EEQUAL expression:e2 {: 
@@ -265,19 +411,19 @@ comp ::= power:e1 EEQUAL expression:e2 {:
 		  RESULT= new ExpNotEqual(e1,e2);
 		  :}
 		;
-heap ::= HEAP  list2:e {: 
+heap ::= HEAP  vector:e {: 
  RESULT= new ExpHeap(e);
 :};  
 
-heapinsert ::= list2:e1 DOTOPERATOR HEAPINSERT LPAREN term:p RPAREN{: 
-System.out.println("in here");
+heapinsert ::= vector:e1 DOT HEAPINSERT LPAREN term:p RPAREN{: 
+//System.out.println("in here");
 RESULT = new ExpHeapInsert(e1,p);
 :}; 
 
-heapdelete ::= list2:e1 DOTOPERATOR HEAPDELETE LPAREN RPAREN {: 
+heapdelete ::= vector:e1 DOT HEAPDELETE LPAREN RPAREN {: 
 RESULT= new ExpHeapDelete(e1);
 :}; 
-getmin ::= list2:e1 DOTOPERATOR GETMIN LPAREN RPAREN  {:
+getmin ::= vector:e1 DOT GETMIN LPAREN RPAREN  {:
   RESULT= new ExpGetMin(e1);
 :};
 
@@ -305,6 +451,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} ;
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | vector:vc {: RESULT = vc; :};
 
 empty ::= ;

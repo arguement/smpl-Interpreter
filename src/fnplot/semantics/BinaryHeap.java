@@ -2,10 +2,10 @@ package fnplot.semantics;
 import java.util.*;
 
 public class BinaryHeap{
-    private static ArrayList<Double> Heap;
+    private static ArrayList<Integer> Heap;
    
-    public static PriorityQueue<Double> heapify (ArrayList<Double> Heap2){
-        PriorityQueue<Double> minHeap = new PriorityQueue<Double>(); 
+    public static PriorityQueue<Integer> heapify (ArrayList<Integer> Heap2){
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>(); 
         for(int i=0;i<Heap2.size();i++){
             minHeap.add(Heap2.get(i));  
         } 
@@ -17,25 +17,28 @@ public class BinaryHeap{
 
 
     } 
-    public static PriorityQueue<Double> heapinsert (ArrayList<Double> Heap2,double num){ 
+    public static PriorityQueue<Integer> heapinsert (ArrayList<Integer> Heap2,Integer num){ 
         
-        PriorityQueue<Double> minHeap = new PriorityQueue<Double>(); 
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>(); 
         minHeap= heapify(Heap2);
         minHeap.add(num);
         return minHeap;
 
 
     }  
-    public static PriorityQueue<Double> heapdelete (ArrayList<Double> Heap2){ 
+    public static PriorityQueue<Integer> heapdelete (ArrayList<Integer> Heap2){ 
         
-        PriorityQueue<Double> minHeap = new PriorityQueue<Double>(); 
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>(); 
         minHeap= heapify(Heap2);
         minHeap.poll();
         return minHeap;
 
 
     }  
-    public static Double min (ArrayList<Double> Heap2){
-        return Heap2.get(0);
+    public static Integer min (ArrayList<Integer> Heap2){
+       
+        PriorityQueue<Integer> minHeap = new PriorityQueue<Integer>(); 
+        minHeap= heapify(Heap2); 
+         return minHeap.peek(); 
     }
 }

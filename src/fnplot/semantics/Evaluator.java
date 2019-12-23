@@ -5,24 +5,35 @@ import fnplot.syntax.StmtFun;
 import fnplot.syntax.Statement;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
+import fnplot.syntax.inbuiltfunctions.CallFunction;
 import fnplot.syntax.inbuiltfunctions.CarFunction;
+import fnplot.syntax.inbuiltfunctions.CdrFunction;
 import fnplot.syntax.inbuiltfunctions.InBuilt;
 import fnplot.syntax.inbuiltfunctions.IsEqual;
 import fnplot.syntax.inbuiltfunctions.IsEqv;
 import fnplot.syntax.inbuiltfunctions.IsPairFunction;
 import fnplot.syntax.inbuiltfunctions.ListFunction;
 import fnplot.syntax.inbuiltfunctions.PairFunction;
+import fnplot.syntax.inbuiltfunctions.SizeVectorFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
+import fnplot.syntax.inbuiltfunctions.VectorFunction;
+import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.StatementClear;
+import fnplot.syntax.StatementPrint;
+import fnplot.syntax.StatementPrintLn;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpMul;
+import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpVar;
+import fnplot.syntax.ExpVecSpec;
+import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
-import fnplot.syntax.ExpSub; 
+import fnplot.syntax.ExpSub;
 import fnplot.syntax.ExpComp; /// Gaza 
+import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpLesser;
 import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
@@ -33,6 +44,10 @@ import fnplot.syntax.ExpHeapDelete;
 import fnplot.syntax.ExpHeapInsert; 
 import fnplot.syntax.ExpGetMin;
 import fnplot.syntax.Binding; 
+import fnplot.syntax.ExpGreater;
+import fnplot.syntax.Binding;
+import fnplot.syntax.CaseStatement;
+import fnplot.syntax.Clause;
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.Exp;
 import fnplot.syntax.ExpFunction;
@@ -47,7 +62,12 @@ import fnplot.values.FnInBuiltFunction;
 import fnplot.values.FnNone;
 import java.awt.geom.Point2D;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.awt.geom.Point2D;
+import fnplot.syntax.ExpConcat;
+import fnplot.syntax.ExpConcat;
 
 public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotValue<?>> {
     /*
@@ -190,14 +210,26 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     // added by me
     public FnPlotValue<?> visitFnDefn(ExpFunction defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
         System.out.println("inside evaluator visitfn");
+
         Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
-        // env.put(( (Exp)defn)., c);
+
+        if (defn.getRestParameters() != null) {
+
+            // ArrayList<String> withRest =
+            // defn.getParameters().addAll(defn.getRestParameters());
+            c.setRest(defn.getRestParameters());
+
+        }
+
+        if (defn.getId() != null) {
+            c.setId(defn.getId());
+        }
+
+        // Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
+
         FnPlotFunction funct = new FnPlotFunction(defn, env);
         env.put(funct.toString(), c);
 
-        // env.put(defn.ge,funct.funValue());
-
-        // System.out.printf("inside functiondfn its %s %n",this.result);
         return funct;
     }
 
@@ -211,9 +243,16 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     }
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
+
         System.out.println("inside evaluator visitfncall");
         // System.out.println(callExp.toString());
-        String name = callExp.getName();
+        // String name = callExp.getName();
+
+        // testing
+        FnPlotFunction obj = (FnPlotFunction) callExp.getName().visit(this, env);
+        // String name = obj.getFunExp().toString();
+        String name = obj.toString();
+        System.out.println("the name is " + name);
 
         // System.out.println(name);
         ArrayList<Exp> args = callExp.getArguments();
@@ -230,10 +269,72 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.parent);
         // System.out.println(env.);
         // System.out.println(values);
-        Closure closure = (Closure) env.get(env.get(name).toString());
+        System.out.println(env.dictionary);
+        System.out.println(obj.getClosingEnv().dictionary);
 
-        // System.out.printf("close getparams: %s %n",closure.getParameters());
-        // System.out.printf("values: %s %n",values);
+        // Closure closure = (Closure) env.get(name);
+        Closure closure = (Closure) obj.getClosingEnv().get(name);
+
+        System.out.println("below");
+
+        // checking for ID then it is proc <id> <body>
+        if (closure.getId() != null) {
+            System.out.println("in closure id");
+            List<Exp> evalExp = values.stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
+
+            ArrayList<Exp> evalExpArrayList = new ArrayList<>(evalExp);
+            ListFunction list = new ListFunction(evalExpArrayList);
+
+            System.out.println(list);
+            System.out.println(closure.getId());
+
+            ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
+
+            Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), tempValues,
+                    closure.getEnvironment());
+
+            newEnv.put(closure.getId(), list.visit(this, env));
+
+            System.out.println("new env below");
+            System.out.println(newEnv.dictionary);
+
+            return closure.getBody().visit(this, newEnv);
+
+        }
+
+        // checks that the rest paramters are there therefore it would be proc(p1, . . .
+        // , pn . prest) <body>
+        if (closure.getRestParameters() != null) {
+            int lenParam = closure.getParameters().size();
+            int lenArgs = values.size();
+
+            if (lenArgs > lenParam) {
+
+                List<Exp> tempFirst = values.subList(0, lenParam).stream().map(v -> new ExpLit(v))
+                        .collect(Collectors.toList());
+                List<Exp> tempAfter = values.subList(lenParam, lenArgs).stream().map(v -> new ExpLit(v))
+                        .collect(Collectors.toList());
+
+                ArrayList<Exp> first = new ArrayList<>(tempFirst);
+                ArrayList<Exp> after = new ArrayList<>(tempAfter);
+
+                ListFunction list = new ListFunction(after);
+                // list.visit(this, env);
+                ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
+                for (Exp e : first) {
+                    tempValues.add(e.visit(this, env));
+
+                }
+                Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(),
+                        tempValues, closure.getEnvironment());
+
+                newEnv.put(closure.getRestParameters(), list.visit(this, env));
+
+                return closure.getBody().visit(this, newEnv);
+
+            }
+
+        }
 
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(closure.getParameters(), values,
                 closure.getEnvironment());
@@ -262,7 +363,11 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(defn.getE().);
         Exp expression = defn.getE();
         if (expression instanceof ExpFunCall) {
-            String name = ((ExpFunCall) expression).getName();
+            // String name = ((ExpFunCall) expression).getName();
+
+            String name = ((FnPlotFunction) ((ExpFunCall) expression).getName().visit(this, env)).getFunExp().getId();
+            // FnPlotFunction obj = (FnPlotFunction)callExp.getName().visit(this, env);
+            // String name = obj.getFunExp().getId();
 
             // the closure is the binds of parameters with the environment
             Closure closure = (Closure) env.get(env.get(name).toString());
@@ -440,69 +545,77 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.div(val2);
-    } 
-    //dean
+    }
+
+    // dean
     @Override
-    public FnPlotValue<?> visitExpComp(ExpComp exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpComp(ExpComp exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
-        //FnPlotValue<FnNone> result=true; 
-        return val1.eequals(val2);
-    } 
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        // System.out.println(val1);
+        // System.out.println(val2);
+        // FnPlotValue<FnNone> result=true;
+        return val1.eequals(val2); 
+        }
+
     @Override
-    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
         System.out.println(val1);
         System.out.println(val2);
         return val1.notequal(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpLesserEqual(ExpLesserEqual exp, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.lesserequal(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpLesser(ExpLesser exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpLesser(ExpLesser exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.lesser(val2);
-    } 
+    }
+
     @Override
-    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpGreaterEqual(ExpGreaterEqual exp, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
-        System.out.println(val1);
-        System.out.println(val2);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        // System.out.println(val1);
+        // System.out.println(val2);
         return val1.greaterequal(val2);
     }
+
     @Override
-    public FnPlotValue<?> visitExpGreater(ExpGreater exp,Environment<FnPlotValue<?>> arg) throws FnPlotException {
-        
-        FnPlotValue<?> val1, val2; 
+    public FnPlotValue<?> visitExpGreater(ExpGreater exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+
+        FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
         System.out.println(val1);
         System.out.println(val2);
         return val1.greater(val2);
     }
+
     @Override
     public FnPlotValue<?> visitExpMod(ExpMod exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         FnPlotValue<?> val1, val2;
@@ -514,28 +627,41 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpHeap(ExpHeap exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         Exp val1=exp.getExp(); 
+        //val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         //System.out.println(val1);
         //ArrayList<String> gaza = ((ListFunction)val). 
-        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
-        //System.out.println("null");
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
+        System.out.println(store);
         //System.out.println(test); 
         ArrayList<String> newArg = new ArrayList<>(); 
         
-        liste.forEach((e) -> {
+        store.forEach((e) -> {
             newArg.add(e.toString()); 
         });  
-        ArrayList<Double> newArg2 = new ArrayList<>();
+        ArrayList<Integer> newArg2 = new ArrayList<>();
         //System.out.println("null");
         //System.out.println(newArg.get(0)); 
         newArg.forEach((e) -> {
-            newArg2.add(Double.parseDouble(e));
+            newArg2.add(Integer.parseInt(e));
         });  
         //PriorityQueue<Double> minHeap = new PriorityQueue<Double>();  
 
         //System.out.println("Before Hepification");
         //System.out.println(newArg2); 
 
-        PriorityQueue<Double> newArg3=BinaryHeap.heapify(newArg2); 
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapify(newArg2); 
 
         //Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
                 //new ArrayList<FnPlotValue<?>>(), val1.getClosingEnv());
@@ -543,7 +669,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Iterator g_iterator = newArg3.iterator(); 
         while(g_iterator.hasNext()) 
         { 
-          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
           //newEnv.put(expFn.getParameters().get(0),i); 
           //FnPlotValue<?> j=expFn.getBody().visit(this,newEnv);
            //outList.add((double)g_iterator.next()) ;
@@ -553,111 +679,144 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         } 
         //System.out.println("After Hepification");
         //System.out.println(outList);  
-        ListFunction List=new ListFunction(outList);
-        return new FnInBuiltFunction(List, arg); 
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
         //return null;
     }  
     @Override
     public FnPlotValue<?> visitExpHeapInsert(ExpHeapInsert exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         Exp val1=exp.getHeap(); 
         Exp val2=exp.getNum(); 
-        System.out.println(val1); 
+        //System.out.println(val1); 
         //Exp val1=
-        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
-        
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+       
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
         String val3= val2.toString(); 
         System.out.println(val3);
         //String val4=val3.toString(); 
-        Double val5=Double.parseDouble(val3);
+        Integer val5=Integer.parseInt(val3);
         
         ArrayList<String> newArg = new ArrayList<>(); 
         
-        liste.forEach((e) -> {
+        store.forEach((e) -> {
             newArg.add(e.toString()); 
         });  
-        ArrayList<Double> newArg2 = new ArrayList<>();
+        ArrayList<Integer> newArg2 = new ArrayList<>();
          
         newArg.forEach((e) -> {
-            newArg2.add(Double.parseDouble(e));
+            newArg2.add(Integer.parseInt(e));
         });  
         
-        PriorityQueue<Double> newArg3=BinaryHeap.heapinsert(newArg2,(double)val5); //hope this work
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapinsert(newArg2,(int)val5); //hope this work
 
         
         ArrayList<Exp> outList=new ArrayList<>(); 
         Iterator g_iterator = newArg3.iterator(); 
         while(g_iterator.hasNext()) 
         { 
-          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
           outList.add(new ExpLit(i)); 
              
         } 
          
-        ListFunction List=new ListFunction(outList);
-        return new FnInBuiltFunction(List, arg); 
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
         
     }  
     @Override
     public FnPlotValue<?> visitExpHeapDelete(ExpHeapDelete exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         Exp val1=exp.getHeap(); 
         
-        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
-        
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
         
         
         ArrayList<String> newArg = new ArrayList<>(); 
         
-        liste.forEach((e) -> {
+        store.forEach((e) -> {
             newArg.add(e.toString()); 
         });  
-        ArrayList<Double> newArg2 = new ArrayList<>();
+        ArrayList<Integer> newArg2 = new ArrayList<>();
          
         newArg.forEach((e) -> {
-            newArg2.add(Double.parseDouble(e));
+            newArg2.add(Integer.parseInt(e));
         });  
         
-        PriorityQueue<Double> newArg3=BinaryHeap.heapdelete(newArg2); //hope this work
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapdelete(newArg2); //hope this work
 
         
         ArrayList<Exp> outList=new ArrayList<>(); 
         Iterator g_iterator = newArg3.iterator(); 
         while(g_iterator.hasNext()) 
         { 
-          FnPlotValue<?> i = FnPlotValue.make((double)g_iterator.next()); 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
           outList.add(new ExpLit(i)); 
              
         } 
          
-        ListFunction List=new ListFunction(outList);
-        return new FnInBuiltFunction(List, arg); 
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
         
     }  
     @Override
     public FnPlotValue<?> visitExpGetMin(ExpGetMin exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         Exp val1=exp.getHeap(); 
         
-        ArrayList<Exp> liste = ((ListFunction) val1).getArguments(); 
-        
-        
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
         
         ArrayList<String> newArg = new ArrayList<>(); 
         
-        liste.forEach((e) -> {
+        store.forEach((e) -> {
             newArg.add(e.toString()); 
         });  
-        ArrayList<Double> newArg2 = new ArrayList<>();
+        ArrayList<Integer> newArg2 = new ArrayList<>();
          
         newArg.forEach((e) -> {
-            newArg2.add(Double.parseDouble(e));
+            newArg2.add(Integer.parseInt(e));
         });  
         
-        Double newArg3=BinaryHeap.min(newArg2); //hope this work
+        Integer newArg3=BinaryHeap.min(newArg2); //hope this work
 
         
         Exp outList; 
         
        
-          FnPlotValue<?> i = FnPlotValue.make((double)newArg3); 
+          FnPlotValue<?> i = FnPlotValue.make((int)newArg3); 
           //outList=(new ExpLit(i)); 
              
         
@@ -692,6 +851,41 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         PairFunction p = ((PairFunction) pair.getFunExp());
 
         Exp exp = p.getArguments().get(0);
+
+        return exp.visit(this, state);
+    }
+
+    // Britt
+    @Override
+    public FnPlotValue<?> visitExpConcat(ExpConcat exp, Environment<FnPlotValue<?>> state) throws FnPlotException {
+        FnPlotValue<?> lst1 = exp.getExpL().visit(this, state);
+        FnPlotValue<?> lst2 = exp.getExpR().visit(this, state);
+
+        FnInBuiltFunction ListFunction1 = ((FnInBuiltFunction) lst1);
+        FnInBuiltFunction ListFunction2 = ((FnInBuiltFunction) lst2);
+
+        ListFunction list1 = ((ListFunction) ListFunction1.getFunExp());
+        ListFunction list2 = ((ListFunction) ListFunction2.getFunExp());
+
+        ArrayList<Exp> list3 = new ArrayList<Exp>();
+
+        list3.addAll(list1.getArguments());
+        list3.addAll(list2.getArguments());
+
+        ListFunction result = new ListFunction(list3);
+
+        return new FnInBuiltFunction(result, state);
+    }
+
+    @Override
+    public FnPlotValue<?> visitCdrFunction(CdrFunction cdrFunction, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+
+        FnInBuiltFunction pair = ((FnInBuiltFunction) cdrFunction.getPair().visit(this, state));
+
+        PairFunction p = ((PairFunction) pair.getFunExp());
+
+        Exp exp = p.getArguments().get(1);
 
         return exp.visit(this, state);
     }
@@ -783,13 +977,221 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         String val = "";
         int strLen = strString.length();
-        if (endInt > startInt){
-            if (startInt < strLen ){
-                val = strString.substring(startInt, endInt );
+        if (endInt > startInt) {
+            if (startInt < strLen) {
+                val = strString.substring(startInt, endInt);
             }
 
         }
         result = FnPlotValue.make(val);
         return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitNoLimitProcDefn(ExpNoLimitProc expNoLimitProc, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // System.out.println("inside evaluator visitfn");
+
+        // Closure c = new Closure(expNoLimitProc.getParameters(),
+        // expNoLimitProc.getBody(), env);
+
+        // // Closure c = new Closure(expNoLimitProc.getParameters(),
+        // expNoLimitProc.getBody(), env);
+
+        // FnPlotFunction funct = new FnPlotFunction(expNoLimitProc, env);
+        // env.put(funct.toString(), c);
+
+        // return funct;
+        return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitCallFunction(CallFunction callFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp funcExp = callFunction.getfunct();
+        Exp listExp = callFunction.getList();
+
+        FnPlotFunction fn = (FnPlotFunction) funcExp.visit(this, env);
+        ExpFunction expFn = fn.getFunExp();
+
+        ListFunction listFun = (ListFunction) listExp;
+
+        ArrayList<FnPlotValue<?>> values = new ArrayList<>();
+        for (Exp e : listFun.getArguments()) {
+            values.add(e.visit(this, env));
+
+        }
+        Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(expFn.getParameters(), values,
+                fn.getClosingEnv());
+
+        return expFn.getBody().visit(this, newEnv);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpVecSpec(ExpVecSpec expVecSpec, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        Exp size = expVecSpec.geSize();
+        Exp fn = expVecSpec.getFunct();
+
+        FnPlotFunction fun = (FnPlotFunction) fn.visit(this, env);
+        ExpFunction expFn = fun.getFunExp();
+
+        FnPlotValue<?> val = size.visit(this, env);
+
+        ArrayList<Integer> a = new ArrayList<>(
+                IntStream.rangeClosed(0, val.intValue() - 1).boxed().collect(Collectors.toList()));
+
+        /*
+         * ArrayList<FnPlotValue<?>> values = new ArrayList<>(); ArrayList<Exp>
+         * valuesExp = new ArrayList<>(); for (Integer e : a) {
+         * values.add(FnPlotValue.make(e)); valuesExp.add(new ExpLit(e));
+         * 
+         * } ListFunction list = new ListFunction(valuesExp);
+         */
+
+        Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
+                new ArrayList<FnPlotValue<?>>(), fun.getClosingEnv());
+
+        // ArrayList<FnPlotValue<?>> values = new ArrayList<>();
+        ArrayList<Exp> valuesExp = new ArrayList<>();
+
+        for (Integer integer : a) {
+            FnPlotValue<?> i = FnPlotValue.make(integer);
+            newEnv.put(expFn.getParameters().get(0), i);
+            FnPlotValue<?> j = expFn.getBody().visit(this, newEnv);
+            valuesExp.add(new ExpLit(j));
+        }
+
+        ListFunction list = new ListFunction(valuesExp);
+
+        return new FnInBuiltFunction(list, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitVectorFunction(VectorFunction vectorFunction, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        // System.out.println(
+        // ((ExpVecSpec)vectorFunction.getArguments().get(1)).visit(this, env) );
+        ArrayList<Exp> exp = vectorFunction.getArguments();
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : exp) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, env));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, env));
+                store.add(temp);
+            }
+        }
+        VectorFunction ans = new VectorFunction(store);
+        return new FnInBuiltFunction(ans, env);
+    }
+
+    @Override
+    public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitSizeVectorFunction(SizeVectorFunction sizeVectorFunction,
+            Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        VectorFunction v = (VectorFunction) ((FnInBuiltFunction) sizeVectorFunction.getVector().visit(this, env))
+                .getFunExp();
+        int len = v.getArguments().size();
+        return FnPlotValue.make(len);
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtIf(IfStatement ifStatement, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        // System.out.println("eval if");
+        Exp pred = ifStatement.getPred();
+        Exp thenConsq = ifStatement.getThenConsq();
+        Exp elseConsq = ifStatement.getElseConsq();
+
+        FnPlotValue<?> predVisited = pred.visit(this, env);
+        FnPlotValue<?> thenConsqVisted = thenConsq.visit(this, env);
+        FnPlotValue<?> elseConsqVisited = elseConsq.visit(this, env);
+
+        FnPlotValue<?> ans;
+
+        if (predVisited.booleanValue()) {
+
+            ans = thenConsqVisted;
+
+        } else {
+
+            ans = elseConsqVisited;
+
+        }
+        return ans;
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtCase(CaseStatement caseStatement, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        ArrayList<Clause> caseList = caseStatement.getClause();
+        FnPlotValue<?> ans = new FnNone();
+        for (Clause clause : caseList) {
+            Exp ant = clause.getAnTqExp();
+            Exp consq = clause.getConsqExp();
+
+            boolean found = false;
+            if (ant instanceof ExpVar) {
+                String var = ((ExpVar) ant).getVar();
+
+                if (var.equals("else")) {
+                    found = true;
+                }
+
+            }
+
+            if (found) {
+                return consq.visit(this, env);
+            }
+
+            FnPlotValue<?> evalAnt = ant.visit(this, env);
+            FnPlotValue<?> evalConsq = consq.visit(this, env);
+
+            if (evalAnt.booleanValue()) {
+
+                ans = evalConsq;
+
+            }
+
+        }
+        return ans;
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpCompount(ExpCompound expCompound, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtPrint(StatementPrint statementPrint, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        System.out.print(statementPrint.getSeq().visit(this, env));
+        return new FnNone();
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtPrintLn(StatementPrintLn statementPrintLn, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        System.out.println(statementPrintLn.getSeq().visit(this, env));
+        return new FnNone();
     }
 }

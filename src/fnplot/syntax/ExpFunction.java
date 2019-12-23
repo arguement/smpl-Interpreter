@@ -28,24 +28,67 @@ package fnplot.syntax;
 import fnplot.semantics.Visitor;
 import fnplot.sys.FnPlotException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author newts
  */
-public class ExpFunction  extends Exp {
-    
+public class ExpFunction extends Exp {
+
     ArrayList<String> parameters;
     Exp body;
+    private String overflow;
+    private String id = null;
 
     public ExpFunction() {
         super();
     }
 
-    public ExpFunction(ArrayList<String> parameters, Exp body) {
+    public ExpFunction(ArrayList<ExpPara> parameters, Exp body) {
         System.out.println("inside");
-        this.parameters = parameters;
+
+        // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        // ArrayList<String> temp2 = new ArrayList<>(temp);
+        
+        this.parameters = this.toVarList(parameters);
         this.body = body;
+    }
+
+    public ExpFunction(ArrayList<ExpPara> parameters, Exp body,ExpPara overflow) {
+        System.out.println("inside another");
+
+        // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        // ArrayList<String> temp2 = new ArrayList<>(temp);
+        
+        this.parameters = this.toVarList(parameters);
+        this.body = body;
+        this.overflow = overflow.getVar();
+    }
+    public ExpFunction(String id,Exp body) {
+
+        this.body = body;
+        this.id = id;
+        this.parameters = new ArrayList<>(/* Arrays.asList(id) */);
+    }
+   
+    private ArrayList<String> toVarList(ArrayList<ExpPara> parameters){
+
+        List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
+        ArrayList<String> temp2 = new ArrayList<>(temp);
+
+        return temp2;
+        
+
+    }
+    public String getId(){
+        return this.id;
+    }
+
+    public String getRestParameters() {
+        return overflow;
     }
 
     public ArrayList<String> getParameters() {
@@ -64,14 +107,8 @@ public class ExpFunction  extends Exp {
 
     @Override
     public String toString() {
-        String paramStr = "";
-        if (parameters.size() > 0) {
-            paramStr = parameters.get(0);
-        }
-        for (int i = 1; i < parameters.size(); i++) {
-            paramStr = paramStr + ", " + parameters.get(i);
-        }
-        return String.format("(fun (%s) -> %s)", paramStr, body);
+        
+        return "expfunction";
     }
 
 }

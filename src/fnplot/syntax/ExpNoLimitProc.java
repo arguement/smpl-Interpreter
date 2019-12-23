@@ -1,5 +1,5 @@
 /*
- * ExpFunCall.java
+ * ExpFunction.java
  * Created on 14-Nov-2016, 9:41:02 PM
  */
 
@@ -27,54 +27,54 @@ package fnplot.syntax;
 
 import fnplot.semantics.Visitor;
 import fnplot.sys.FnPlotException;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author newts
  */
-public class ExpFunCall  extends Exp {
-    
-    Exp name;
-    ArrayList<Exp> argList;
+public class ExpNoLimitProc extends Exp {
 
-    public ExpFunCall() {
+    ArrayList<String> parameters;
+    Exp body;
+    private String id;
+
+    public ExpNoLimitProc() {
         super();
     }
 
-    public ExpFunCall(Exp mn,ArrayList<Exp> args ) {
-        System.out.println("inside fun call");
-        this.name = mn;
-        this.argList = args;
+    public ExpNoLimitProc(String id,Exp body) {
+
+        this.body = body;
+        this.id = id;
+        this.parameters = new ArrayList<>();
+    }
+   
+    public ArrayList<String> getParameters(){
+        return this.parameters;
+    }
+    public Exp getBody() {
+        return body;
     }
 
-    public Exp getName(){
-        return this.name;
+    public String getId(){
+        return this.id;
     }
-
-    public ArrayList<Exp> getArguments() {
-        return this.argList;
-    }    
-
     
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
-        System.out.println("inside visit for function call");
-        return v.visitFnCall(this, state);
+        
+        return v.visitNoLimitProcDefn(this, state);
     }
 
     @Override
     public String toString() {
-        String argStr = "";
-        int n = argList.size();
-        if(n > 0){
-            argStr += argList.get(0);
-            for (int i = 1; i < n; i++) {
-                argStr+= ", ";
-                argStr += argList.get(i);
-            }
-        }
-        return String.format("%s (%s)", this.name, argStr);
+        
+        return "no limit proc";
     }
 
 }

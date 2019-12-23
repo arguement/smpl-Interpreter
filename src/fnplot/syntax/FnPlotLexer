@@ -61,6 +61,8 @@ alphanum = {alpha}|{num}
 
 bin = #b[01]+
 
+string = "?:[^"]}*|'?:[^']*
+
 %%
 
 <YYINITIAL>	{nl}	{
@@ -84,6 +86,7 @@ bin = #b[01]+
 <YYINITIAL>	"}"	{return new Symbol(sym.RBRACE);}
 
 <YYINITIAL>	","	{return new Symbol(sym.COMMA);}
+<YYINITIAL>	"."	{return new Symbol(sym.DOT);}
 
 <YYINITIAL>	"let"	{return new Symbol(sym.LET);}
 <YYINITIAL>	"in"	{return new Symbol(sym.IN);}
@@ -98,6 +101,23 @@ bin = #b[01]+
 
 // project code below
 
+
+
+<YYINITIAL> "print" {return new Symbol(sym.PRINT);}
+<YYINITIAL> "println" {return new Symbol(sym.PRINTLN);}
+<YYINITIAL> [\/][*] [.\s\S]* [*][\/] {  }
+<YYINITIAL> [\/][\/] .* {  }
+
+
+
+<YYINITIAL> "case" {return new Symbol(sym.CASE);}
+<YYINITIAL> "else" {return new Symbol(sym.ELSE);}
+<YYINITIAL> "then" {return new Symbol(sym.THEN);}
+<YYINITIAL> "if" {return new Symbol(sym.IF);}
+<YYINITIAL> "size" {return new Symbol(sym.SIZE);}
+<YYINITIAL> "call" {return new Symbol(sym.CALL);}
+<YYINITIAL> "proc" {return new Symbol(sym.PROC);}
+<YYINITIAL> "lazy" {return new Symbol(sym.MODIFIER,yytext());}
 <YYINITIAL> "substr" {return new Symbol(sym.SUBSTR);}
 <YYINITIAL> "equal?" {return new Symbol(sym.IS_EQUAL);}
 <YYINITIAL> "eqv?" {return new Symbol(sym.IS_EQV);}
@@ -106,6 +126,7 @@ bin = #b[01]+
 <YYINITIAL> "pair?" {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair" {return new Symbol(sym.PAIR);}
 <YYINITIAL> "car" {return new Symbol(sym.CAR);}
+<YYINITIAL> "cdr" {return new Symbol(sym.CDR);}
 
 <YYINITIAL> "^" {return new Symbol(sym.EXPO);}
 
@@ -117,11 +138,12 @@ bin = #b[01]+
 <YYINITIAL> "<=" {return new Symbol(sym.LESSEREQUAL);} 
 <YYINITIAL> "!=" {return new Symbol(sym.NOTEQUAL);} 
 <YYINITIAL> "==" {return new Symbol(sym.EEQUAL);}
-<YYINITIAL> "." { return new Symbol(sym.DOTOPERATOR);}
+//<YYINITIAL> "." { return new Symbol(sym.DOTOPERATOR);}
 <YYINITIAL> "heapify" { return new Symbol(sym.HEAP);} 
 <YYINITIAL> "insert" {return new Symbol(sym.HEAPINSERT);}
 <YYINITIAL> "deleteMin" {return new Symbol(sym.HEAPDELETE);}
 <YYINITIAL> "getMin"  {return new Symbol(sym.GETMIN); }
+
 <YYINITIAL> #f {return new Symbol(sym.BOOL_FALSE);}
 
 <YYINITIAL> #e {return new Symbol(sym.NIL);}
@@ -131,6 +153,9 @@ bin = #b[01]+
 <YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) ); }
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }
+
+<YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
+
 
 <YYINITIAL>   ( {num}+|{neg}+ ) {
 	       // INTEGER

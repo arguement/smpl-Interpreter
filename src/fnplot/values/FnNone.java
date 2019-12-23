@@ -16,6 +16,7 @@ import static fnplot.values.FnPlotValue.make;
 public class FnNone extends FnPlotValue<FnNone> {
     
     int value;
+    String output =null;
 
     public FnNone() {
         this(0);
@@ -23,6 +24,9 @@ public class FnNone extends FnPlotValue<FnNone> {
 
     public FnNone(Integer v) {
         value = v;
+    }
+    public FnNone(String v) {
+        output = v;
     }
     
     @Override
@@ -33,6 +37,9 @@ public class FnNone extends FnPlotValue<FnNone> {
 
     @Override
     public String toString() {
+        if (output != null){
+            return this.output;
+        }
         return "None";
     }
 }
