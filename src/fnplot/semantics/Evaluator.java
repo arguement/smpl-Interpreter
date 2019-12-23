@@ -19,6 +19,8 @@ import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.StatementClear;
+import fnplot.syntax.StatementPrint;
+import fnplot.syntax.StatementPrintLn;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpDiv;
 import fnplot.syntax.ExpMul;
@@ -969,5 +971,21 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             throws FnPlotException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtPrint(StatementPrint statementPrint, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        System.out.print(statementPrint.getSeq().visit(this, env));
+        return new FnNone();
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtPrintLn(StatementPrintLn statementPrintLn, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        System.out.println(statementPrintLn.getSeq().visit(this, env));
+        return new FnNone();
     }
 }

@@ -38,6 +38,8 @@ import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.StatementClear;
+import fnplot.syntax.StatementPrint;
+import fnplot.syntax.StatementPrintLn;
 import fnplot.syntax.PlotStatement;
 import fnplot.syntax.ArithProgram;
 import fnplot.syntax.CaseStatement;
@@ -222,5 +224,9 @@ public interface Visitor<S, T> {
 	public T visitStmtCase(CaseStatement caseStatement, S state) throws FnPlotException;
 
 	public T visitExpCompount(ExpCompound expCompound, S arg) throws FnPlotException;
+
+	public T visitStmtPrint(StatementPrint statementPrint, S arg) throws FnPlotException;
+
+	public T visitStmtPrintLn(StatementPrintLn statementPrintLn, S arg) throws FnPlotException;
 
 }

@@ -101,6 +101,15 @@ string = "?:[^"]}*|'?:[^']*
 
 // project code below
 
+
+
+<YYINITIAL> "print" {return new Symbol(sym.PRINT);}
+<YYINITIAL> "println" {return new Symbol(sym.PRINTLN);}
+<YYINITIAL> [\/][*] [.\s\S]* [*][\/] {  }
+<YYINITIAL> [\/][\/] .* {  }
+
+
+
 <YYINITIAL> "case" {return new Symbol(sym.CASE);}
 <YYINITIAL> "else" {return new Symbol(sym.ELSE);}
 <YYINITIAL> "then" {return new Symbol(sym.THEN);}

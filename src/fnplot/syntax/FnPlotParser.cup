@@ -98,6 +98,9 @@ terminal IF;
 terminal THEN;
 terminal ELSE;
 terminal CASE;
+terminal PRINTLN;
+terminal PRINT;
+// terminal COMMENT;
 
 // terminals with values
 terminal Integer INTEGER;
@@ -168,6 +171,7 @@ non terminal Clause clause;
 non terminal CaseStatement case;
 non terminal ArrayList<Clause> cParamListE;
 non terminal ArrayList<Clause> cParamList;
+non terminal StatementPrint print;
 
 
 // non terminal StmtFun funExp;
@@ -185,8 +189,10 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}    ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p {: RESULT = p;:}   ;
 
+
+print ::= PRINT LPAREN expression:e RPAREN {: RESULT = new StatementPrint(e); :};
 
 
 cParamListE ::=  cParamList:pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
