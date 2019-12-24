@@ -103,6 +103,7 @@ terminal PRINT;
 terminal AND;
 terminal OR;
 terminal NOT;
+terminal DEF;
 // terminal COMMENT;
 
 // terminals with values
@@ -181,6 +182,13 @@ non terminal Exp and;
 non terminal Exp or;
 non terminal Exp not;
 
+non terminal ArrayList<Exp> multParamListE;
+non terminal ArrayList<Exp> multParamList;
+
+non terminal ExpTuple tuple;
+// non terminal Exp exp_tup;
+
+
 
 // non terminal StmtFun funExp;
 
@@ -197,15 +205,20 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :}  ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}  ;
 
 
-// LogExp ::= LogExp:e AND termL:t {:
-// 			RESULT = new ExpAnd(e, t); :} | termL:t {: RESULT= t; :};
+multParamListE ::=  multParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
-// termL ::= termL:t OR factorL:l {: RESULT = new ExpOr(t,l); :} | factorL:f {: RESULT = f; :};
+multParamList ::=    expression:v COMMA multParamList:pl {: pl.add(0,v); 
+												RESULT = pl; :} | RSQBRACKET expression:v LSQBRACKET {: 
+												ArrayList<Exp> ls = new ArrayList();
+												ls.add(0,v);
+												RESULT = ls;
+												 :}  ;
+tuple ::= LPAREN multParamListE:lst RPAREN {: RESULT= new ExpTuple( lst); :};
 
-// factorL ::= NOT complits:n {: RESULT = new ExpNot(new ExpLit(n)); :} | complits:nm {: RESULT = new ExpLit(nm); :};
+// exp_tup ::= multParamListE:t {: RESULT= new ExpTuple(t);; :} | expression:e {: RESULT=e; :};
 
 
 print ::= PRINT LPAREN expression:e RPAREN {: RESULT = new StatementPrint(e); :};
@@ -381,9 +394,13 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 		:} |
 		empty {: RESULT = new ArrayList(); :};
 
-definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
+// definition ::= VARIABLE:v ASSIGN expression:e SEMI {:
+// 		   RESULT = new StmtDefinition(v, e);
+// 		:} ;
+
+definition ::= DEF VARIABLE:v expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:} ;
+		:}  | VARIABLE:v  COLON ASSIGN expression:e SEMI {: RESULT = new StatementAssign(v,e); :};
 
 
 
@@ -439,6 +456,6 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | vector:vc {: RESULT = vc; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | LBRACE expression:e RBRACE {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
 
 empty ::= ;

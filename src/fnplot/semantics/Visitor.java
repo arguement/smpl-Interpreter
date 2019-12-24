@@ -1,6 +1,7 @@
 package fnplot.semantics;
 
 import fnplot.syntax.Statement;
+import fnplot.syntax.StatementAssign;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
@@ -17,6 +18,7 @@ import fnplot.syntax.inbuiltfunctions.SizeVectorFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.inbuiltfunctions.VectorIndex;
+import fnplot.syntax.inbuiltfunctions.ExpTuple;
 import fnplot.syntax.ExpComp; //added by dean 
 import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpGreater;
@@ -33,6 +35,7 @@ import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpNot;
 import fnplot.syntax.ExpSub;
+// import fnplot.syntax.ExpTuple;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
 import fnplot.syntax.ExpVecSpec;
@@ -237,5 +240,11 @@ public interface Visitor<S, T> {
 	public T visitExpOr(ExpOr expOr, S arg) throws FnPlotException;
 
 	public T visitExpNot(ExpNot expNot, S arg) throws FnPlotException;
+
+	public T visitStmtAssign(StatementAssign statementAssign, S arg) throws FnPlotException;
+
+	// public T visitExpTuple(fnplot.syntax.inbuiltfunctions.ExpTuple expTuple, S state);
+
+	public T visitExpTuple(ExpTuple expTuple, S state) throws FnPlotException;
 
 }

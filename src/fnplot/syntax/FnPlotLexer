@@ -95,6 +95,8 @@ string = "?:[^"]}*|'?:[^']*
 
 // project code below
 
+<YYINITIAL>	"def" 	{return new Symbol(sym.DEF);}
+
 <YYINITIAL>	":" 	{return new Symbol(sym.COLON);}
 <YYINITIAL>	"[" 	{return new Symbol(sym.RSQBRACKET);}
 <YYINITIAL>	"]" 	{return new Symbol(sym.LSQBRACKET);}

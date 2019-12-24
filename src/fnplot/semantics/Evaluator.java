@@ -3,6 +3,7 @@ package fnplot.semantics;
 import fnplot.syntax.StmtLet;
 import fnplot.syntax.StmtFun;
 import fnplot.syntax.Statement;
+import fnplot.syntax.StatementAssign;
 import fnplot.syntax.StmtDefinition;
 import fnplot.syntax.StmtSequence;
 import fnplot.syntax.inbuiltfunctions.CallFunction;
@@ -18,6 +19,7 @@ import fnplot.syntax.inbuiltfunctions.SizeVectorFunction;
 import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.inbuiltfunctions.VectorIndex;
+import fnplot.syntax.inbuiltfunctions.ExpTuple;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.StatementPrint;
 import fnplot.syntax.StatementPrintLn;
@@ -34,6 +36,7 @@ import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
 import fnplot.syntax.ExpSub;
+// import fnplot.syntax.ExpTuple;
 import fnplot.syntax.ExpComp; /// Gaza 
 import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpLesser;
@@ -893,8 +896,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        FnInBuiltFunction val = (FnInBuiltFunction)vectorIndex.getVector().visit(this, state);
-        VectorFunction vec =  (VectorFunction)val.getFunExp() ;
+        FnInBuiltFunction val = (FnInBuiltFunction) vectorIndex.getVector().visit(this, state);
+        VectorFunction vec = (VectorFunction) val.getFunExp();
         Exp exp = vec.getArguments().get(vectorIndex.getIndex().visit(this, state).intValue());
         return exp.visit(this, state);
     }
@@ -999,24 +1002,49 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpAnd(ExpAnd expAnd, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        FnPlotValue<?> left= expAnd.getExpL().visit(this, env);
-        FnPlotValue<?> right= expAnd.getExpR().visit(this, env);
-        
+        FnPlotValue<?> left = expAnd.getExpL().visit(this, env);
+        FnPlotValue<?> right = expAnd.getExpR().visit(this, env);
+
         return left.and(right);
     }
 
     @Override
     public FnPlotValue<?> visitExpOr(ExpOr expOr, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        FnPlotValue<?> left= expOr.getExpL().visit(this, env);
-        FnPlotValue<?> right= expOr.getExpR().visit(this, env);
+        FnPlotValue<?> left = expOr.getExpL().visit(this, env);
+        FnPlotValue<?> right = expOr.getExpR().visit(this, env);
         return left.or(right);
     }
 
     @Override
     public FnPlotValue<?> visitExpNot(ExpNot expNot, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        FnPlotValue<?> left= expNot.getExp().visit(this, env);
+        FnPlotValue<?> left = expNot.getExp().visit(this, env);
         return left.not();
+    }
+
+    @Override
+    public FnPlotValue<?> visitStmtAssign(StatementAssign statementAssign, Environment<FnPlotValue<?>> env)
+            throws FnPlotException {
+        // TODO Auto-generated method stub
+        result = statementAssign.getExp().visit(this, env);
+        ExpVar temp = new ExpVar(statementAssign.getVar());
+        temp.visit(this, env);
+        env.put(statementAssign.getVar(), result);
+        return result;
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpTuple(ExpTuple expTuple, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        ArrayList<Exp> multiExp = expTuple.getArguments();
+        ArrayList<Exp> temp = new ArrayList<>();
+        for (Exp exp : multiExp) {
+
+            temp.add(new ExpLit( exp.visit(this, env) ));
+            
+        }
+        ExpTuple tup = new ExpTuple(temp);
+        return new FnInBuiltFunction(tup, env);
     }
 }
