@@ -124,7 +124,22 @@ public class FnPlotInt extends FnPlotValue<FnPlotInt> {
           //boolean value= val1==arg.doubleValue();
           Boolean val = value >= arg.intValue();
          return  make(val);
-     }
+     } 
+
+    @Override
+    public FnPlotInt BitAnd(FnPlotValue<?> arg) throws FnPlotException { 
+          int val= value & arg.intValue();
+        return make((int)val);
+    } 
+    @Override
+    public FnPlotInt BitOr(FnPlotValue<?> arg) throws FnPlotException { 
+          int val= value | arg.intValue();
+        return make((int)val);
+    }  
+    public FnPlotInt BitNot(FnPlotValue<?> arg) throws FnPlotException { 
+        int val= ~ value;
+      return make((int)val);
+  } 
     @Override
     public int intValue() {
         return value;

@@ -136,7 +136,16 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
 
     public FnPlotValue<?> greaterequal(FnPlotValue<?> arg) throws FnPlotException {
         throw new TypeFnPlotException("something6"); 
-    }
+    } 
+    public FnPlotValue<?> BitAnd(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    }  
+    public FnPlotValue<?> BitOr(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    }  
+    public FnPlotValue<?> BitNot(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    } 
     /**
      *
      * @return The integer value wrapped in this FnPlot value

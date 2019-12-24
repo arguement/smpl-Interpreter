@@ -29,7 +29,10 @@ import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpHeap;
 import fnplot.syntax.ExpHeapDelete;
 import fnplot.syntax.ExpHeapInsert;
-import fnplot.syntax.ExpGetMin;
+import fnplot.syntax.ExpGetMin; 
+import fnplot.syntax.ExpBitwiseAnd;
+import fnplot.syntax.ExpBitwiseOr; 
+import fnplot.syntax.ExpBitwiseNot;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
@@ -138,7 +141,14 @@ public interface Visitor<S, T> {
 
     public T visitExpGetMin(ExpGetMin exp,S arg) throws FnPlotException;
 
-    //dean
+    
+    //dean 
+    public T visitExpBitwiseAnd(ExpBitwiseAnd exp, S arg) throws FnPlotException;
+    
+    public T visitExpBitwiseOr(ExpBitwiseOr exp, S arg) throws FnPlotException; 
+    
+    public T visitExpBitwiseNot(ExpBitwiseNot exp, S arg) throws FnPlotException;
+    
     public T visitExpAdd(ExpAdd exp, S arg) throws FnPlotException ;
     
     /**

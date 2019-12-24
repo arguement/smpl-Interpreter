@@ -42,7 +42,10 @@ import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpHeap;
 import fnplot.syntax.ExpHeapDelete;
 import fnplot.syntax.ExpHeapInsert; 
-import fnplot.syntax.ExpGetMin;
+import fnplot.syntax.ExpGetMin; 
+import fnplot.syntax.ExpBitwiseAnd;
+import fnplot.syntax.ExpBitwiseOr;
+import fnplot.syntax.ExpBitwiseNot;
 import fnplot.syntax.Binding; 
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.Binding;
@@ -824,7 +827,31 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         
         return i; 
         
-    } 
+    }  
+
+    //bitwise 
+    @Override
+    public FnPlotValue<?> visitExpBitwiseAnd(ExpBitwiseAnd exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1, val2;
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        return val1.BitAnd(val2);
+     } 
+     @Override
+    public FnPlotValue<?> visitExpBitwiseOr(ExpBitwiseOr exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1, val2;
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        return val1.BitOr(val2);
+     } 
+     @Override
+    public FnPlotValue<?> visitExpBitwiseNot(ExpBitwiseNot exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1;
+        val1 = (FnPlotValue) exp.getExp().visit(this, arg);
+        
+        return val1.BitNot(val1);
+     } 
+
     @Override
     public FnPlotValue<?> visitExpLit(ExpLit exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
         return exp.getVal();
