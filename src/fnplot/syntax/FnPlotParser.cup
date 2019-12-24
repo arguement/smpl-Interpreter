@@ -199,6 +199,9 @@ non terminal ArrayList<Exp> multParamList;
 
 non terminal ExpTuple tuple;
 non terminal Exp bitWiseExp;
+non terminal Exp bitOr;
+non terminal Exp bitAnd;
+non terminal Exp bitNot;
 // non terminal Exp exp_tup;
 
 
@@ -442,9 +445,20 @@ comp ::= comp:re EEQUAL bitWiseExp:be {: RESULT = new ExpComp(re, be); :}|
              comp:re NOTEQUAL bitWiseExp:be {: RESULT = new  ExpNotEqual(re, be); :}|
              bitWiseExp:re {: RESULT = re; :};
 
-bitWiseExp ::= bitWiseExp:be BAND arithExp:ae {: RESULT = new ExpBitwiseAnd(be, ae); :}|
-                bitWiseExp:be BOR arithExp:ae {: RESULT = new ExpBitwiseOr(be, ae); :}|
+// bitWiseExp ::= bitWiseExp:be BAND arithExp:ae {: RESULT = new ExpBitwiseAnd(be, ae); :}|
+//                 bitWiseExp:be BOR arithExp:ae {: RESULT = new ExpBitwiseOr(be, ae); :}|
+//                 arithExp:ae {: RESULT = ae; :};
+bitWiseExp ::= bitOr:b {: RESULT=b; :};
+
+bitOr ::= bitOr:loe BOR bitAnd:lae {: RESULT = new ExpBitwiseOr(loe,lae); :}|
+                bitAnd:lae {: RESULT = lae ; :};
+
+bitAnd ::= bitAnd:lae BAND bitNot:lne {: RESULT = new ExpBitwiseAnd(lae,lne); :}|
+                bitNot:lne {: RESULT = lne; :};
+
+bitNot ::= BNOT bitNot:lne {: RESULT = new ExpBitwiseNot(lne); :}|
                 arithExp:ae {: RESULT = ae; :};
+
 
 power ::= factor:f EXPO power:p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :} ;
