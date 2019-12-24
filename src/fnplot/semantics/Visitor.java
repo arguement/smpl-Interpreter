@@ -19,6 +19,7 @@ import fnplot.syntax.inbuiltfunctions.SubstrFunction;
 import fnplot.syntax.inbuiltfunctions.VectorFunction;
 import fnplot.syntax.inbuiltfunctions.VectorIndex;
 import fnplot.syntax.inbuiltfunctions.ExpTuple;
+import fnplot.syntax.inbuiltfunctions.Heap;
 import fnplot.syntax.ExpComp; //added by dean 
 import fnplot.syntax.ExpCompound;
 import fnplot.syntax.ExpGreater;
@@ -270,5 +271,7 @@ public interface Visitor<S, T> {
 	// public T visitExpTuple(fnplot.syntax.inbuiltfunctions.ExpTuple expTuple, S state);
 
 	public T visitExpTuple(ExpTuple expTuple, S state) throws FnPlotException;
+
+	public T visitHeapFunction(Heap heap, S state) throws FnPlotException;
 
 }

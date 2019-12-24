@@ -463,19 +463,19 @@ bitNot ::= BNOT bitNot:lne {: RESULT = new ExpBitwiseNot(lne); :}|
 power ::= factor:f EXPO power:p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :} ;
 
-heap ::= HEAP  vector:e {: 
+heap ::= HEAP expression:e {: 
  RESULT= new ExpHeap(e);
 :};  
 
-heapinsert ::= vector:e1 DOT HEAPINSERT LPAREN term:p RPAREN{: 
+heapinsert ::=  HEAPINSERT LPAREN expression:e1 COMMA term:p RPAREN{: 
 //System.out.println("in here");
 RESULT = new ExpHeapInsert(e1,p);
 :}; 
 
-heapdelete ::= vector:e1 DOT HEAPDELETE LPAREN RPAREN {: 
+heapdelete ::=  HEAPDELETE LPAREN expression:e1 RPAREN {: 
 RESULT= new ExpHeapDelete(e1);
 :}; 
-getmin ::= vector:e1 DOT GETMIN LPAREN RPAREN  {:
+getmin ::=  GETMIN LPAREN expression:e1 RPAREN  {:
   RESULT= new ExpGetMin(e1);
 :};
 
