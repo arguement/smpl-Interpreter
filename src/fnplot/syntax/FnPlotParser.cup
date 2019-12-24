@@ -109,6 +109,9 @@ terminal AND;
 terminal OR;
 terminal NOT;
 terminal DEF;
+terminal BAND;
+terminal BOR;
+terminal BNOT;
 // terminal COMMENT;
 
 // terminals with values
@@ -195,6 +198,7 @@ non terminal ArrayList<Exp> multParamListE;
 non terminal ArrayList<Exp> multParamList;
 
 non terminal ExpTuple tuple;
+non terminal Exp bitWiseExp;
 // non terminal Exp exp_tup;
 
 
@@ -430,15 +434,17 @@ and ::= and:lae AND not:lne {: RESULT = new ExpAnd(lae,lne); :}|
 not ::= NOT not:lne {: RESULT = new ExpNot(lne); :}|
                 comp:re {: RESULT = re; :};
 
-comp ::= comp:re EEQUAL arithExp:be {: RESULT = new ExpComp(re, be); :}|
-              comp:re GREATER arithExp:be {: RESULT = new ExpGreater(re, be); :}|
-               comp:re LESSER arithExp:be {: RESULT = new ExpLesser(re, be); :}|
-             comp:re GREATEREQUAL arithExp:be {: RESULT = new ExpGreaterEqual(re, be); :}|
-             comp:re  LESSEREQUAL arithExp:be {: RESULT = new ExpLesserEqual(re, be); :}|
-             comp:re NOTEQUAL arithExp:be {: RESULT = new  ExpNotEqual(re, be); :}|
-             arithExp:re {: RESULT = re; :};
+comp ::= comp:re EEQUAL bitWiseExp:be {: RESULT = new ExpComp(re, be); :}|
+              comp:re GREATER bitWiseExp:be {: RESULT = new ExpGreater(re, be); :}|
+               comp:re LESSER bitWiseExp:be {: RESULT = new ExpLesser(re, be); :}|
+             comp:re GREATEREQUAL bitWiseExp:be {: RESULT = new ExpGreaterEqual(re, be); :}|
+             comp:re  LESSEREQUAL bitWiseExp:be {: RESULT = new ExpLesserEqual(re, be); :}|
+             comp:re NOTEQUAL bitWiseExp:be {: RESULT = new  ExpNotEqual(re, be); :}|
+             bitWiseExp:re {: RESULT = re; :};
 
-
+bitWiseExp ::= bitWiseExp:be BAND arithExp:ae {: RESULT = new ExpBitwiseAnd(be, ae); :}|
+                bitWiseExp:be BOR arithExp:ae {: RESULT = new ExpBitwiseOr(be, ae); :}|
+                arithExp:ae {: RESULT = ae; :};
 
 power ::= factor:f EXPO power:p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :} ;

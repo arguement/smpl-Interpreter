@@ -103,6 +103,10 @@ string = "?:[^"]}*|'?:[^']*
 
 // project code below
 
+<YYINITIAL> "&" {return new Symbol(sym.BAND);}
+<YYINITIAL> "|" {return new Symbol(sym.BOR);}
+<YYINITIAL> "~" {return new Symbol(sym.BNOT);}
+
 <YYINITIAL> "and" {return new Symbol(sym.AND);}
 <YYINITIAL> "or" {return new Symbol(sym.OR);}
 <YYINITIAL> "not" {return new Symbol(sym.NOT);}
