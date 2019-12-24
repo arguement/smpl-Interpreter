@@ -44,6 +44,15 @@ import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpOr;
+import fnplot.syntax.ExpGreater; 
+import fnplot.syntax.ExpHeap;
+import fnplot.syntax.ExpHeapDelete;
+import fnplot.syntax.ExpHeapInsert; 
+import fnplot.syntax.ExpGetMin; 
+import fnplot.syntax.ExpBitwiseAnd;
+import fnplot.syntax.ExpBitwiseOr;
+import fnplot.syntax.ExpBitwiseNot;
+import fnplot.syntax.Binding; 
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.Binding;
 import fnplot.syntax.CaseStatement;
@@ -557,17 +566,16 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(val1);
         // System.out.println(val2);
         // FnPlotValue<FnNone> result=true;
-        return val1.eequals(val2);
-    }
+        return val1.eequals(val2); 
+        }
 
     @Override
     public FnPlotValue<?> visitExpNotEqual(ExpNotEqual exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
-
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        // System.out.println(val1);
-        // System.out.println(val2);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
         return val1.notequal(val2);
     }
 
@@ -611,9 +619,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
-        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        // System.out.println(val1);
-        // System.out.println(val2);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg); 
+        System.out.println(val1);
+        System.out.println(val2);
         return val1.greater(val2);
     }
 
@@ -623,7 +631,232 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
         return val1.mod(val2);
-    }
+    } 
+
+    @Override
+    public FnPlotValue<?> visitExpHeap(ExpHeap exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getExp(); 
+        //val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        //System.out.println(val1);
+        //ArrayList<String> gaza = ((ListFunction)val). 
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
+        System.out.println(store);
+        //System.out.println(test); 
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        store.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Integer> newArg2 = new ArrayList<>();
+        //System.out.println("null");
+        //System.out.println(newArg.get(0)); 
+        newArg.forEach((e) -> {
+            newArg2.add(Integer.parseInt(e));
+        });  
+        //PriorityQueue<Double> minHeap = new PriorityQueue<Double>();  
+
+        //System.out.println("Before Hepification");
+        //System.out.println(newArg2); 
+
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapify(newArg2); 
+
+        //Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
+                //new ArrayList<FnPlotValue<?>>(), val1.getClosingEnv());
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
+          //newEnv.put(expFn.getParameters().get(0),i); 
+          //FnPlotValue<?> j=expFn.getBody().visit(this,newEnv);
+           //outList.add((double)g_iterator.next()) ;
+            //System.out.println(outList);
+             outList.add(new ExpLit(i)); 
+             //System.out.println(i);
+        } 
+        //System.out.println("After Hepification");
+        //System.out.println(outList);  
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
+        //return null;
+    }  
+    @Override
+    public FnPlotValue<?> visitExpHeapInsert(ExpHeapInsert exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        Exp val2=exp.getNum(); 
+        //System.out.println(val1); 
+        //Exp val1=
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+       
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
+        String val3= val2.toString(); 
+        System.out.println(val3);
+        //String val4=val3.toString(); 
+        Integer val5=Integer.parseInt(val3);
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        store.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Integer> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Integer.parseInt(e));
+        });  
+        
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapinsert(newArg2,(int)val5); //hope this work
+
+        
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
+          outList.add(new ExpLit(i)); 
+             
+        } 
+         
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
+        
+    }  
+    @Override
+    public FnPlotValue<?> visitExpHeapDelete(ExpHeapDelete exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
+        
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        store.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Integer> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Integer.parseInt(e));
+        });  
+        
+        PriorityQueue<Integer> newArg3=BinaryHeap.heapdelete(newArg2); //hope this work
+
+        
+        ArrayList<Exp> outList=new ArrayList<>(); 
+        Iterator g_iterator = newArg3.iterator(); 
+        while(g_iterator.hasNext()) 
+        { 
+          FnPlotValue<?> i = FnPlotValue.make((int)g_iterator.next()); 
+          outList.add(new ExpLit(i)); 
+             
+        } 
+         
+        VectorFunction ans = new VectorFunction(outList);
+        return new FnInBuiltFunction(ans, arg);
+        
+    }  
+    @Override
+    public FnPlotValue<?> visitExpGetMin(ExpGetMin exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        Exp val1=exp.getHeap(); 
+        
+        ArrayList<Exp> liste = ((VectorFunction) val1).getArguments(); 
+        ArrayList<Exp> store = new ArrayList<>();
+        for (Exp exp2 : liste) {
+            if (exp2 instanceof ExpVecSpec) {
+                FnInBuiltFunction spec = ((FnInBuiltFunction) ((ExpVecSpec) exp2).visit(this, arg));
+                ArrayList<Exp> an = ((ListFunction) spec.getFunExp()).getArguments();
+                store.addAll(an);
+
+            } else {
+                Exp temp = new ExpLit(exp2.visit(this, arg));
+                store.add(temp);
+            }
+        }
+        
+        ArrayList<String> newArg = new ArrayList<>(); 
+        
+        store.forEach((e) -> {
+            newArg.add(e.toString()); 
+        });  
+        ArrayList<Integer> newArg2 = new ArrayList<>();
+         
+        newArg.forEach((e) -> {
+            newArg2.add(Integer.parseInt(e));
+        });  
+        
+        Integer newArg3=BinaryHeap.min(newArg2); //hope this work
+
+        
+        Exp outList; 
+        
+       
+          FnPlotValue<?> i = FnPlotValue.make((int)newArg3); 
+          //outList=(new ExpLit(i)); 
+             
+        
+         
+        
+        return i; 
+        
+    }  
+
+    //bitwise 
+    @Override
+    public FnPlotValue<?> visitExpBitwiseAnd(ExpBitwiseAnd exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1, val2;
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        return val1.BitAnd(val2);
+     } 
+     @Override
+    public FnPlotValue<?> visitExpBitwiseOr(ExpBitwiseOr exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1, val2;
+        val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
+        val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
+        return val1.BitOr(val2);
+     } 
+     @Override
+    public FnPlotValue<?> visitExpBitwiseNot(ExpBitwiseNot exp, Environment<FnPlotValue<?>> arg) throws FnPlotException { 
+        FnPlotValue<?> val1;
+        val1 = (FnPlotValue) exp.getExp().visit(this, arg);
+        
+        return val1.BitNot(val1);
+     } 
 
     @Override
     public FnPlotValue<?> visitExpLit(ExpLit exp, Environment<FnPlotValue<?>> arg) throws FnPlotException {

@@ -18,7 +18,11 @@ public class Closure extends FnPlotValue<Closure>  {
         this.body = body;
         this.env = env;
     }
-
+    public Closure(Exp body,Environment<FnPlotValue<?>> env){
+        
+        this.body = body;
+        this.env = env;
+    }
     public ArrayList<String> getParameters(){
         return parameters;
     }

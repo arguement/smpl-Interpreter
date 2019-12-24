@@ -29,6 +29,14 @@ import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpOr;
+import fnplot.syntax.ExpNotEqual; 
+import fnplot.syntax.ExpHeap;
+import fnplot.syntax.ExpHeapDelete;
+import fnplot.syntax.ExpHeapInsert;
+import fnplot.syntax.ExpGetMin; 
+import fnplot.syntax.ExpBitwiseAnd;
+import fnplot.syntax.ExpBitwiseOr; 
+import fnplot.syntax.ExpBitwiseNot;
 import fnplot.syntax.ExpFunCall;
 import fnplot.syntax.ExpLit;
 import fnplot.syntax.ExpMul;
@@ -130,8 +138,24 @@ public interface Visitor<S, T> {
 
     public T visitExpLesserEqual(ExpLesserEqual exp,S arg) throws FnPlotException; 
 
-    public T visitExpNotEqual(ExpNotEqual exp,S arg) throws FnPlotException;
-    //dean
+    public T visitExpNotEqual(ExpNotEqual exp,S arg) throws FnPlotException; 
+
+    public T visitExpHeap(ExpHeap exp,S arg) throws FnPlotException;  
+
+    public T visitExpHeapInsert(ExpHeapInsert exp,S arg) throws FnPlotException; 
+    
+    public T visitExpHeapDelete(ExpHeapDelete exp,S arg) throws FnPlotException; 
+
+    public T visitExpGetMin(ExpGetMin exp,S arg) throws FnPlotException;
+
+    
+    //dean 
+    public T visitExpBitwiseAnd(ExpBitwiseAnd exp, S arg) throws FnPlotException;
+    
+    public T visitExpBitwiseOr(ExpBitwiseOr exp, S arg) throws FnPlotException; 
+    
+    public T visitExpBitwiseNot(ExpBitwiseNot exp, S arg) throws FnPlotException;
+    
     public T visitExpAdd(ExpAdd exp, S arg) throws FnPlotException ;
     
     /**

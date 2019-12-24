@@ -1,2 +1,2 @@
-p = pair(1,3);
-c = car(p);
+def p pair(1,3);
+def c car(p);

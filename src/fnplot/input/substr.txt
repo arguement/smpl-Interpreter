@@ -1,1 +1,1 @@
-a = substr("the cow jumped over the moon",3,14);
+def a substr("the cow jumped over the moon",3,14);

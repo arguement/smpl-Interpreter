@@ -146,6 +146,16 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public FnPlotValue<?> not() throws FnPlotException {
         throw new TypeFnPlotException("error9"); 
     }
+        
+    public FnPlotValue<?> BitAnd(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    }  
+    public FnPlotValue<?> BitOr(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    }  
+    public FnPlotValue<?> BitNot(FnPlotValue<?> arg) throws FnPlotException {
+        throw new TypeFnPlotException("Operator called with non numeric type"); 
+    } 
     /**
      *
      * @return The integer value wrapped in this FnPlot value

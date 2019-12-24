@@ -90,6 +90,11 @@ terminal NIL;
 terminal IS_EQV;
 terminal IS_EQUAL;
 terminal SUBSTR;
+//terminal DOTOPERATOR;// heap operator
+terminal HEAP; //heap operator
+terminal HEAPINSERT; //heap operator 
+terminal HEAPDELETE;//heap operator
+terminal GETMIN;//HEAP OPERATOR
 terminal PROC;
 terminal DOT;
 terminal CALL;
@@ -151,7 +156,11 @@ non terminal IsEqv isEqv;
 non terminal IsEqual isEqual;
 non terminal SubstrFunction substr;
 non terminal Boolean complits;
-non terminal Exp comp; //dean 
+non terminal Exp comp; //dean  
+non terminal Exp heap; 
+non terminal Exp heapinsert ; 
+non terminal Exp heapdelete ; 
+non terminal Exp getmin;
 non terminal ExpPara paramter; //dean 
 non terminal ArrayList<ExpPara> paramListE;
 non terminal ArrayList<ExpPara> paramList;
@@ -323,6 +332,7 @@ isEqv ::= IS_EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 allLists ::= list:lst {: RESULT = lst; :} | list2:lst2 {: RESULT=lst2; :};
 
 list2 ::= RSQBRACKET expListE:lst LSQBRACKET{:
+                //System.out.println("inhere");
 				RESULT = new ListFunction(lst);
 :};
 
@@ -371,7 +381,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
 		string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
-		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | call:c {: RESULT = c; :}
+		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:} | call:c {: RESULT = c; :}
 		 | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :}  ;
 
 letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
@@ -433,6 +443,22 @@ comp ::= comp:re EEQUAL arithExp:be {: RESULT = new ExpComp(re, be); :}|
 power ::= factor:f EXPO power:p {: RESULT= new ExpExpo(f,p); :} | 
 						factor:f {: RESULT=f; :} ;
 
+heap ::= HEAP  vector:e {: 
+ RESULT= new ExpHeap(e);
+:};  
+
+heapinsert ::= vector:e1 DOT HEAPINSERT LPAREN term:p RPAREN{: 
+//System.out.println("in here");
+RESULT = new ExpHeapInsert(e1,p);
+:}; 
+
+heapdelete ::= vector:e1 DOT HEAPDELETE LPAREN RPAREN {: 
+RESULT= new ExpHeapDelete(e1);
+:}; 
+getmin ::= vector:e1 DOT GETMIN LPAREN RPAREN  {:
+  RESULT= new ExpGetMin(e1);
+:};
+
 
 term ::= power:f MUL term:t {:
 		RESULT = new ExpMul(f, t); :} |
@@ -448,6 +474,7 @@ complits ::= BOOL_FALSE:f {: RESULT= new Boolean("false"); :} | BOOL_TRUE:t {: R
 
 number ::= INTEGER:ilit {: RESULT = FnPlotValue.make( ilit ); :} | DOUBLE:ilit {: RESULT = FnPlotValue.make(ilit); :} | BIN_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 2);
+
 RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);

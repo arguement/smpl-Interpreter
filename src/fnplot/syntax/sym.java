@@ -10,39 +10,41 @@ public class sym {
   /* terminals */
   public static final int EEQUAL = 25;
   public static final int CONCAT = 4;
-  public static final int STR = 53;
-  public static final int CASE = 43;
+  public static final int STR = 57;
+  public static final int CASE = 47;
   public static final int CAR = 28;
-  public static final int DOUBLE = 51;
-  public static final int INTEGER = 50;
+  public static final int DOUBLE = 55;
+  public static final int INTEGER = 54;
   public static final int NOTEQUAL = 24;
   public static final int CDR = 29;
   public static final int LPAREN = 2;
   public static final int GREATER = 20;
   public static final int SEMI = 19;
   public static final int EXPO = 26;
-  public static final int PRINTLN = 44;
-  public static final int MODIFIER = 58;
-  public static final int BOOL_TRUE = 54;
+  public static final int PRINTLN = 48;
+  public static final int MODIFIER = 62;
+  public static final int BOOL_TRUE = 58;
   public static final int MINUS = 9;
   public static final int RPAREN = 3;
-  public static final int NOT = 48;
-  public static final int AND = 46;
+  public static final int NOT = 52;
+  public static final int AND = 50;
   public static final int NIL = 32;
-  public static final int OR = 47;
+  public static final int OR = 51;
   public static final int IN = 15;
   public static final int COMMA = 18;
-  public static final int CALL = 38;
+  public static final int CALL = 42;
   public static final int LESSEREQUAL = 23;
   public static final int DIV = 11;
+  public static final int HEAPINSERT = 37;
   public static final int LESSER = 21;
   public static final int PLUS = 8;
-  public static final int IF = 40;
+  public static final int IF = 44;
   public static final int ASSIGN = 13;
   public static final int IS_EQUAL = 34;
-  public static final int DOT = 37;
+  public static final int DOT = 41;
   public static final int EOF = 0;
-  public static final int SIZE = 39;
+  public static final int HEAP = 36;
+  public static final int SIZE = 43;
   public static final int error = 1;
   public static final int MUL = 10;
   public static final int MOD = 12;
@@ -50,23 +52,25 @@ public class sym {
   public static final int PAIR = 27;
   public static final int IS_EQV = 33;
   public static final int IS_PAIR = 30;
+  public static final int GETMIN = 39;
   public static final int GREATEREQUAL = 22;
-  public static final int BOOL_FALSE = 55;
+  public static final int BOOL_FALSE = 59;
   public static final int COLON = 7;
-  public static final int ELSE = 42;
+  public static final int ELSE = 46;
   public static final int LBRACE = 16;
-  public static final int VARIABLE = 52;
+  public static final int VARIABLE = 56;
   public static final int LIST = 31;
   public static final int SUBSTR = 35;
   public static final int LET = 14;
-  public static final int BIN_INTEGER = 56;
-  public static final int THEN = 41;
+  public static final int BIN_INTEGER = 60;
+  public static final int THEN = 45;
   public static final int RBRACE = 17;
   public static final int RSQBRACKET = 5;
-  public static final int HEX_INTEGER = 57;
-  public static final int PROC = 36;
-  public static final int DEF = 49;
-  public static final int PRINT = 45;
+  public static final int HEX_INTEGER = 61;
+  public static final int PROC = 40;
+  public static final int DEF = 53;
+  public static final int HEAPDELETE = 38;
+  public static final int PRINT = 49;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -104,6 +108,10 @@ public class sym {
   "IS_EQV",
   "IS_EQUAL",
   "SUBSTR",
+  "HEAP",
+  "HEAPINSERT",
+  "HEAPDELETE",
+  "GETMIN",
   "PROC",
   "DOT",
   "CALL",
