@@ -338,7 +338,7 @@ procDefWithOverflow ::= PROC LPAREN paramListE:p DOT paramter:overflow RPAREN ex
 
 procDef ::= PROC LPAREN RSQBRACKET paramListE:pl LSQBRACKET RPAREN expression:body {: 
 
-System.out.println("procDeof");
+// System.out.println("procDeof");
 RESULT=new ExpFunction(pl,body); 
 :};
 

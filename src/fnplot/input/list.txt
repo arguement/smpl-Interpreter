@@ -17,7 +17,7 @@ def jor proc([c]){
 
 println(  (jor(10))(5)  );
 
-def a readint();
+//def a readint();
 
-println(a);
+//println(a);
 
