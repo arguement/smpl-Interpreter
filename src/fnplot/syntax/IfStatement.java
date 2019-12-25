@@ -21,7 +21,7 @@ public class IfStatement extends Statement {
 
     public IfStatement(Exp pred, Exp consq,Exp elseConsq) {
 
-        System.out.println("constr");
+        
 
         this.pred = pred;
         this.thenconsq = consq;
@@ -43,7 +43,7 @@ public class IfStatement extends Statement {
 
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
-        System.out.println("inside visit");
+        
         return v.visitStmtIf(this, state);
     }
     

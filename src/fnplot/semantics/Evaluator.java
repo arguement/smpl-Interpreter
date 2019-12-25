@@ -220,7 +220,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     // added by me
     public FnPlotValue<?> visitFnDefn(ExpFunction defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        System.out.println("inside evaluator visitfn");
+        
 
         Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
 
@@ -255,7 +255,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
 
-        System.out.println("inside evaluator visitfncall");
+       
         // System.out.println(callExp.toString());
         // String name = callExp.getName();
 
@@ -280,24 +280,22 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.parent);
         // System.out.println(env.);
         // System.out.println(values);
-        System.out.println(env.dictionary);
-        System.out.println(obj.getClosingEnv().dictionary);
+        
 
         // Closure closure = (Closure) env.get(name);
         Closure closure = (Closure) obj.getClosingEnv().get(name);
 
-        System.out.println("below");
+        
 
         // checking for ID then it is proc <id> <body>
         if (closure.getId() != null) {
-            System.out.println("in closure id");
+            
             List<Exp> evalExp = values.stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
 
             ArrayList<Exp> evalExpArrayList = new ArrayList<>(evalExp);
             ListFunction list = new ListFunction(evalExpArrayList);
 
-            System.out.println(list);
-            System.out.println(closure.getId());
+            
 
             ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
 
@@ -306,8 +304,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
             newEnv.put(closure.getId(), list.visit(this, env));
 
-            System.out.println("new env below");
-            System.out.println(newEnv.dictionary);
+            
 
             return closure.getBody().visit(this, newEnv);
 
@@ -366,7 +363,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     // to plot the graph
     public FnPlotValue<?> visitStmtPlot(PlotStatement defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        System.out.println("inside statement plot");
+        
         int num1 = defn.getNum1();
         int num2 = defn.getNum2();
         String var = defn.getId();
@@ -405,7 +402,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             // System.out.println(values);
             // System.out.println(values.size() == range.length);
             ArrayList<Double> yVal = runClosureEnv(closure, values);
-            System.out.println(yVal);
+            
             Point2D[] points = new Point2D[range.length];
             for (int i = 0; i < range.length; i++) {
                 Double x = range[i];
@@ -430,7 +427,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             // FnPlotValue<?> ans = visitStmtSequence( (StmtSequence)expression, env);
             // FnPlotValue<?> ans = expression.visit(this,env);
             ArrayList<Double> yVal = evalExpression(env, expression, bindVar, range);
-            System.out.println(yVal);
+            
 
             Point2D[] points = new Point2D[range.length];
             for (int i = 0; i < range.length; i++) {
@@ -482,7 +479,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         }
 
-        System.out.println(store);
+        
         ArrayList<ArrayList<FnPlotValue<?>>> values = new ArrayList<>();
 
         for (ArrayList<Exp> storeIndex : store) {
@@ -576,8 +573,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        System.out.println(val1);
-        System.out.println(val2);
+        
         return val1.notequal(val2);
     }
 
@@ -622,8 +618,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        System.out.println(val1);
-        System.out.println(val2);
+        
         return val1.greater(val2);
     }
 

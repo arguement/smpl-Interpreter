@@ -16,7 +16,7 @@ public class PlotStatement extends Statement {
     int num2;
 
     public PlotStatement(Exp e,String id,Integer num1, Integer num2) {
-        System.out.println("inside plot class");
+        
         this.e = e;
         this.id = id;
         this.num1 = num1;
@@ -44,7 +44,7 @@ public class PlotStatement extends Statement {
 
     @Override
     public <S, T> T visit(Visitor<S, T> v, S arg) throws FnPlotException {
-        System.out.println("inside visitor of plot");
+        
         return v.visitStmtPlot(this, arg);
         
     }

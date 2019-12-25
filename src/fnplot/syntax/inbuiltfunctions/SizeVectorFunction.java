@@ -21,7 +21,7 @@ public class SizeVectorFunction extends InBuilt {
     public SizeVectorFunction(Exp args) {
         
         this.vector = args;
-        System.out.println(args);
+        
       
     }
 

@@ -9,10 +9,8 @@ public class BinaryHeap{
         for(int i=0;i<Heap2.size();i++){
             minHeap.add(Heap2.get(i));  
         } 
-        //System.out.println(minHeap);
         
-        //minHeap=Heap2; 
-        System.out.println(Heap);
+       
         return minHeap;
 
 

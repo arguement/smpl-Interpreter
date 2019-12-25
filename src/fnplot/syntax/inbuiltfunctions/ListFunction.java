@@ -24,7 +24,7 @@ public class ListFunction extends InBuilt {
     public ListFunction(ArrayList<Exp> args) {
         
         this.argList = args;
-        System.out.println(args);
+        
       
     }
 

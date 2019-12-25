@@ -43,7 +43,7 @@ public class ExpFunCall  extends Exp {
     }
 
     public ExpFunCall(Exp mn,ArrayList<Exp> args ) {
-        System.out.println("inside fun call");
+        
         this.name = mn;
         this.argList = args;
     }
@@ -59,7 +59,7 @@ public class ExpFunCall  extends Exp {
     
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
-        System.out.println("inside visit for function call");
+        
         return v.visitFnCall(this, state);
     }
 

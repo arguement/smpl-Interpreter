@@ -48,7 +48,7 @@ public class ExpFunction extends Exp {
     }
 
     public ExpFunction(ArrayList<ExpPara> parameters, Exp body) {
-        System.out.println("inside");
+        
 
         // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
         // ArrayList<String> temp2 = new ArrayList<>(temp);
@@ -58,7 +58,7 @@ public class ExpFunction extends Exp {
     }
 
     public ExpFunction(ArrayList<ExpPara> parameters, Exp body,ExpPara overflow) {
-        System.out.println("inside another");
+        
 
         // List<String> temp = parameters.stream().map(para -> para.getVar()).collect(Collectors.toList());
         // ArrayList<String> temp2 = new ArrayList<>(temp);
@@ -101,7 +101,7 @@ public class ExpFunction extends Exp {
     
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
-        System.out.println("inside visit for function");
+        
         return v.visitFnDefn(this, state);
     }
 

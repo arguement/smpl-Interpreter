@@ -21,7 +21,7 @@ public class VectorFunction extends InBuilt {
     public VectorFunction(ArrayList<Exp> args) {
         
         this.argList = args;
-        System.out.println(args);
+        
       
     }
 

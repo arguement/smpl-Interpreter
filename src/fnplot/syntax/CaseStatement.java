@@ -21,7 +21,7 @@ public class CaseStatement extends Statement {
 
     public CaseStatement(ArrayList<Clause> clauses) {
 
-        System.out.println("constr");
+        
 
         this.clauses = clauses;
 
