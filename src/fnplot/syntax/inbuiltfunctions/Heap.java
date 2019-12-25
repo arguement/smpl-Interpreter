@@ -45,7 +45,7 @@ public class Heap extends InBuilt {
             this.minHeap.add(val.get(i).intValue());  
         } 
 
-        System.out.println(this.minHeap);
+        // System.out.println(this.minHeap);
         
 
     } 
