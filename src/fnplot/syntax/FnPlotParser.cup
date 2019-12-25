@@ -197,11 +197,20 @@ non terminal Exp not;
 non terminal ArrayList<Exp> multParamListE;
 non terminal ArrayList<Exp> multParamList;
 
+non terminal ArrayList<Exp> nParamListE;
+non terminal ArrayList<Exp> nParamList;
+
+non terminal ArrayList<String> varParamListE;
+non terminal ArrayList<String> varParamList;
+
 non terminal ExpTuple tuple;
 non terminal Exp bitWiseExp;
 non terminal Exp bitOr;
 non terminal Exp bitAnd;
 non terminal Exp bitNot;
+
+
+// non terminal Exp toN;
 // non terminal Exp exp_tup;
 
 
@@ -221,8 +230,27 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}  ;
+	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
 
+
+varParamListE ::=  varParamList: pl {: RESULT = pl;  :}  ;
+
+varParamList ::=   varParamList:pl COMMA VARIABLE:v   {: pl.add(v); 
+												RESULT = pl; :} | VARIABLE:v {: 
+												ArrayList<String> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+
+nParamListE ::=  nParamList: pl {: RESULT = pl;  :}  ;
+
+nParamList ::=   nParamList:pl COMMA expression:v   {: pl.add(v); 
+												RESULT = pl; :} | expression:v {: 
+												ArrayList<Exp> ls = new ArrayList();
+												ls.add(v);
+												RESULT = ls;
+												 :}  ;
+// toN ::= nParamListE:pl {: RESULT = new ExpToN(pl); :} ;
 
 multParamListE ::=  multParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
@@ -415,9 +443,13 @@ bindingsAux ::= COMMA binding:b bindingsAux:bl {:
 // 		   RESULT = new StmtDefinition(v, e);
 // 		:} ;
 
+// definition ::= DEF VARIABLE:v expression:e SEMI {:
+// 		   RESULT = new StmtDefinition(v, e);
+// 		:}  | VARIABLE:v  COLON ASSIGN expression:e SEMI {: RESULT = new StatementAssign(v,e); :};
+
 definition ::= DEF VARIABLE:v expression:e SEMI {:
 		   RESULT = new StmtDefinition(v, e);
-		:}  | VARIABLE:v  COLON ASSIGN expression:e SEMI {: RESULT = new StatementAssign(v,e); :};
+		:}  | varParamListE:v  COLON ASSIGN nParamListE:e SEMI {: RESULT = new ExpToN(v,e); :};
 
 
 

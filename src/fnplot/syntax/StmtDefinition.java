@@ -13,6 +13,10 @@ public class StmtDefinition extends Statement {
     String var;
     Exp exp;
 
+    public StmtDefinition(){
+        
+    }
+
     public StmtDefinition(String id, Exp e) {
         var = id;
         exp = e;

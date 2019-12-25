@@ -44,6 +44,7 @@ import fnplot.syntax.ExpMul;
 import fnplot.syntax.ExpNoLimitProc;
 import fnplot.syntax.ExpNot;
 import fnplot.syntax.ExpSub;
+import fnplot.syntax.inbuiltfunctions.ExpToN;
 // import fnplot.syntax.ExpTuple;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpVar;
@@ -273,5 +274,7 @@ public interface Visitor<S, T> {
 	public T visitExpTuple(ExpTuple expTuple, S state) throws FnPlotException;
 
 	public T visitHeapFunction(Heap heap, S state) throws FnPlotException;
+
+	public T visitExpSeq(ExpToN expToN, S arg) throws FnPlotException;
 
 }
