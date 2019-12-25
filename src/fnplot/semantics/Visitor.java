@@ -30,6 +30,8 @@ import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpOr;
+import fnplot.syntax.ExpRead;
+import fnplot.syntax.ExpReadInt;
 import fnplot.syntax.ExpNotEqual; 
 import fnplot.syntax.ExpHeap;
 import fnplot.syntax.ExpHeapDelete;
@@ -276,5 +278,9 @@ public interface Visitor<S, T> {
 	public T visitHeapFunction(Heap heap, S state) throws FnPlotException;
 
 	public T visitExpSeq(ExpToN expToN, S arg) throws FnPlotException;
+
+	public T visitExpRead(ExpRead expRead, S arg) throws FnPlotException;
+
+	public T visitExpReadInt(ExpReadInt expReadInt, S arg) throws FnPlotException;
 
 }

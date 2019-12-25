@@ -10,11 +10,12 @@ public class sym {
   /* terminals */
   public static final int EEQUAL = 25;
   public static final int CONCAT = 4;
-  public static final int STR = 60;
+  public static final int STR = 62;
+  public static final int READINT = 58;
   public static final int CASE = 47;
   public static final int CAR = 28;
-  public static final int DOUBLE = 58;
-  public static final int INTEGER = 57;
+  public static final int DOUBLE = 60;
+  public static final int INTEGER = 59;
   public static final int NOTEQUAL = 24;
   public static final int CDR = 29;
   public static final int LPAREN = 2;
@@ -22,8 +23,8 @@ public class sym {
   public static final int SEMI = 19;
   public static final int EXPO = 26;
   public static final int PRINTLN = 48;
-  public static final int MODIFIER = 65;
-  public static final int BOOL_TRUE = 61;
+  public static final int MODIFIER = 67;
+  public static final int BOOL_TRUE = 63;
   public static final int MINUS = 9;
   public static final int RPAREN = 3;
   public static final int NOT = 52;
@@ -56,20 +57,21 @@ public class sym {
   public static final int IS_PAIR = 30;
   public static final int GETMIN = 39;
   public static final int GREATEREQUAL = 22;
-  public static final int BOOL_FALSE = 62;
+  public static final int BOOL_FALSE = 64;
   public static final int COLON = 7;
   public static final int BOR = 55;
   public static final int ELSE = 46;
   public static final int LBRACE = 16;
-  public static final int VARIABLE = 59;
+  public static final int VARIABLE = 61;
+  public static final int READ = 57;
   public static final int LIST = 31;
   public static final int SUBSTR = 35;
   public static final int LET = 14;
-  public static final int BIN_INTEGER = 63;
+  public static final int BIN_INTEGER = 65;
   public static final int THEN = 45;
   public static final int RBRACE = 17;
   public static final int RSQBRACKET = 5;
-  public static final int HEX_INTEGER = 64;
+  public static final int HEX_INTEGER = 66;
   public static final int PROC = 40;
   public static final int DEF = 53;
   public static final int HEAPDELETE = 38;
@@ -132,6 +134,8 @@ public class sym {
   "BAND",
   "BOR",
   "BNOT",
+  "READ",
+  "READINT",
   "INTEGER",
   "DOUBLE",
   "VARIABLE",

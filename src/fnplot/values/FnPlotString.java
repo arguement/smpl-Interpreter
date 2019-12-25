@@ -30,6 +30,12 @@ public class FnPlotString extends FnPlotValue<FnPlotString> {
        
         return this.value;
     }
+
+    @Override
+    public FnPlotValue<?> eequals(FnPlotValue<?> arg) throws FnPlotException {
+        // TODO Auto-generated method stub
+        return make(value.equals(arg.stringValue()));
+    }
     
     @Override
     public String toString() {

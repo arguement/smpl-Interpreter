@@ -42,7 +42,9 @@ import java_cup.runtime.*;
     }
 %}
 
-%debug
+// %debug goes below
+
+// %debug above
 
 nl = [\n\r]
 cc = ([\b\f]|{nl})
@@ -115,6 +117,9 @@ string = "?:[^"]}*|'?:[^']*
 <YYINITIAL> "println" {return new Symbol(sym.PRINTLN);}
 <YYINITIAL> [\/][*] [.\s\S]* [*][\/] {  }
 <YYINITIAL> [\/][\/] .* {  }
+
+<YYINITIAL> "read" {return new Symbol(sym.READ);}
+<YYINITIAL> "readint" {return new Symbol(sym.READINT);}
 
 
 

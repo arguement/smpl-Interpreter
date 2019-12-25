@@ -112,6 +112,8 @@ terminal DEF;
 terminal BAND;
 terminal BOR;
 terminal BNOT;
+terminal READ;
+terminal READINT;
 // terminal COMMENT;
 
 // terminals with values
@@ -209,6 +211,9 @@ non terminal Exp bitOr;
 non terminal Exp bitAnd;
 non terminal Exp bitNot;
 
+non terminal ExpRead read;
+non terminal ExpReadInt readint;
+
 
 // non terminal Exp toN;
 // non terminal Exp exp_tup;
@@ -232,6 +237,9 @@ stmtList ::= stmtList:lst stmt:s {:
 stmt ::= definition:d {: RESULT = d; :} |
 	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
 
+read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
+
+readint ::= READINT LPAREN RPAREN {: RESULT= new ExpReadInt(); :};
 
 varParamListE ::=  varParamList: pl {: RESULT = pl;  :}  ;
 
@@ -414,10 +422,9 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 :};
 
 expression ::=  letExp:l {: RESULT = l; :} |
-		LBRACE stmtList:body RBRACE {: RESULT = body; :} |
-		string:s {: RESULT=s; :} | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
+		LBRACE stmtList:body RBRACE {: RESULT = body; :}  | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:} | call:c {: RESULT = c; :}
-		 | funCall: fc{: RESULT = fc; :} | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :}  ;
+		  | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :} | read:r {: RESULT=r; :} | readint:ri {: RESULT=ri; :} ;
 
 letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);
@@ -520,7 +527,7 @@ term ::= power:f MUL term:t {:
 		RESULT = new ExpMod(f, t); :} |
 		power:p {: RESULT= p; :}  ;
 
-string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
+// string ::= STR:s {: RESULT= new ExpLit( FnPlotValue.make(s) ); :};
 
 complits ::= BOOL_FALSE:f {: RESULT= new Boolean("false"); :} | BOOL_TRUE:t {: RESULT= new Boolean("true"); :} ;
 
@@ -531,10 +538,10 @@ RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);
 RESULT = FnPlotValue.make(val);
- :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :};
+ :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :} | STR:s {: RESULT= FnPlotValue.make(s); :};
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} | LBRACE expression:e RBRACE {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
 
 empty ::= ;

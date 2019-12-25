@@ -46,6 +46,8 @@ import fnplot.syntax.ExpGreaterEqual;
 import fnplot.syntax.ExpLesserEqual;
 import fnplot.syntax.ExpNotEqual;
 import fnplot.syntax.ExpOr;
+import fnplot.syntax.ExpRead;
+import fnplot.syntax.ExpReadInt;
 import fnplot.syntax.ExpGreater;
 import fnplot.syntax.ExpHeap;
 import fnplot.syntax.ExpHeapDelete;
@@ -220,7 +222,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     // added by me
     public FnPlotValue<?> visitFnDefn(ExpFunction defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        
 
         Closure c = new Closure(defn.getParameters(), defn.getBody(), env);
 
@@ -255,7 +256,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     public FnPlotValue<?> visitFnCall(ExpFunCall callExp, Environment<FnPlotValue<?>> env) throws FnPlotException {
 
-       
         // System.out.println(callExp.toString());
         // String name = callExp.getName();
 
@@ -263,7 +263,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotFunction obj = (FnPlotFunction) callExp.getName().visit(this, env);
         // String name = obj.getFunExp().toString();
         String name = obj.toString();
-        System.out.println("the name is " + name);
+        
 
         // System.out.println(name);
         ArrayList<Exp> args = callExp.getArguments();
@@ -280,22 +280,17 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         // System.out.println(env.parent);
         // System.out.println(env.);
         // System.out.println(values);
-        
 
         // Closure closure = (Closure) env.get(name);
         Closure closure = (Closure) obj.getClosingEnv().get(name);
 
-        
-
         // checking for ID then it is proc <id> <body>
         if (closure.getId() != null) {
-            
+
             List<Exp> evalExp = values.stream().map(v -> new ExpLit(v)).collect(Collectors.toList());
 
             ArrayList<Exp> evalExpArrayList = new ArrayList<>(evalExp);
             ListFunction list = new ListFunction(evalExpArrayList);
-
-            
 
             ArrayList<FnPlotValue<?>> tempValues = new ArrayList<>();
 
@@ -303,8 +298,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
                     closure.getEnvironment());
 
             newEnv.put(closure.getId(), list.visit(this, env));
-
-            
 
             return closure.getBody().visit(this, newEnv);
 
@@ -363,7 +356,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
     // to plot the graph
     public FnPlotValue<?> visitStmtPlot(PlotStatement defn, Environment<FnPlotValue<?>> env) throws FnPlotException {
-        
+
         int num1 = defn.getNum1();
         int num2 = defn.getNum2();
         String var = defn.getId();
@@ -402,7 +395,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             // System.out.println(values);
             // System.out.println(values.size() == range.length);
             ArrayList<Double> yVal = runClosureEnv(closure, values);
-            
+
             Point2D[] points = new Point2D[range.length];
             for (int i = 0; i < range.length; i++) {
                 Double x = range[i];
@@ -427,7 +420,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             // FnPlotValue<?> ans = visitStmtSequence( (StmtSequence)expression, env);
             // FnPlotValue<?> ans = expression.visit(this,env);
             ArrayList<Double> yVal = evalExpression(env, expression, bindVar, range);
-            
 
             Point2D[] points = new Point2D[range.length];
             for (int i = 0; i < range.length; i++) {
@@ -479,7 +471,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
 
         }
 
-        
         ArrayList<ArrayList<FnPlotValue<?>>> values = new ArrayList<>();
 
         for (ArrayList<Exp> storeIndex : store) {
@@ -573,7 +564,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        
+
         return val1.notequal(val2);
     }
 
@@ -618,7 +609,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotValue<?> val1, val2;
         val1 = (FnPlotValue) exp.getExpL().visit(this, arg);
         val2 = (FnPlotValue) exp.getExpR().visit(this, arg);
-        
+
         return val1.greater(val2);
     }
 
@@ -1256,22 +1247,39 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     @Override
     public FnPlotValue<?> visitExpSeq(ExpToN expToN, Environment<FnPlotValue<?>> env) throws FnPlotException {
         // TODO Auto-generated method stub
-        /* ArrayList<Exp> seq = expToN.getSeq();
-        ArrayList<Exp> seq2 = new ArrayList<>();
-        for (Exp exp : seq) {
-            seq2.add( new ExpLit( exp.visit(this, env)));
-        }
-        ExpToN toN = new ExpToN(seq2);
-        return new FnInBuiltFunction(toN, env); */
-        ArrayList<String> vars =  expToN.getVarList();
+        /*
+         * ArrayList<Exp> seq = expToN.getSeq(); ArrayList<Exp> seq2 = new
+         * ArrayList<>(); for (Exp exp : seq) { seq2.add( new ExpLit( exp.visit(this,
+         * env))); } ExpToN toN = new ExpToN(seq2); return new FnInBuiltFunction(toN,
+         * env);
+         */
+        ArrayList<String> vars = expToN.getVarList();
         ArrayList<Exp> exps = expToN.getSeq();
 
-        
         for (int i = 0; i < vars.size(); i++) {
             ExpVar exp = new ExpVar(vars.get(i));
             exp.visit(this, env);
-            env.put(vars.get(i),exps.get(i).visit(this, env));
+            env.put(vars.get(i), exps.get(i).visit(this, env));
         }
         return new FnNone();
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpRead(ExpRead expRead, Environment<FnPlotValue<?>> arg) throws FnPlotException {
+        // TODO Auto-generated method stub
+        Scanner scan = new Scanner(System.in);
+        String val = scan.nextLine();
+
+        return FnPlotValue.make(val);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpReadInt(ExpReadInt expReadInt, Environment<FnPlotValue<?>> arg)
+            throws FnPlotException {
+
+        Scanner scan = new Scanner(System.in);
+        int val = scan.nextInt();
+
+        return FnPlotValue.make(val);
     }
 }

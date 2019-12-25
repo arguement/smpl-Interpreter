@@ -1,3 +1,23 @@
 def lst [1,2,3,#e];
 def lst2 list([1,2,3,#e]);
 
+println("Jordan \n");
+println("Williams");
+
+println(1+ 1);
+println(2+2);
+
+def a 3;
+
+def jor proc([c]){
+    //def a 20;
+    2+3;
+    proc([j]) a + 10;
+};
+
+println(  (jor(10))(5)  );
+
+def a readint();
+
+println(a);
+
