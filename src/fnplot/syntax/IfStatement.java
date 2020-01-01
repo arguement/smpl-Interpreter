@@ -8,7 +8,7 @@ import fnplot.sys.FnPlotException;
  * if statement
  * @author Jordan
  */
-public class IfStatement extends Statement {
+public class IfStatement extends Exp {
 
     
  Exp elseConsq;

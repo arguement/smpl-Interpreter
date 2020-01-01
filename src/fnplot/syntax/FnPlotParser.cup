@@ -184,7 +184,8 @@ non terminal ArrayList<Exp> vParamListE;
 non terminal ArrayList<Exp> vParamList;
 non terminal VectorIndex vecIndex;
 non terminal SizeVectorFunction vecSize;
-non terminal IfStatement stmtIf;
+// non terminal IfStatement stmtIf;
+non terminal Exp stmtIf;
 non terminal Clause clause;
 non terminal CaseStatement case;
 non terminal ArrayList<Clause> cParamListE;
@@ -235,7 +236,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}| stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
+	 expression:e SEMI {: RESULT = e; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
 
 read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
 
@@ -424,7 +425,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :}  | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:} | call:c {: RESULT = c; :}
-		  | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :} | read:r {: RESULT=r; :} | readint:ri {: RESULT=ri; :} ;
+		  | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :} | read:r {: RESULT=r; :} | readint:ri {: RESULT=ri; :} | stmtIf:si {: RESULT = si; :};
 
 letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);
