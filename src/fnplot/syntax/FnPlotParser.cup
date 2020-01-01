@@ -217,6 +217,8 @@ non terminal ExpRead read;
 non terminal ExpReadInt readint;
 
 
+
+
 // non terminal Exp toN;
 // non terminal Exp exp_tup;
 
@@ -237,7 +239,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
+	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:}  | tuple:t SEMI{: RESULT=t; :} |  vecIndex:vi  {: RESULT=vi; :} SEMI   ;
 
 read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
 
@@ -301,7 +303,7 @@ stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:c
 
 vecSize ::= SIZE LPAREN expression:v RPAREN {: RESULT = new SizeVectorFunction(v); :};
  
-vecIndex ::= expression:v RSQBRACKET expression:e LSQBRACKET {: RESULT = new VectorIndex(v,e); :};
+vecIndex ::= factor:v RSQBRACKET expression:e LSQBRACKET {: System.out.println("vector index"); RESULT = new VectorIndex(v,e); :};
 
 vParamListE ::=  vParamList: pl {: RESULT = pl;  :} | empty {: RESULT = new ArrayList(); :} ;
 
@@ -545,5 +547,7 @@ RESULT = FnPlotValue.make(val);
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
 	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
+
+
 
 empty ::= ;

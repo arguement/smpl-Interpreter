@@ -1020,6 +1020,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitExpVecSpec(ExpVecSpec expVecSpec, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
+        System.out.println("vec spec method before");
         Exp size = expVecSpec.geSize();
         Exp fn = expVecSpec.getFunct();
 
@@ -1053,6 +1054,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         }
 
         ListFunction list = new ListFunction(valuesExp);
+        System.out.println("vec spec");
+        System.out.println(newEnv.dictionary);
+        System.out.println(env.dictionary);
 
         return new FnInBuiltFunction(list, env);
     }
@@ -1084,9 +1088,14 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
         // TODO Auto-generated method stub
+        
         FnInBuiltFunction val = (FnInBuiltFunction) vectorIndex.getVector().visit(this, state);
+        
         VectorFunction vec = (VectorFunction) val.getFunExp();
+        
+    
         Exp exp = vec.getArguments().get(vectorIndex.getIndex().visit(this, state).intValue());
+        
         return exp.visit(this, state);
     }
 
