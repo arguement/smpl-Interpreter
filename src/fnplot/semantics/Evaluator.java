@@ -1109,17 +1109,19 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Exp elseConsq = ifStatement.getElseConsq();
 
         FnPlotValue<?> predVisited = pred.visit(this, env);
-        FnPlotValue<?> thenConsqVisted = thenConsq.visit(this, env);
-        FnPlotValue<?> elseConsqVisited = elseConsq.visit(this, env);
+        
+        
 
         FnPlotValue<?> ans;
 
         if (predVisited.booleanValue()) {
 
+            FnPlotValue<?> thenConsqVisted = thenConsq.visit(this, env);
             ans = thenConsqVisted;
 
         } else {
 
+            FnPlotValue<?> elseConsqVisited = elseConsq.visit(this, env);
             ans = elseConsqVisited;
 
         }
@@ -1151,10 +1153,10 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             }
 
             FnPlotValue<?> evalAnt = ant.visit(this, env);
-            FnPlotValue<?> evalConsq = consq.visit(this, env);
+            
 
             if (evalAnt.booleanValue()) {
-
+                FnPlotValue<?> evalConsq = consq.visit(this, env);
                 ans = evalConsq;
                 break;
 

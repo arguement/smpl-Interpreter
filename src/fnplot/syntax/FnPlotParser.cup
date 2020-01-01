@@ -187,7 +187,8 @@ non terminal SizeVectorFunction vecSize;
 // non terminal IfStatement stmtIf;
 non terminal Exp stmtIf;
 non terminal Clause clause;
-non terminal CaseStatement case;
+// non terminal CaseStatement case;
+non terminal Exp case;
 non terminal ArrayList<Clause> cParamListE;
 non terminal ArrayList<Clause> cParamList;
 non terminal StatementPrint print;
@@ -236,7 +237,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :} |case:c {: RESULT=c; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
+	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:} | vecIndex:vi SEMI {: RESULT=vi; :} | tuple:t SEMI{: RESULT=t; :}   ;
 
 read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
 
@@ -290,7 +291,7 @@ cParamList ::=  cParamList:pl COMMA clause:v  {: pl.add(v);
 case ::= CASE LBRACE RSQBRACKET cParamListE:cp LSQBRACKET RBRACE {: RESULT = new CaseStatement( cp );  :};
 
 
-clause ::= expression:pred COLON expression:consq {: RESULT = new Clause(pred,consq); :};
+clause ::= expression:pred COLON expression:consq {: RESULT = new Clause(pred,consq); :} | ELSE COLON expression:consq {: RESULT = new Clause(new ExpLit(FnPlotValue.make( new Boolean("true") )),consq); :};
 
 stmtIf ::= IF expression:pred THEN expression:consq RSQBRACKET ELSE expression:consq2 LSQBRACKET {:
 	
@@ -425,7 +426,7 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN {:
 expression ::=  letExp:l {: RESULT = l; :} |
 		LBRACE stmtList:body RBRACE {: RESULT = body; :}  | procedures:prd {: RESULT=prd; :}  | pair:p {: RESULT = p; :} | car:c {: RESULT = c; :} | cdr:c {: RESULT = c; :} | isPair:ip {: RESULT = ip; :} 
 		|allLists:lst {: RESULT = lst; :} | vecSize:vs {:  RESULT = vs;:}  | isEqv:eqv {: RESULT = eqv; :} | isEqual:isEq {: RESULT = isEq; :} | substr:subs {: RESULT=subs; :} | heap:h {: RESULT=h; :} | heapinsert:hi {: RESULT=hi; :}|heapdelete:hd {: RESULT=hd ; :} | getmin:gm {: RESULT=gm ;:} | call:c {: RESULT = c; :}
-		  | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :} | read:r {: RESULT=r; :} | readint:ri {: RESULT=ri; :} | stmtIf:si {: RESULT = si; :};
+		  | concat:c {: RESULT= c; :} | or:o {: RESULT = o; :} | read:r {: RESULT=r; :} | readint:ri {: RESULT=ri; :} | stmtIf:si {: RESULT = si; :} |case:c {: RESULT=c; :} ;
 
 letExp ::= LET LPAREN bindings:bs RPAREN expression:body {:
 			RESULT = new StmtLet(bs, body);

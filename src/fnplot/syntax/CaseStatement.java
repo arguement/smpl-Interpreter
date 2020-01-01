@@ -10,7 +10,7 @@ import fnplot.sys.FnPlotException;
  * if statement
  * @author Jordan
  */
-public class CaseStatement extends Statement {
+public class CaseStatement extends Exp {
 
     
     private ArrayList<Clause> clauses;
@@ -43,6 +43,6 @@ public class CaseStatement extends Statement {
 
     @Override
     public String toString() {
-        return "clause";
+        return "case";
     }
 }
