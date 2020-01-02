@@ -192,7 +192,7 @@ string = "?:[^"]}*|'?:[^']*
 				 new Double(yytext()));
 	       }
 
-<YYINITIAL>    {alpha}{alphanum}* {
+<YYINITIAL>    [a-zA-Z0-9]*[a-zA-Z]+[a-zA-Z0-9#!?\.]* {
 	       // VARIABLE
 	       return new Symbol(sym.VARIABLE, yytext());
 	       }

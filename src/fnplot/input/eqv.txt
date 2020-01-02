@@ -9,13 +9,3 @@ lst2 := lst;
 a := eqv?(lst,lst2);
 a := equal?(lst,lst2);
 
-def gcd proc(a, b)
-/* Euclidean alg. for gcd */
-case {
-[a < b: gcd(b, a);
-b = 0: a;
-else : gcd(b, a % b);]
-};
-
-print("fib function");
-//println(fact(4));
