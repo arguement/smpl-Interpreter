@@ -32,9 +32,26 @@ public class ListFunction extends InBuilt {
         return this.argList;
     }
 
+    private <S,T> ArrayList<Exp> expressionReduce(Visitor<S, T> v,ArrayList<Exp> args, S state) throws FnPlotException{
+
+        // List<Exp> eval = args.stream().map( exp->new ExpLit( ((FnPlotValue)exp.visit(v, state)) )  ).collect(Collectors.toList());
+        ArrayList<Exp> eval = new ArrayList<>();
+
+        for (Exp exp : args) {
+            ExpLit newLit = new ExpLit( ((FnPlotValue)exp.visit(v, state)) ) ;
+            eval.add(newLit);
+        }
+
+        return new ArrayList<Exp>(eval);
+    }
+
     @Override
     public <S, T> T visit(Visitor<S, T> v, S state) throws FnPlotException {
         // TODO Auto-generated method stub
+
+        ArrayList<Exp> evalArgs = expressionReduce(v, this.argList, state);
+        this.argList =  evalArgs;
+        
         return v.visitListFunction(this, state);
     }
 

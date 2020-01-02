@@ -166,7 +166,7 @@ string = "?:[^"]}*|'?:[^']*
 
 <YYINITIAL> #e {return new Symbol(sym.NIL);}
 
-<YYINITIAL> [\"][a-zA-Z0-9\\\s\*:#]+[\"] { return new Symbol(sym.STR, yytext().substring(1,yytext().length() - 1 ) ); }
+<YYINITIAL> [\"].+[\"] { return new Symbol(sym.STR, yytext().substring(1,yytext().length() - 1 ) ); }
 
 <YYINITIAL> {bin} { return new Symbol(sym.BIN_INTEGER,yytext().substring(2) ); }
 

@@ -1010,6 +1010,8 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             values.add(e.visit(this, env));
 
         }
+        // Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(expFn.getParameters(), values,
+        //         env);
         Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(expFn.getParameters(), values,
                 fn.getClosingEnv());
 
