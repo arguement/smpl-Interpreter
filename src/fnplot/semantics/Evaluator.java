@@ -36,6 +36,7 @@ import fnplot.syntax.ExpVecSpec;
 import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpMod;
 import fnplot.syntax.ExpExpo;
+import fnplot.syntax.ExpFor;
 import fnplot.syntax.ExpSub;
 import fnplot.syntax.inbuiltfunctions.ExpToN;
 // import fnplot.syntax.ExpTuple;
@@ -263,7 +264,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         FnPlotFunction obj = (FnPlotFunction) callExp.getName().visit(this, env);
         // String name = obj.getFunExp().toString();
         String name = obj.toString();
-        
 
         // System.out.println(name);
         ArrayList<Exp> args = callExp.getArguments();
@@ -959,7 +959,7 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         int startInt = startVal.intValue();
         int endInt = endVal.intValue();
 
-        // System.out.println(strString);
+        System.out.println(strString);
         // System.out.println(startInt);
         // System.out.println(endInt);
 
@@ -1088,14 +1088,13 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitVectorFunction(VectorIndex vectorIndex, Environment<FnPlotValue<?>> state)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        
+
         FnInBuiltFunction val = (FnInBuiltFunction) vectorIndex.getVector().visit(this, state);
-        
+
         VectorFunction vec = (VectorFunction) val.getFunExp();
-        
-    
+
         Exp exp = vec.getArguments().get(vectorIndex.getIndex().visit(this, state).intValue());
-        
+
         return exp.visit(this, state);
     }
 
@@ -1118,8 +1117,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         Exp elseConsq = ifStatement.getElseConsq();
 
         FnPlotValue<?> predVisited = pred.visit(this, env);
-        
-        
 
         FnPlotValue<?> ans;
 
@@ -1162,7 +1159,6 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
             }
 
             FnPlotValue<?> evalAnt = ant.visit(this, env);
-            
 
             if (evalAnt.booleanValue()) {
                 FnPlotValue<?> evalConsq = consq.visit(this, env);
@@ -1292,5 +1288,35 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         int val = scan.nextInt();
 
         return FnPlotValue.make(val);
+    }
+
+    @Override
+    public FnPlotValue<?> visitExpFor(ExpFor expFor, Environment<FnPlotValue<?>> env) throws FnPlotException {
+        // TODO Auto-generated method stub
+        String var = expFor.getVar();
+        Exp start = expFor.getStart();
+        Exp stop = expFor.getStop();
+        Exp insideLoop = expFor.getInsideLoop();
+
+        ExpVar expVar = new ExpVar(var);
+        FnPlotValue<?> startVal = start.visit(this,env);
+        FnPlotValue<?> stopVal = stop.visit(this,env);
+
+
+        Environment<FnPlotValue<?>> newEnv = new Environment<FnPlotValue<?>>(new ArrayList<String>(),
+                new ArrayList<FnPlotValue<?>>(), env);
+
+        FnPlotValue<?> insideLoopVal = new FnNone();
+
+        for(int i = startVal.intValue();i < stopVal.intValue(); i++){
+
+            
+
+            newEnv.put(var,FnPlotValue.make(i));
+            insideLoopVal = insideLoop.visit(this,newEnv);
+
+
+        }
+        return insideLoopVal;
     }
 }

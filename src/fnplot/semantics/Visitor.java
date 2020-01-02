@@ -55,6 +55,7 @@ import fnplot.syntax.IfStatement;
 import fnplot.syntax.ExpAdd;
 import fnplot.syntax.ExpAnd;
 import fnplot.syntax.ExpExpo;
+import fnplot.syntax.ExpFor;
 import fnplot.syntax.StatementClear;
 import fnplot.syntax.StatementPrint;
 import fnplot.syntax.StatementPrintLn;
@@ -282,5 +283,7 @@ public interface Visitor<S, T> {
 	public T visitExpRead(ExpRead expRead, S arg) throws FnPlotException;
 
 	public T visitExpReadInt(ExpReadInt expReadInt, S arg) throws FnPlotException;
+
+	public T visitExpFor(ExpFor expFor, S arg) throws FnPlotException;
 
 }
