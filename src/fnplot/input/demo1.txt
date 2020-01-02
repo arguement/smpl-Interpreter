@@ -6,5 +6,5 @@ b == 0: a,
 else : gcd(b, a % b)]
 };
 
-
-print( gcd(100,10) );
+println("gcd of 100 and 10");
+println( gcd(100,10) );

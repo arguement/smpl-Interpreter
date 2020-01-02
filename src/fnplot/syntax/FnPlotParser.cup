@@ -126,6 +126,8 @@ terminal Boolean BOOL_FALSE;
 terminal String BIN_INTEGER;
 terminal String HEX_INTEGER;
 terminal String MODIFIER;
+// terminal String NIL; // replace for nil above
+
 
 /* Non terminals */
 non terminal ArithProgram program;
@@ -239,7 +241,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:}  |  vecIndex:vi  {: RESULT=vi; :} SEMI   ;
+	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:}  |  vecIndex:vi SEMI {: RESULT=vi; :}  ;
 
 read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
 
@@ -382,6 +384,7 @@ list2 ::= RSQBRACKET expListE:lst LSQBRACKET{:
                 //System.out.println("inhere");
 				RESULT = new ListFunction(lst);
 :};
+
 
 list ::= LIST LPAREN list2:lst RPAREN {:
 			RESULT = lst;
@@ -542,11 +545,11 @@ RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);
 RESULT = FnPlotValue.make(val);
- :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :} | STR:s {: RESULT= FnPlotValue.make(s); :};
+ :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :} | STR:s {: RESULT= FnPlotValue.make(s); :} ;
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | tuple:t {: RESULT=t; :}  | vector:vc {: RESULT = vc; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | tuple:t {: RESULT=t; :}  | vector:vc {: RESULT = vc; :}  ;
 
 
 
