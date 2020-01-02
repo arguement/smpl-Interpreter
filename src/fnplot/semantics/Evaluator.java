@@ -1175,15 +1175,45 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
     public FnPlotValue<?> visitStmtPrint(StatementPrint statementPrint, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
         // TODO Auto-generated method stub
-        System.out.print(statementPrint.getSeq().visit(this, env));
+        FnPlotValue<?> val1 = statementPrint.getSeq().visit(this, env); 
+        String val2 = val1.stringValue();
+        
+        if (val2.contains("\\n")){
+            //String [] val3 = val2.split("\n");  
+            int indexer=val2.indexOf("\\");
+            //String val5=val2.substring(0,indexer);
+            System.out.println(val2.substring(0,indexer)); 
+            System.out.println(val2.substring(indexer+2,val2.length()));
+        } 
+           if (val2.contains("\\t")){ 
+               
+            int indexer=val2.indexOf("\\");
+            //String val5=val2.substring(0,indexer);
+            System.out.print(val2.substring(0,indexer)); 
+            System.out.print("  ");
+            System.out.print(val2.substring(indexer+2,val2.length()));
+           
+        }
+        if (val2.contains("\\ \\")){
+          
+            int indexer=val2.indexOf("\\");
+            //String val5=val2.substring(0,indexer);
+            System.out.print(val2.substring(0,indexer)); 
+            System.out.print(val2.substring(indexer+1,val2.length()));
+        }
+         
+        else {
+        System.out.print(statementPrint.getSeq().visit(this, env)); 
+        }
         return new FnNone();
     }
 
     @Override
     public FnPlotValue<?> visitStmtPrintLn(StatementPrintLn statementPrintLn, Environment<FnPlotValue<?>> env)
             throws FnPlotException {
-        // TODO Auto-generated method stub
-        System.out.println(statementPrintLn.getSeq().visit(this, env));
+        // TODO Auto-generated method stub 
+
+        System.out.println(statementPrintLn.getSeq().visit(this, env)); 
         return new FnNone();
     }
 
