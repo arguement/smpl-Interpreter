@@ -260,4 +260,64 @@ print("*** End of Vector tests ***"); print("\n");
 
 
 
+// characters
+println("*** Character Tests ***");
+print("char a = ["); 
+print(#ca); 
+print("]\n");
+print("char nl = ["); print(#c\n); print("]\n");
+print("char tab = ["); print(#c\t); print("]\n");
+println("*** End of Character Tests ***");
 
+// nestable comments
+println("*** Nestable Comments ***");
+println("Should print 2:");
+
+print("\n");
+println("*** End of Nestable Comments ***");
+
+
+// variable arity procedures
+println("*** Variable Arity Procedures ***");
+def f proc([y, z]) pair(y, z);
+def g proc(y . z) [y, z,#e];
+print("f(1, 2) = "); 
+print(call(f, [1, 2,#e])); 
+println("Should be (1 . 2)"); 
+print("g(1, 2, 3, 4) = "); 
+print(g(1, 2, 3, 4));
+println("Should be [1, [2, 3, 4]]");
+print("call(g, [1, 2, 3,#e]) = "); print(call(g, [1, 2, 3,#e]));
+println("Should be [1, [2, 3]]");
+
+def double proc([x]) 2 * x;
+
+println("*** End of Variable Arity Procedures ***");
+
+
+println("*** Multivalue test ... ***");
+def xt 5;
+def yt 7;
+def multi proc([u, v]) (u/v, [u%v]);
+print("before: xt, yt = ("); 
+print(xt); 
+print(", "); 
+print(yt); 
+print(")");
+xt, yt := multi(yt, xt);
+print("after: xt, yt = ("); print(xt); 
+print(", "); 
+print(yt); 
+print(")");
+println("*** End of Multivalue test ***");
+
+println("*** Mutual recursion test ***");
+def isEven proc([n]) {
+   def f proc([x]) if x == 0 then #t [else g(x - 1)];
+   def g proc([x]) if x == 0 then #f [else f(x - 1)];
+   f(n);
+};
+
+print("7 is even. -- "); println(isEven(7));
+print("10 is even. -- "); println(isEven(10));
+println("*** End of Mutual Recursion Test ***");
