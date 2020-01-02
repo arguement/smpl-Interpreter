@@ -8,6 +8,7 @@ package fnplot.syntax;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int CHAR = 68;
   public static final int EEQUAL = 25;
   public static final int CONCAT = 4;
   public static final int STR = 62;
@@ -144,7 +145,8 @@ public class sym {
   "BOOL_FALSE",
   "BIN_INTEGER",
   "HEX_INTEGER",
-  "MODIFIER"
+  "MODIFIER",
+  "CHAR"
   };
 }
 

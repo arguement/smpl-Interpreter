@@ -167,6 +167,9 @@ string = "?:[^"]}*|'?:[^']*
 
 <YYINITIAL> #x[a-fA-F0-9]+ { return new Symbol( sym.HEX_INTEGER,yytext().substring(2) ); }
 
+<YYINITIAL> #c[a-zA-Z] { return new Symbol( sym.CHAR,yytext().substring(2).charAt(0) ); }
+<YYINITIAL> #u[0-9]+ { return new Symbol( sym.CHAR,new Character(   ("\\u"+yytext().substring(2)).toCharArray()[0] ) ); }
+
 <YYINITIAL> " @ " {return new Symbol (sym.CONCAT);}
 
 

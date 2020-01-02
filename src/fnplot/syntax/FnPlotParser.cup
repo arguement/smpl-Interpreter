@@ -126,6 +126,8 @@ terminal Boolean BOOL_FALSE;
 terminal String BIN_INTEGER;
 terminal String HEX_INTEGER;
 terminal String MODIFIER;
+terminal Character CHAR;
+
 // terminal String NIL; // replace for nil above
 
 
@@ -545,7 +547,7 @@ RESULT = FnPlotValue.make(val);
  :} | HEX_INTEGER:ilit {: 
 Integer val = Integer.parseInt(ilit, 16);
 RESULT = FnPlotValue.make(val);
- :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :} | STR:s {: RESULT= FnPlotValue.make(s); :} ;
+ :} |complits: ilit {: RESULT = FnPlotValue.make(ilit); :} | STR:s {: RESULT= FnPlotValue.make(s); :} | CHAR:ch {: RESULT= FnPlotValue.make(new Character(ch) ); :} ;
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |

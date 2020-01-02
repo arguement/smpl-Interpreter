@@ -25,6 +25,9 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
     public static FnPlotReal make(Double v) {
         return new FnPlotReal(v);
     }
+    public static FnChar make(Character v) {
+        return new FnChar(v);
+    }
     
     /**
      * Create a FnPlot value wrapping a Java integer
@@ -179,6 +182,9 @@ public abstract class FnPlotValue<T extends FnPlotValue<T>> {
 
 
     public String stringValue() throws TypeFnPlotException {
+        throw new TypeFnPlotException(FnPlotType.STRING, getType());
+    }
+    public char charValue() throws TypeFnPlotException {
         throw new TypeFnPlotException(FnPlotType.STRING, getType());
     }
 
