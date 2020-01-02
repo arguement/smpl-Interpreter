@@ -239,7 +239,7 @@ stmtList ::= stmtList:lst stmt:s {:
 		:};
 
 stmt ::= definition:d {: RESULT = d; :} |
-	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:}  | tuple:t SEMI{: RESULT=t; :} |  vecIndex:vi  {: RESULT=vi; :} SEMI   ;
+	 expression:e SEMI {: RESULT = e; :}  | print:p SEMI {: RESULT = p;:} | println:pn SEMI {: RESULT = pn;:}  |  vecIndex:vi  {: RESULT=vi; :} SEMI   ;
 
 read ::= READ LPAREN RPAREN {: RESULT= new ExpRead(); :};
 
@@ -546,7 +546,7 @@ RESULT = FnPlotValue.make(val);
 
 factor ::= number:n {: RESULT = new ExpLit( n ); :} |
 	   VARIABLE:var {: RESULT = new ExpVar(var); :} |
-	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :}  | vector:vc {: RESULT = vc; :};
+	   LPAREN expression:e RPAREN {: RESULT = e; :} | funCall: fc{: RESULT = fc; :} | LBRACE expression:e RBRACE {: RESULT = e; :} | tuple:t {: RESULT=t; :}  | vector:vc {: RESULT = vc; :};
 
 
 
