@@ -1056,9 +1056,9 @@ public class Evaluator implements Visitor<Environment<FnPlotValue<?>>, FnPlotVal
         }
 
         ListFunction list = new ListFunction(valuesExp);
-        System.out.println("vec spec");
-        System.out.println(newEnv.dictionary);
-        System.out.println(env.dictionary);
+        // System.out.println("vec spec");
+        // System.out.println(newEnv.dictionary);
+        // System.out.println(env.dictionary);
 
         return new FnInBuiltFunction(list, env);
     }

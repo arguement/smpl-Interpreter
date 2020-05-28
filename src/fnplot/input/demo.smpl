@@ -41,12 +41,16 @@ print("1 + 2 > 2 + 3 ="); println(1 + 2 > 2 + 3);
 println("*** def tests ***");
 println("def x 1 ...");
 def x 1 ;
-print("x = "); print(x) ; print("\n");
+print("x = "); 
+print(x) ; 
+print("\n");
 
 
 println("def s <quote foo>") ;
 def s "foo" ;
-print("s = "); print(s); print("\n");
+print("s = "); 
+print(s); 
+print("\n");
 println("*** End of def tests ***");
 
 
@@ -106,10 +110,16 @@ let(b = 5,
     f = (proc([n]) a * n),
     a = f(b)) {
   print("a= "); print(a); 
-  print("Should be 8, not 3, 15, 21 or 6"); print("\n");
-  print("b= "); print(b); println("Should be 5 not 7");
+  print("Should be 8, not 3, 15, 21 or 6"); 
   print("\n");
-  print("f(b) = "); print(f(b)); print (" should be 15, not 6 or 40"); print("\n");
+  print("b= "); 
+  print(b); 
+  println("Should be 5 not 7");
+  print("\n");
+  print("f(b) = "); 
+  print(f(b)); 
+  print (" should be 15, not 6 or 40"); 
+  print("\n");
   };
 
 print("should be 5 not 4...");
@@ -181,9 +191,14 @@ println("*** End of Case Tests ***");
 
 // assignment tests
 print("*** Assignment Tests ***\n");
-def x 1 ; print("after def: x = "); print(x) ; println ("... Should be 1");
+def x 1 ; 
+print("after def: x = "); 
+print(x) ;
+ println ("... Should be 1");
 x := 3 ; 
-print("after assgn: x = "); print(x); println("... Should be 3");
+print("after assgn: x = ");
+ print(x); 
+ println("... Should be 3");
 def f proc([n]) proc([x]) n + x ;
 def g f(2);
 print("Should print 5...");
@@ -212,11 +227,14 @@ println("Internal def assignment test...");
 def a 3;
 def assgntest proc([n]) {
    def a 7;
-   print("a ="); print(a); print("Should be 7 not 3"); 
+   print("a ="); print(a); 
+   print("Should be 7 not 3"); 
    print("\n");
    a := n;
    print("a ="); print(a); 
-   print(" Should be "); print(n); print(" not 7 or 3"); print("\n");
+   print(" Should be "); 
+   print(n); print(" not 7 or 3"); 
+   print("\n");
    };
 
 
@@ -248,7 +266,7 @@ print([: [1 + 2 , 3 * 4 , 12 - 7] :]) ;
 print("\n");
 
 print("Should print [:0, 2, 4, 6, 8:] - ");
-print([:[ 5 : proc([n]) (2 * n) ]:]) ; 
+print( [:[ 5 : proc([n]) (2 * n) ]:] ) ; 
 print("\n");
 
 print("Should print [:0, 1, 2, 0, 1, 4, 9:] - ");

@@ -1,0 +1,2 @@
+Class-Path: bin gui\cs34q-utils.jar syntax\java-cup-11b-runtime.jar
+Main-Class: fnplot.gui.FnPlotFrame
